@@ -9,10 +9,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import upp.team5.literaryassociation.security.CustomUserDetailsService;
 import upp.team5.literaryassociation.security.auth.RestAuthenticationEntryPoint;
@@ -20,34 +20,36 @@ import upp.team5.literaryassociation.security.token.TokenAuthenticationFilter;
 import upp.team5.literaryassociation.security.token.TokenUtils;
 
 @Configuration
-@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
-    @Autowired
-    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-    @Autowired
-    private TokenUtils tokenUtils;
-
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
+
+    @Autowired
+    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+
+    @Autowired
+    TokenUtils tokenUtils;
+
     @Bean
     @Override
-    public AuthenticationManager authenticationManager() throws Exception {
+    public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
     // Definisemo nacin autentifikacije
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
     }
 
+    // Definisemo prava pristupa odredjenim URL-ovima
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -64,12 +66,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .cors().and()
 
-                .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, userDetailsService),
+                .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, customUserDetailsService),
                         BasicAuthenticationFilter.class);
 
         http.csrf().disable();
     }
-
 
     @Override
     public void configure(WebSecurity web) throws Exception {
