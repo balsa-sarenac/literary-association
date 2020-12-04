@@ -1,6 +1,6 @@
 package upp.team5.literaryassociation.model;
 
-import lombok.Data;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,7 +9,10 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.*;
 
-@Data @Entity
+@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
 @Table(name = "user_table")
 public class User implements UserDetails {
 
