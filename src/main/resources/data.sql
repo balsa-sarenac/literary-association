@@ -14,6 +14,12 @@ insert into user_table (id, first_name, last_name, city, country, email, passwor
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
 (1, 'Admin', 'Admin', 'Novi Sad', 'Serbia', 'admin@admin.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  true, true, true, true, null);
+-- example of disabled user
+insert into user_table (id, first_name, last_name, city, country, email, password, enabled,
+                        account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
+(2, 'Marko', 'Markovic', 'Novi Sad', 'Serbia', 'marko@example.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
+ false, true, true, true, null);
 
 -- USERS_ROLES
 insert into users_roles (user_id, role_id) values (1, 1);
+insert into users_roles (user_id, role_id) values (2, 5);
