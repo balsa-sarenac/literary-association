@@ -2,6 +2,7 @@ package upp.team5.literaryassociation.security;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import upp.team5.literaryassociation.exception.BadRequestException;
+import upp.team5.literaryassociation.exception.UserNotFoundException;
 import upp.team5.literaryassociation.model.User;
 import upp.team5.literaryassociation.security.dto.JwtAuthenticationRequest;
 import upp.team5.literaryassociation.security.dto.UserTokenState;
@@ -57,5 +60,16 @@ public class CustomUserDetailsService implements UserDetailsService {
         Long id = user.getId();
 
         return ResponseEntity.ok(new UserTokenState(id, jwt, expiresIn, refresh, email, role));
+    }
+
+    public ResponseEntity<Void> enable(Long userId) {
+        User user = this.userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+        if (user.isEnabled()) throw new BadRequestException("User with given id has already been enabled");
+
+        user.setEnabled(true);
+        this.userRepository.save(user);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -26,4 +26,9 @@ public class UserController {
         return this.userDetailsService.login(authenticationRequest);
     }
 
+    @GetMapping(name = "enable", path = "/enable/{userId}")
+    public ResponseEntity<?> enable(@PathVariable Long userId) {
+        return this.userDetailsService.enable(userId);
+    }
+
 }
