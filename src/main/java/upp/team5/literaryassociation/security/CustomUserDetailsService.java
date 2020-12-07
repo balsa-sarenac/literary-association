@@ -22,15 +22,14 @@ import upp.team5.literaryassociation.security.token.TokenUtils;
 @Service @Slf4j
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private UserRepository userRepository;
+    @Autowired
     private AuthenticationManager authenticationManager;
+    private UserRepository userRepository;
     private TokenUtils tokenUtils;
 
     @Autowired
-    public CustomUserDetailsService(UserRepository userRepository, AuthenticationManager authenticationManager,
-                                    TokenUtils tokenUtils) {
+    public CustomUserDetailsService(UserRepository userRepository, TokenUtils tokenUtils) {
         this.userRepository = userRepository;
-        this.authenticationManager = authenticationManager;
         this.tokenUtils = tokenUtils;
     }
 
@@ -76,7 +75,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public ResponseEntity<Void> disable(Long userId) {
         User user = getUser(userId);
 
-        if (user.isEnabled()) throw new BadRequestException("User with given id has already been disabled");
+        if (!user.isEnabled()) throw new BadRequestException("User with given id has already been disabled");
 
         user.setEnabled(false);
         this.userRepository.save(user);
