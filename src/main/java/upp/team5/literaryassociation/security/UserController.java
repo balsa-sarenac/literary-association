@@ -31,4 +31,9 @@ public class UserController {
         return this.userDetailsService.enable(userId);
     }
 
+    @GetMapping(name = "disable", path = "/disable/{userId}")
+    public ResponseEntity<?> disable(@PathVariable Long userId) {
+        return this.userDetailsService.disable(userId);
+    }
+
 }

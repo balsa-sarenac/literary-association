@@ -63,7 +63,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public ResponseEntity<Void> enable(Long userId) {
-        User user = this.userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        User user = getUser(userId);
 
         if (user.isEnabled()) throw new BadRequestException("User with given id has already been enabled");
 
@@ -71,5 +71,20 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.userRepository.save(user);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ResponseEntity<Void> disable(Long userId) {
+        User user = getUser(userId);
+
+        if (user.isEnabled()) throw new BadRequestException("User with given id has already been disabled");
+
+        user.setEnabled(false);
+        this.userRepository.save(user);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private User getUser(Long userId) {
+        return this.userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
     }
 }
