@@ -8,6 +8,7 @@ insert into role (id, name) values (6, 'ROLE_EDITOR');
 insert into role (id, name) values (7, 'ROLE_CHIEF_EDITOR');
 insert into role (id, name) values (8, 'ROLE_COMMITTEE_MEMBER');
 insert into role (id, name) values (9, 'ROLE_HEAD_OF_COMMITTEE');
+insert into role (id, name) values (10, 'ROLE_PENDING_AUTHOR');
 
 -- USERS
 insert into user_table (id, first_name, last_name, city, country, email, password, enabled,
