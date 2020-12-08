@@ -22,15 +22,11 @@ import upp.team5.literaryassociation.security.token.TokenUtils;
 @Service @Slf4j
 public class CustomUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
     private UserRepository userRepository;
-    private TokenUtils tokenUtils;
 
     @Autowired
-    public CustomUserDetailsService(UserRepository userRepository, TokenUtils tokenUtils) {
+    public CustomUserDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.tokenUtils = tokenUtils;
     }
 
     @Override
@@ -40,25 +36,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (user == null) throw new UsernameNotFoundException("Could not find user with given username/email");
 
         return user;
-    }
-
-    public ResponseEntity<?> login(JwtAuthenticationRequest authenticationRequest) {
-        log.info("Login function initialised");
-        final Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(),
-                                                        authenticationRequest.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        User user = (User) authentication.getPrincipal();
-
-        String jwt = tokenUtils.generateToken(user.getUsername());
-        int expiresIn = tokenUtils.getExpiredIn();
-        String refresh = tokenUtils.generateRefreshToken(user.getUsername());
-        String email = user.getUsername();
-        String role = user.getRoles().iterator().next().getName();
-        Long id = user.getId();
-
-        return ResponseEntity.ok(new UserTokenState(id, jwt, expiresIn, refresh, email, role));
     }
 
     public ResponseEntity<Void> enable(Long userId) {
