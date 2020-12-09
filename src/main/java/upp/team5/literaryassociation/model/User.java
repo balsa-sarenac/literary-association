@@ -14,7 +14,7 @@ import java.util.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "user_table")
-public class User implements UserDetails {
+public class User implements UserDetails { //, org.camunda.bpm.engine.identity.User {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,7 +31,7 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String country;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
@@ -69,6 +69,11 @@ public class User implements UserDetails {
         }
         return authorities;
     }
+
+//    @Override
+//    public void setId(String s) {
+//
+//    }
 
     @Override
     public String getPassword() {
