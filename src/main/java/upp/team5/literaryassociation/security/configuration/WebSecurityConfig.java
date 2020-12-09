@@ -60,9 +60,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
 //                .antMatchers("/").hasAnyAuthority("ADMIN", "...")
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/register").permitAll()
-                .anyRequest().authenticated().and()
+                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/camunda/**").permitAll()
+                .antMatchers("/camunda*").permitAll()
+                .anyRequest().authenticated()
+                .and()
 
                 .cors().and()
 
@@ -75,7 +77,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         // TokenAuthenticationFilter ce ignorisati sve ispod navedene putanje
-        web.ignoring().antMatchers(HttpMethod.POST, "/login");
-        web.ignoring().antMatchers(HttpMethod.POST, "/register");
+        web.ignoring().antMatchers(HttpMethod.POST, "/auth/**");
+
+        web.ignoring().antMatchers(HttpMethod.GET, "/camunda-welcome");
+        web.ignoring().antMatchers(HttpMethod.GET, "/camunda/**");
+        web.ignoring().antMatchers(HttpMethod.POST, "/camunda/**");
+        web.ignoring().antMatchers(HttpMethod.PUT, "/camunda/**");
+        web.ignoring().antMatchers(HttpMethod.OPTIONS, "/camunda/**");
+        web.ignoring().antMatchers(HttpMethod.DELETE, "/camunda/**");
+        web.ignoring().antMatchers(HttpMethod.HEAD, "/camunda/**");
+        web.ignoring().antMatchers(HttpMethod.PATCH, "/camunda/**");
     }
 }
