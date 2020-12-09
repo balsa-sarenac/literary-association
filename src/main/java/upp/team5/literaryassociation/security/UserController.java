@@ -48,7 +48,7 @@ public class UserController {
 
     @GetMapping(name = "getLoginForm", path = "/form-login")
     public ResponseEntity<FormFieldsDTO> loginForm() {
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("Process_0blau3z");
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("login-process");
         Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).list().get(0);
 
         TaskFormData taskFormData = formService.getTaskFormData(task.getId());

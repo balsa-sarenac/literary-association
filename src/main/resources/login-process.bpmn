@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0stcoft" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.4.0">
-  <bpmn:process id="Process_0blau3z" name="User login" isExecutable="true">
+  <bpmn:process id="login-process" name="User login" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_16701pe</bpmn:outgoing>
     </bpmn:startEvent>
@@ -34,7 +34,7 @@
     <bpmn:sequenceFlow id="Flow_0tkvor7" sourceRef="Activity_0ecgbp5" targetRef="Event_1so8j7p" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_0blau3z">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="login-process">
       <bpmndi:BPMNEdge id="Flow_0tkvor7_di" bpmnElement="Flow_0tkvor7">
         <di:waypoint x="530" y="117" />
         <di:waypoint x="592" y="117" />
