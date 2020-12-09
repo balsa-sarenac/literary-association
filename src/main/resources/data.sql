@@ -97,10 +97,6 @@ insert into users_roles (user_id, role_id) values (6, 6);
 insert into users_roles (user_id, role_id) values (7, 6);
 insert into users_roles (user_id, role_id) values (8, 6);
 
--- CHIEF EDITORS
-insert into users_roles (user_id, role_id) values (9, 7);
-insert into users_roles (user_id, role_id) values (10, 7);
-
 -- COMMITTEE MEMBERS
 insert into users_roles (user_id, role_id) values (11, 8);
 insert into users_roles (user_id, role_id) values (12, 8);
