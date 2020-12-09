@@ -24,7 +24,7 @@
       <bpmn:outgoing>Flow_11b6s01</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="Flow_11b6s01" sourceRef="Activity_1bo4edx" targetRef="Activity_0ecgbp5" />
-    <bpmn:serviceTask id="Activity_0ecgbp5" name="Process login request" camunda:class="root.literary-association.security.LoginService">
+    <bpmn:serviceTask id="Activity_0ecgbp5" name="Process login request" camunda:class="upp.team5.literaryassociation.security.LoginService">
       <bpmn:incoming>Flow_11b6s01</bpmn:incoming>
       <bpmn:outgoing>Flow_0tkvor7</bpmn:outgoing>
     </bpmn:serviceTask>
