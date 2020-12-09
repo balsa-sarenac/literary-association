@@ -8,12 +8,12 @@
     <bpmn:userTask id="Activity_1bo4edx" name="Fill login form">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="FormField_0efbhhc" label="Username" type="string">
+          <camunda:formField id="username" label="Username" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
             </camunda:validation>
           </camunda:formField>
-          <camunda:formField id="FormField_06muf8i" label="Password" type="string">
+          <camunda:formField id="password" label="Password" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
             </camunda:validation>
@@ -35,17 +35,17 @@
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_0blau3z">
-      <bpmndi:BPMNEdge id="Flow_16701pe_di" bpmnElement="Flow_16701pe">
-        <di:waypoint x="215" y="117" />
-        <di:waypoint x="270" y="117" />
+      <bpmndi:BPMNEdge id="Flow_0tkvor7_di" bpmnElement="Flow_0tkvor7">
+        <di:waypoint x="530" y="117" />
+        <di:waypoint x="592" y="117" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_11b6s01_di" bpmnElement="Flow_11b6s01">
         <di:waypoint x="370" y="117" />
         <di:waypoint x="430" y="117" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0tkvor7_di" bpmnElement="Flow_0tkvor7">
-        <di:waypoint x="530" y="117" />
-        <di:waypoint x="592" y="117" />
+      <bpmndi:BPMNEdge id="Flow_16701pe_di" bpmnElement="Flow_16701pe">
+        <di:waypoint x="215" y="117" />
+        <di:waypoint x="270" y="117" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="179" y="99" width="36" height="36" />
