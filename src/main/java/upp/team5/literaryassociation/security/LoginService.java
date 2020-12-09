@@ -5,20 +5,16 @@ import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.model.User;
-import upp.team5.literaryassociation.security.dto.FormSubmissionDTO;
 import upp.team5.literaryassociation.security.dto.UserTokenState;
 import upp.team5.literaryassociation.security.token.TokenUtils;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Service @Slf4j
 public class LoginService implements JavaDelegate {
