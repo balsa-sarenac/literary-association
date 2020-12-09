@@ -12,9 +12,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.model.User;
-import upp.team5.literaryassociation.security.dto.JwtAuthenticationRequest;
+import upp.team5.literaryassociation.security.dto.FormSubmissionDTO;
 import upp.team5.literaryassociation.security.dto.UserTokenState;
 import upp.team5.literaryassociation.security.token.TokenUtils;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service @Slf4j
 public class LoginService implements JavaDelegate {
@@ -30,11 +34,17 @@ public class LoginService implements JavaDelegate {
         this.tokenUtils = tokenUtils;
     }
 
-    public ResponseEntity<?> login(JwtAuthenticationRequest authenticationRequest) {
-        log.info("Login function initialised");
+
+    @Override
+    public void execute(DelegateExecution execution) throws Exception {
+        log.info("Delegating login execution");
+
+        HashMap<String, Object> formSubmission = (HashMap<String, Object>) execution.getVariable("login-data");
+
+
         final Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(),
-                        authenticationRequest.getPassword()));
+                new UsernamePasswordAuthenticationToken(formSubmission.get("username"),
+                        formSubmission.get("password")));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         User user = (User) authentication.getPrincipal();
@@ -45,13 +55,7 @@ public class LoginService implements JavaDelegate {
         String email = user.getUsername();
         String role = user.getRoles().iterator().next().getName();
         Long id = user.getId();
-
-        return ResponseEntity.ok(new UserTokenState(id, jwt, expiresIn, refresh, email, role));
-    }
-
-    @Override
-    public void execute(DelegateExecution execution) throws Exception {
-        log.info("Delegating login execution");
+        UserTokenState userTokenState = new UserTokenState(id, jwt, expiresIn, refresh, email, role);
 
     }
 }

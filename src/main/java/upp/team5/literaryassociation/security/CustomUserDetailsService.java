@@ -15,9 +15,6 @@ import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.exception.BadRequestException;
 import upp.team5.literaryassociation.exception.UserNotFoundException;
 import upp.team5.literaryassociation.model.User;
-import upp.team5.literaryassociation.security.dto.JwtAuthenticationRequest;
-import upp.team5.literaryassociation.security.dto.UserTokenState;
-import upp.team5.literaryassociation.security.token.TokenUtils;
 
 @Service @Slf4j
 public class CustomUserDetailsService implements UserDetailsService {

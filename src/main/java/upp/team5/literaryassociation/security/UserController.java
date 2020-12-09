@@ -13,9 +13,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 import upp.team5.literaryassociation.security.dto.FormFieldsDTO;
-import upp.team5.literaryassociation.security.dto.JwtAuthenticationRequest;
+import upp.team5.literaryassociation.security.dto.FormSubmissionDTO;
+import upp.team5.literaryassociation.security.dto.FormSubmissionFieldDTO;
 
-import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 
 //@CrossOrigin("*")
@@ -46,7 +48,7 @@ public class UserController {
 
     @GetMapping(name = "getLoginForm", path = "/form-login")
     public ResponseEntity<FormFieldsDTO> loginForm() {
-        ProcessInstance processInstance = runtimeService.startProcessInstanceById("Process_0blau3z");
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("Process_0blau3z");
         Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).list().get(0);
 
         TaskFormData taskFormData = formService.getTaskFormData(task.getId());
@@ -57,36 +59,37 @@ public class UserController {
         return new ResponseEntity<>(formFieldsDTO, HttpStatus.OK);
     }
 
-    @PostMapping(name = "login", path = "/login")
-    public ResponseEntity<?> login(@RequestBody JwtAuthenticationRequest authenticationRequest)  throws AuthenticationException {
+    @PostMapping(name = "login", path = "/login/{taskId}")
+    public void login(@RequestBody FormSubmissionDTO formSubmissionDTO, @PathVariable String taskId,
+                      HttpServletRequest httpServletRequest)  throws AuthenticationException {
         log.info("Initialising login functionality");
-        return this.loginService.login(authenticationRequest);
+        HashMap<String, Object> map = this.listToMap(formSubmissionDTO.getFormFields());
+
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String processInstanceId = task.getProcessInstanceId();
+        runtimeService.setVariable(processInstanceId, "login-data", map);
+//        runtimeService.setVariable(processInstanceId, "login-request", httpServletRequest);
+        formService.submitTaskForm(taskId, map);
     }
 
-    /**
-     * If user is admin this endpoint will try to enable user with given id
-     * @param userId Id of the user to be enabled
-     * @throws upp.team5.literaryassociation.exception.UserNotFoundException if user is not found
-     * @throws upp.team5.literaryassociation.exception.BadRequestException if user is already enabled
-     * @return OK if user is enabled
-     */
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping(name = "enable", path = "/enable/{userId}")
     public ResponseEntity<?> enable(@PathVariable Long userId) {
         return this.userDetailsService.enable(userId);
     }
 
-    /**
-     * If user is admin this endpoint will try to disable user with given id
-     * @param userId Id of the user to be enabled
-     * @throws upp.team5.literaryassociation.exception.UserNotFoundException if user is not found
-     * @throws upp.team5.literaryassociation.exception.BadRequestException if user is already disabled
-     * @return OK if user is disabled
-     */
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping(name = "disable", path = "/disable/{userId}")
     public ResponseEntity<?> disable(@PathVariable Long userId) {
         return this.userDetailsService.disable(userId);
     }
 
+
+    private HashMap<String, Object> listToMap(List<FormSubmissionFieldDTO> formSubmissionDTOS) {
+        HashMap<String, Object> map = new HashMap<>();
+        for (FormSubmissionFieldDTO fs : formSubmissionDTOS) {
+            map.put(fs.getId(), fs.getValue());
+        }
+        return map;
+    }
 }
