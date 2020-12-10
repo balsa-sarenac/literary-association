@@ -30,7 +30,7 @@ public class RegistrationService {
 
     public ResponseEntity<?> register(RegistrationDTO regDTO) {
         var u = userRepository.getUserByEmail(regDTO.getEmail());
-        if(u == null) {
+        if(u != null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         User user = new User();
