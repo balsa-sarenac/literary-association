@@ -1,6 +1,8 @@
 package upp.team5.literaryassociation.security;
 
 import lombok.extern.slf4j.Slf4j;
+import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +17,7 @@ import java.util.Set;
 
 @Service
 @Slf4j
-public class RegistrationService {
+public class RegistrationService implements JavaDelegate {
 
     private UserRepository userRepository;
     private RoleRepository roleRepository;
@@ -50,5 +52,10 @@ public class RegistrationService {
         this.userRepository.save(user);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Override
+    public void execute(DelegateExecution delegateExecution) throws Exception {
+
     }
 }
