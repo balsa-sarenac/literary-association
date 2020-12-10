@@ -13,7 +13,7 @@ import upp.team5.literaryassociation.security.dto.RegistrationDTO;
 
 @RestController
 @Slf4j
-@RequestMapping(produces = "application/json", path = "/reg")
+@RequestMapping(produces = "application/json", path = "/auth")
 public class RegistrationController {
 
     private RegistrationService registrationService;
