@@ -40,28 +40,31 @@ public class AuthorRegistrationService implements JavaDelegate {
     public void execute(DelegateExecution delegateExecution) throws Exception {
         HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("author-register-data");
 
-        boolean userExists = true;
-        Optional.of(userRepository.getUserByEmail(formSubmission.get("email").toString())==null)
-                .orElseThrow(()->new UserAlreadyExistsException());
+        boolean userExists;
+        var u = userRepository.getUserByEmail(formSubmission.get("email").toString());
+        if(u != null) {
+            userExists = true;
 
-        userExists = false;
+        }
+        else{
+            userExists = false;
 
+            User user = new User();
+            user.setEnabled(false);
+            user.setCity(formSubmission.get("city").toString());
+            user.setCountry(formSubmission.get("country").toString());
+            user.setEmail(formSubmission.get("email").toString());
+            user.setFirstName(formSubmission.get("firstName").toString());
+            user.setLastName(formSubmission.get("lastName").toString());
+            user.setPassword(passwordEncoder.encode(formSubmission.get("password").toString()));
+
+            Set<Role> rolesSet = new HashSet<Role>();
+            var role = roleRepository.findByName("ROLE_PENDING_AUTHOR");
+            rolesSet.add(role);
+            user.setRoles(rolesSet);
+
+            this.userRepository.save(user);
+        }
         delegateExecution.setVariable("userExists", userExists);
-
-        User user = new User();
-        user.setEnabled(false);
-        user.setCity(formSubmission.get("city").toString());
-        user.setCountry(formSubmission.get("country").toString());
-        user.setEmail(formSubmission.get("email").toString());
-        user.setFirstName(formSubmission.get("firstName").toString());
-        user.setLastName(formSubmission.get("lastName").toString());
-        user.setPassword(passwordEncoder.encode(formSubmission.get("password").toString()));
-
-        Set<Role> rolesSet = new HashSet<Role>();
-        var role = roleRepository.findByName("ROLE_PENDING_AUTHOR");
-        rolesSet.add(role);
-        user.setRoles(rolesSet);
-
-        this.userRepository.save(user);
     }
 }
