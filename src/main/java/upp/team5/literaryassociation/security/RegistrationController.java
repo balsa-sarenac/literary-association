@@ -8,20 +8,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import upp.team5.literaryassociation.exception.UserAlreadyExistsException;
+import upp.team5.literaryassociation.security.dto.RegistrationDTO;
 
 @RestController
 @Slf4j
 @RequestMapping(produces = "application/json", path = "/reg")
 public class RegistrationController {
 
-    @Autowired
-    public RegistrationController() {
+    private RegistrationService registrationService;
 
+    @Autowired
+    public RegistrationController(RegistrationService registrationService) {
+        this.registrationService = registrationService;
     }
 
     @PostMapping(name = "register", path = "/register")
-    public ResponseEntity<?> register()  {
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> register(@RequestBody RegistrationDTO registrationDTO) throws UserAlreadyExistsException {
+        return registrationService.register(registrationDTO);
     }
 
 }
