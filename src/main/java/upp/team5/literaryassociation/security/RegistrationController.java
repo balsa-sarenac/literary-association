@@ -14,8 +14,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upp.team5.literaryassociation.exception.UserAlreadyExistsException;
 import upp.team5.literaryassociation.security.dto.FormFieldsDTO;
+import upp.team5.literaryassociation.security.dto.FormSubmissionDTO;
+import upp.team5.literaryassociation.security.dto.FormSubmissionFieldDTO;
 import upp.team5.literaryassociation.security.dto.RegistrationDTO;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -53,6 +56,26 @@ public class RegistrationController {
         FormFieldsDTO formFieldsDTO = new FormFieldsDTO(processInstance.getId(), task.getId(), properties);
 
         return new ResponseEntity<>(formFieldsDTO, HttpStatus.OK);
+    }
+
+    @PostMapping(name = "register-author", path = "/register-author/{taskId}")
+    public void registerAuthor(@RequestBody FormSubmissionDTO formSubmissionDTO, @PathVariable String taskId){
+        log.info("Initialising author register functionality");
+        HashMap<String, Object> map = this.listToMap(formSubmissionDTO.getFormFields());
+
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String processInstanceId = task.getProcessInstanceId();
+        runtimeService.setVariable(processInstanceId, "author-register-data", map);
+
+        formService.submitTaskForm(taskId, map);
+    }
+
+    private HashMap<String, Object> listToMap(List<FormSubmissionFieldDTO> formSubmissionDTOS) {
+        HashMap<String, Object> map = new HashMap<>();
+        for (FormSubmissionFieldDTO fs : formSubmissionDTOS) {
+            map.put(fs.getId(), fs.getValue());
+        }
+        return map;
     }
 }
 
