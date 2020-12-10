@@ -71,6 +71,7 @@ public class RegistrationService implements JavaDelegate {
         }
 
         runtimeService.setVariable(delegateExecution.getProcessInstanceId(), "userExists", false);
+
         User user = new User();
         user.setEnabled(false);
         user.setCity(formSubmission.get("city").toString());
@@ -79,6 +80,8 @@ public class RegistrationService implements JavaDelegate {
         user.setFirstName(formSubmission.get("firstName").toString());
         user.setLastName(formSubmission.get("lastName").toString());
         user.setPassword(passwordEncoder.encode(formSubmission.get("password").toString()));
+        user.setAccountNonExpired(true);
+        user.setAccountNonLocked(true);
 
         Set<Role> rolesSet = new HashSet<Role>();
         var isBeta = Boolean.parseBoolean(formSubmission.get("isBetaReader").toString());
@@ -86,10 +89,7 @@ public class RegistrationService implements JavaDelegate {
             rolesSet.add(roleRepository.findByName("ROLE_BETA_READER"));
         else
             rolesSet.add(roleRepository.findByName("ROLE_READER"));
-
         user.setRoles(rolesSet);
-
-        var check = runtimeService.getVariable(delegateExecution.getProcessInstanceId(), "userExists");
 
         this.userRepository.save(user);
     }
