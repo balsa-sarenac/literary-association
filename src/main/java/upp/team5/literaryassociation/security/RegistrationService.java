@@ -1,6 +1,7 @@
 package upp.team5.literaryassociation.security;
 
 import lombok.extern.slf4j.Slf4j;
+import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import upp.team5.literaryassociation.model.Role;
 import upp.team5.literaryassociation.model.User;
 import upp.team5.literaryassociation.security.dto.RegistrationDTO;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,6 +24,8 @@ public class RegistrationService implements JavaDelegate {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private RuntimeService runtimeService;
 
     @Autowired
     public RegistrationService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
@@ -54,10 +58,39 @@ public class RegistrationService implements JavaDelegate {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
-
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
+        log.info("Registration - user create initiated");
 
+        HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("register-data");
+
+        var u = userRepository.getUserByEmail(formSubmission.get("email").toString());
+        if(u != null) {
+            runtimeService.setVariable(delegateExecution.getProcessInstanceId(), "userExists", true);
+            return;
+        }
+
+        runtimeService.setVariable(delegateExecution.getProcessInstanceId(), "userExists", false);
+        User user = new User();
+        user.setEnabled(false);
+        user.setCity(formSubmission.get("city").toString());
+        user.setCountry(formSubmission.get("country").toString());
+        user.setEmail(formSubmission.get("email").toString());
+        user.setFirstName(formSubmission.get("firstName").toString());
+        user.setLastName(formSubmission.get("lastName").toString());
+        user.setPassword(passwordEncoder.encode(formSubmission.get("password").toString()));
+
+        Set<Role> rolesSet = new HashSet<Role>();
+        var isBeta = Boolean.parseBoolean(formSubmission.get("isBetaReader").toString());
+        if(isBeta)
+            rolesSet.add(roleRepository.findByName("ROLE_BETA_READER"));
+        else
+            rolesSet.add(roleRepository.findByName("ROLE_READER"));
+
+        user.setRoles(rolesSet);
+
+        var check = runtimeService.getVariable(delegateExecution.getProcessInstanceId(), "userExists");
+
+        this.userRepository.save(user);
     }
 }
