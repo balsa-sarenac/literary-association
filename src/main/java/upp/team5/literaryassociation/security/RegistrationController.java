@@ -20,6 +20,10 @@ import upp.team5.literaryassociation.security.dto.*;
 
 import java.util.HashMap;
 import java.util.List;
+import upp.team5.literaryassociation.security.dto.FormFieldsDTO;
+import upp.team5.literaryassociation.security.dto.FormSubmissionDTO;
+import upp.team5.literaryassociation.security.dto.FormSubmissionFieldDTO;
+import upp.team5.literaryassociation.security.dto.RegistrationDTO;
 
 @RestController
 @Slf4j
@@ -28,6 +32,7 @@ public class RegistrationController {
 
     private RegistrationService registrationService;
     private VerificationInformationRepository verificationInformationRepository;
+
     @Autowired
     private RuntimeService runtimeService;
     @Autowired
@@ -48,6 +53,38 @@ public class RegistrationController {
         return registrationService.register(registrationDTO);
     }
 
+    @GetMapping(name = "authorRegForm", path="/author-reg-form")
+    public ResponseEntity<FormFieldsDTO> authorRegFrom() {
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("author-reg");
+        Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).list().get(0);
+
+        TaskFormData taskFormData = formService.getTaskFormData(task.getId());
+        List<FormField> properties = taskFormData.getFormFields();
+
+        FormFieldsDTO formFieldsDTO = new FormFieldsDTO(processInstance.getId(), task.getId(), properties);
+
+        return new ResponseEntity<>(formFieldsDTO, HttpStatus.OK);
+    }
+
+    @PostMapping(name = "register-author", path = "/register-author/{taskId}")
+    public void registerAuthor(@RequestBody FormSubmissionDTO formSubmissionDTO, @PathVariable String taskId){
+        log.info("Initialising author register functionality");
+        HashMap<String, Object> map = this.listToMap(formSubmissionDTO.getFormFields());
+
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String processInstanceId = task.getProcessInstanceId();
+        runtimeService.setVariable(processInstanceId, "author-register-data", map);
+
+        formService.submitTaskForm(taskId, map);
+    }
+
+    private HashMap<String, Object> listToMap(List<FormSubmissionFieldDTO> formSubmissionDTOS) {
+        HashMap<String, Object> map = new HashMap<>();
+        for (FormSubmissionFieldDTO fs : formSubmissionDTOS) {
+            map.put(fs.getId(), fs.getValue());
+        }
+        return map;
+    }
     @GetMapping(name = "getRegistrationForm", path = "/form-registration")
     public ResponseEntity<FormFieldsDTO> getRegistrationForm() {
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("registration-process");
