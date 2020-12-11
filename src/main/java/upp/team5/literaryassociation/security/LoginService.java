@@ -2,22 +2,21 @@ package upp.team5.literaryassociation.security;
 
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.model.User;
+import upp.team5.literaryassociation.security.dto.LoginRequestDTO;
 import upp.team5.literaryassociation.security.dto.UserTokenState;
 import upp.team5.literaryassociation.security.token.TokenUtils;
 
-import java.util.HashMap;
-
 @Service @Slf4j
-public class LoginService implements JavaDelegate {
+public class LoginService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -30,17 +29,11 @@ public class LoginService implements JavaDelegate {
         this.tokenUtils = tokenUtils;
     }
 
-
-    @Override
-    public void execute(DelegateExecution execution) throws Exception {
-        log.info("Delegating login execution");
-
-        HashMap<String, Object> formSubmission = (HashMap<String, Object>) execution.getVariable("login-data");
-
-
+    public ResponseEntity<UserTokenState> login(LoginRequestDTO loginRequestDTO) {
+        log.info("Trying to authenticate");
         final Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(formSubmission.get("username"),
-                        formSubmission.get("password")));
+                new UsernamePasswordAuthenticationToken(loginRequestDTO.getEmail(),
+                        loginRequestDTO.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         User user = (User) authentication.getPrincipal();
@@ -51,7 +44,9 @@ public class LoginService implements JavaDelegate {
         String email = user.getUsername();
         String role = user.getRoles().iterator().next().getName();
         Long id = user.getId();
-        UserTokenState userTokenState = new UserTokenState(id, jwt, expiresIn, refresh, email, role);
 
+        log.info("Sending user his token");
+        UserTokenState userTokenState = new UserTokenState(id, jwt, expiresIn, refresh, email, role);
+        return new ResponseEntity<>(userTokenState, HttpStatus.OK);
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import upp.team5.literaryassociation.security.dto.FormFieldsDTO;
 import upp.team5.literaryassociation.security.dto.FormSubmissionDTO;
 import upp.team5.literaryassociation.security.dto.FormSubmissionFieldDTO;
+import upp.team5.literaryassociation.security.dto.LoginRequestDTO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -59,17 +60,10 @@ public class UserController {
         return new ResponseEntity<>(formFieldsDTO, HttpStatus.OK);
     }
 
-    @PostMapping(name = "login", path = "/login/{taskId}")
-    public void login(@RequestBody FormSubmissionDTO formSubmissionDTO, @PathVariable String taskId,
-                      HttpServletRequest httpServletRequest)  throws AuthenticationException {
+    @PostMapping(name = "login", path = "/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO)  throws AuthenticationException {
         log.info("Initialising login functionality");
-        HashMap<String, Object> map = this.listToMap(formSubmissionDTO.getFormFields());
-
-        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-        String processInstanceId = task.getProcessInstanceId();
-        runtimeService.setVariable(processInstanceId, "login-data", map);
-//        runtimeService.setVariable(processInstanceId, "login-request", httpServletRequest);
-        formService.submitTaskForm(taskId, map);
+        return loginService.login(loginRequestDTO);
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
