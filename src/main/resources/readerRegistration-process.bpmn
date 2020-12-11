@@ -220,7 +220,7 @@
       <bpmndi:BPMNShape id="Gateway_1j7v1x0_di" bpmnElement="Gateway_1j7v1x0" isMarkerVisible="true">
         <dc:Bounds x="545" y="425" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="605" y="436" width="59" height="27" />
+          <dc:Bounds x="610" y="436" width="59" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1umaslk_di" bpmnElement="Gateway_1umaslk" isMarkerVisible="true">

@@ -97,6 +97,13 @@
       <optional>true</optional>
     </dependency>
 
+    <!-- google library for SHA-256 hashing-->
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>20.0</version>
+    </dependency>
+
   </dependencies>
 
   <build>

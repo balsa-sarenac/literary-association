@@ -27,6 +27,7 @@ import java.util.List;
 public class RegistrationController {
 
     private RegistrationService registrationService;
+    private VerificationInformationRepository verificationInformationRepository;
     @Autowired
     private RuntimeService runtimeService;
     @Autowired
@@ -37,8 +38,9 @@ public class RegistrationController {
     private JavaMailSender javaMailSender;
 
     @Autowired
-    public RegistrationController(RegistrationService registrationService) {
+    public RegistrationController(RegistrationService registrationService, VerificationInformationRepository verificationInformationRepository) {
         this.registrationService = registrationService;
+        this.verificationInformationRepository = verificationInformationRepository;
     }
 
     @PostMapping(name = "register", path = "/register")
@@ -86,15 +88,22 @@ public class RegistrationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping(name = "clickVerification", path = "/clickVerification/{processKey}")
-    public ResponseEntity<?> clickVerification(@PathVariable String processKey) {
+    @GetMapping(name = "clickVerification", path = "/clickVerification/{email}/{hash}")
+    public ResponseEntity<?> clickVerification(@PathVariable String email, @PathVariable String hash) {
         log.info("verification link clicked");
-        MessageCorrelationResult result = runtimeService.createMessageCorrelation("LinkClicked")
-                .processInstanceBusinessKey(processKey)
-                .setVariable("userVerified", true)
-                .correlateWithResult();
-        var execution = result.getExecution();
-        return new ResponseEntity<>(HttpStatus.OK);
+
+        var verInf = verificationInformationRepository.getVerificationInformationByHash(hash);
+        if(verInf != null) {
+            if(verInf.getEmail().equals(email)){
+                MessageCorrelationResult result = runtimeService.createMessageCorrelation("LinkClicked")
+                        .processInstanceBusinessKey(verInf.getProcessBussinessKey())
+                        .setVariable("userVerified", true)
+                        .correlateWithResult();
+                var execution = result.getExecution();
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 }
