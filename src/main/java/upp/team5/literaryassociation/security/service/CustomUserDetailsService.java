@@ -1,13 +1,9 @@
-package upp.team5.literaryassociation.security;
+package upp.team5.literaryassociation.security.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,6 +11,7 @@ import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.exception.BadRequestException;
 import upp.team5.literaryassociation.exception.UserNotFoundException;
 import upp.team5.literaryassociation.model.User;
+import upp.team5.literaryassociation.security.repository.UserRepository;
 
 @Service @Slf4j
 public class CustomUserDetailsService implements UserDetailsService {

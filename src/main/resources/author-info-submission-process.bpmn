@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0yusdow" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.4.0">
   <bpmn:process id="author-reg" name="Author submission process" isExecutable="true">
-    <bpmn:serviceTask id="Activity_0uc2nxm" name="Create user" camunda:class="upp.team5.literaryassociation.security.AuthorRegistrationService">
+    <bpmn:serviceTask id="Activity_0uc2nxm" name="Create user" camunda:class="upp.team5.literaryassociation.security.service.AuthorRegistrationService">
       <bpmn:incoming>Flow_1yu4v6o</bpmn:incoming>
       <bpmn:outgoing>Flow_0st1pe0</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -10,11 +10,11 @@
       <bpmn:outgoing>Flow_0k0yckm</bpmn:outgoing>
       <bpmn:outgoing>Flow_0qaw5rg</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sendTask id="Activity_1c4fb44" name="Send verification link" camunda:class="upp.team5.literaryassociation.security.EmailService">
+    <bpmn:sendTask id="Activity_1c4fb44" name="Send verification link" camunda:class="upp.team5.literaryassociation.security.service.EmailService">
       <bpmn:incoming>Flow_0k0yckm</bpmn:incoming>
       <bpmn:outgoing>Flow_11owbb5</bpmn:outgoing>
     </bpmn:sendTask>
-    <bpmn:serviceTask id="Activity_1b3a6a9" name="Verify account" camunda:class="upp.team5.literaryassociation.security.VerifyService">
+    <bpmn:serviceTask id="Activity_1b3a6a9" name="Verify account" camunda:class="upp.team5.literaryassociation.security.service.VerifyService">
       <bpmn:incoming>Flow_0nh8hw1</bpmn:incoming>
       <bpmn:outgoing>Flow_1ua2bgo</bpmn:outgoing>
     </bpmn:serviceTask>

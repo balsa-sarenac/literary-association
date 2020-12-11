@@ -1,4 +1,4 @@
-package upp.team5.literaryassociation.security;
+package upp.team5.literaryassociation.security.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.IdentityService;
