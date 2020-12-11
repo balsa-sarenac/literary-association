@@ -22,7 +22,7 @@ public class VerificationInformation {
     private String email;
 
     @Column(nullable = false)
-    private String processBussinessKey;
+    private String processBusinessKey;
 
     @Column(nullable = false)
     private String hash;

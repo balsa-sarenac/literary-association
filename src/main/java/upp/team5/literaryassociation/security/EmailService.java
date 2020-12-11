@@ -7,7 +7,6 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.model.VerificationInformation;
 
@@ -35,18 +34,17 @@ public class EmailService implements JavaDelegate {
         HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("register-data");
         delegateExecution.setProcessBusinessKey(delegateExecution.getProcessInstanceId());
         VerificationInformation verInf = new VerificationInformation();
-        verInf.setProcessBussinessKey(delegateExecution.getProcessInstanceId());
+        verInf.setProcessBusinessKey(delegateExecution.getProcessInstanceId());
         verInf.setEmail(formSubmission.get("email").toString());
         var hashCode = Hashing.sha256()
-                .hashString(verInf.getProcessBussinessKey(), StandardCharsets.UTF_8)
+                .hashString(verInf.getProcessBusinessKey(), StandardCharsets.UTF_8)
                 .toString();
         verInf.setHash(hashCode);
         verificationInformationRepository.save(verInf);
 
-        SimpleMailMessage message = new SimpleMailMessage();
-
-
         var firstName = formSubmission.get("firstName");
+
+        SimpleMailMessage message = new SimpleMailMessage();
 
         message.setTo(formSubmission.get("email").toString());
         message.setSubject("Account verification");
