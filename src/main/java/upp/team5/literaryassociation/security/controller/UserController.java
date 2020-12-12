@@ -46,25 +46,15 @@ public class UserController {
         this.loginService = loginService;
     }
 
-
-    @GetMapping(name = "getLoginForm", path = "/form-login")
-    public ResponseEntity<FormFieldsDTO> loginForm() {
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("login-process");
-        Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).list().get(0);
-
-        TaskFormData taskFormData = formService.getTaskFormData(task.getId());
-        List<FormField> properties = taskFormData.getFormFields();
-
-        FormFieldsDTO formFieldsDTO = new FormFieldsDTO(processInstance.getId(), task.getId(), properties);
-
-        return new ResponseEntity<>(formFieldsDTO, HttpStatus.OK);
-    }
-
     @PostMapping(name = "login", path = "/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO)  throws AuthenticationException {
         log.info("Initialising login functionality");
         return loginService.login(loginRequestDTO);
     }
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @GetMapping(name = "getRequests", path = "/requests")
+    public ResponseEntity<?> getRegistrationRequests() {return this.userDetailsService.getRegistrationRequests();}
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping(name = "enable", path = "/enable/{userId}")
