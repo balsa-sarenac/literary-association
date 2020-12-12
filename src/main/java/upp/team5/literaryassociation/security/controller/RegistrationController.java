@@ -6,6 +6,7 @@ import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
+import org.camunda.bpm.engine.runtime.MessageCorrelationResult;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +14,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upp.team5.literaryassociation.exception.UserAlreadyExistsException;
-import upp.team5.literaryassociation.security.service.RegistrationService;
+import upp.team5.literaryassociation.security.VerificationInformationRepository;
 import upp.team5.literaryassociation.security.dto.FormFieldsDTO;
 import upp.team5.literaryassociation.security.dto.FormSubmissionDTO;
 import upp.team5.literaryassociation.security.dto.FormSubmissionFieldDTO;
 import upp.team5.literaryassociation.security.dto.RegistrationDTO;
+import upp.team5.literaryassociation.security.service.RegistrationService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +30,9 @@ import java.util.List;
 @RequestMapping(produces = "application/json", path = "/auth")
 public class RegistrationController {
 
+    private RegistrationService registrationService;
+    private VerificationInformationRepository verificationInformationRepository;
+
     @Autowired
     private RuntimeService runtimeService;
     @Autowired
@@ -35,11 +40,10 @@ public class RegistrationController {
     @Autowired
     private FormService formService;
 
-    private RegistrationService registrationService;
-
     @Autowired
-    public RegistrationController(RegistrationService registrationService) {
+    public RegistrationController(RegistrationService registrationService, VerificationInformationRepository verificationInformationRepository) {
         this.registrationService = registrationService;
+        this.verificationInformationRepository = verificationInformationRepository;
     }
 
     @PostMapping(name = "register", path = "/register")
@@ -72,6 +76,53 @@ public class RegistrationController {
         formService.submitTaskForm(taskId, map);
     }
 
+    @GetMapping(name = "getRegistrationForm", path = "/form-registration")
+    public ResponseEntity<FormFieldsDTO> getRegistrationForm() {
+        log.info("Registration form requested, initiating reader registration process");
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("registration-process");
+        Task regTask = taskService.createTaskQuery().processInstanceId(processInstance.getId()).list().get(0);
+
+        TaskFormData taskFormData = formService.getTaskFormData(regTask.getId());
+        List<FormField> fields = taskFormData.getFormFields();
+
+        FormFieldsDTO formFieldsDTO = new FormFieldsDTO(processInstance.getId(), regTask.getId(), fields);
+        return new ResponseEntity<>(formFieldsDTO, HttpStatus.OK);
+    }
+
+    @PostMapping(name = "submitRegistrationForm", path = "/submitRegForm/{taskId}")
+    public ResponseEntity<?> submitRegistrationForm(@RequestBody FormSubmissionDTO formSubmissionDTO, @PathVariable String taskId) throws UserAlreadyExistsException {
+        log.info("Registration form submitted");
+        HashMap<String, Object> regFormData = this.listToMap(formSubmissionDTO.getFormFields());
+        var isBetaReader = Boolean.parseBoolean( regFormData.get("isBetaReader").toString());
+
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String processInstanceId = task.getProcessInstanceId();
+
+        runtimeService.setVariable(processInstanceId, "register-data", regFormData);
+        runtimeService.setVariable(processInstanceId, "isBetaReader", isBetaReader);
+
+        formService.submitTaskForm(taskId, regFormData);
+        return  new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(name = "clickVerification", path = "/clickVerification/{email}/{hash}")
+    public ResponseEntity<?> clickVerification(@PathVariable String email, @PathVariable String hash) {
+        log.info("Verification link clicked");
+
+        var verInf = verificationInformationRepository.getVerificationInformationByHash(hash);
+        if(verInf != null) {
+            if(verInf.getEmail().equals(email)){
+                MessageCorrelationResult result = runtimeService.createMessageCorrelation("LinkClicked")
+                        .processInstanceBusinessKey(verInf.getProcessBusinessKey())
+                        .setVariable("userVerified", true)
+                        .correlateWithResult();
+                result.getExecution();
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     private HashMap<String, Object> listToMap(List<FormSubmissionFieldDTO> formSubmissionDTOS) {
         HashMap<String, Object> map = new HashMap<>();
         for (FormSubmissionFieldDTO fs : formSubmissionDTOS) {
@@ -79,5 +130,6 @@ public class RegistrationController {
         }
         return map;
     }
+
 }
 
