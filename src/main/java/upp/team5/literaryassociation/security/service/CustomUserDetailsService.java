@@ -79,11 +79,19 @@ public class CustomUserDetailsService implements UserDetailsService {
             ModelMapper modelMapper = new ModelMapper();
             RequestDTO requestDTO = modelMapper.map(user, RequestDTO.class);
             Set<Role> userRoles = user.getRoles();
-            requestDTO.setRole(userRoles.iterator().next().getName());
+            if (userRoles.size() != 0)
+                requestDTO.setRole(userRoles.iterator().next().getName().substring(5).toLowerCase().replace('_', ' '));
 
             requests.add(requestDTO);
         }
         log.info("Returning list of requests");
         return new ResponseEntity<>(requests, HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> delete(Long userId) {
+        log.info("Deleting user with given id");
+        this.userRepository.deleteById(userId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

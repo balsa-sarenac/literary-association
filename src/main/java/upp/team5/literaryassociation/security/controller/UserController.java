@@ -2,21 +2,15 @@ package upp.team5.literaryassociation.security.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.*;
-import org.camunda.bpm.engine.form.FormField;
-import org.camunda.bpm.engine.form.TaskFormData;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
-import upp.team5.literaryassociation.security.service.CustomUserDetailsService;
-import upp.team5.literaryassociation.security.service.LoginService;
-import upp.team5.literaryassociation.security.dto.FormFieldsDTO;
 import upp.team5.literaryassociation.security.dto.FormSubmissionFieldDTO;
 import upp.team5.literaryassociation.security.dto.LoginRequestDTO;
+import upp.team5.literaryassociation.security.service.CustomUserDetailsService;
+import upp.team5.literaryassociation.security.service.LoginService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -76,4 +70,10 @@ public class UserController {
         }
         return map;
     }
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @DeleteMapping(name = "delete", path = "/delete/{userId}")
+    public ResponseEntity<?> delete(@PathVariable Long userId) {
+        log.info("Calling service to delete given user");
+        return this.userDetailsService.delete(userId); }
 }
