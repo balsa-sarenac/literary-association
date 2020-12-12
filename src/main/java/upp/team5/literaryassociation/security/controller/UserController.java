@@ -21,7 +21,7 @@ import upp.team5.literaryassociation.security.dto.LoginRequestDTO;
 import java.util.HashMap;
 import java.util.List;
 
-//@CrossOrigin("*")
+@CrossOrigin
 @RestController @Slf4j
 @RequestMapping(produces = "application/json", path = "/auth")
 public class UserController {

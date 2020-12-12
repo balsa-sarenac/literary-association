@@ -53,9 +53,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .csrf().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 
-                .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
+                .exceptionHandling().and() //.authenticationEntryPoint(restAuthenticationEntryPoint).and()
 
                 .authorizeRequests()
 //                .antMatchers("/").hasAnyAuthority("ADMIN", "...")
@@ -68,7 +69,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
 
                 .cors().and()
-
                 .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, customUserDetailsService),
                         BasicAuthenticationFilter.class);
 
