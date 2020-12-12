@@ -1,4 +1,4 @@
-package upp.team5.literaryassociation.security;
+package upp.team5.literaryassociation.security.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.RuntimeService;
@@ -13,6 +13,8 @@ import upp.team5.literaryassociation.exception.UserAlreadyExistsException;
 import upp.team5.literaryassociation.model.Role;
 import upp.team5.literaryassociation.model.User;
 import upp.team5.literaryassociation.security.dto.RegistrationDTO;
+import upp.team5.literaryassociation.security.repository.RoleRepository;
+import upp.team5.literaryassociation.security.repository.UserRepository;
 
 import java.util.HashMap;
 import java.util.HashSet;

@@ -1,24 +1,18 @@
-package upp.team5.literaryassociation.security;
+package upp.team5.literaryassociation.security.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.camunda.bpm.engine.FormService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
-import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import upp.team5.literaryassociation.exception.UserAlreadyExistsException;
 import upp.team5.literaryassociation.model.Role;
 import upp.team5.literaryassociation.model.User;
+import upp.team5.literaryassociation.security.repository.RoleRepository;
+import upp.team5.literaryassociation.security.repository.UserRepository;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -27,7 +21,7 @@ public class AuthorRegistrationService implements JavaDelegate {
 
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
-    private  RoleRepository roleRepository;
+    private RoleRepository roleRepository;
 
     @Autowired
     AuthorRegistrationService(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository){

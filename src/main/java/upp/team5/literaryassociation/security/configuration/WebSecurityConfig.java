@@ -14,7 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import upp.team5.literaryassociation.security.CustomUserDetailsService;
+import upp.team5.literaryassociation.security.service.CustomUserDetailsService;
 import upp.team5.literaryassociation.security.auth.RestAuthenticationEntryPoint;
 import upp.team5.literaryassociation.security.token.TokenAuthenticationFilter;
 import upp.team5.literaryassociation.security.token.TokenUtils;
