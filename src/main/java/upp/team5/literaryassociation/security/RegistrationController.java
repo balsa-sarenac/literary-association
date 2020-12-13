@@ -86,18 +86,7 @@ public class RegistrationController {
         return new ResponseEntity<>(formFieldsDTO, HttpStatus.OK);
     }
 
-    @GetMapping(name = "getRegistrationForm", path = "/app-form")
-    public ResponseEntity<FormFieldsDTO> getDocumentApplicationForm() {
-        log.info("Application form requested, initiating writer document application process");
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("author-application");
-        Task regTask = taskService.createTaskQuery().processInstanceId(processInstance.getId()).list().get(0);
 
-        TaskFormData taskFormData = formService.getTaskFormData(regTask.getId());
-        List<FormField> fields = taskFormData.getFormFields();
-
-        FormFieldsDTO formFieldsDTO = new FormFieldsDTO(processInstance.getId(), regTask.getId(), fields);
-        return new ResponseEntity<>(formFieldsDTO, HttpStatus.OK);
-    }
 
     @PostMapping(name = "submitRegistrationForm", path = "/submitRegForm/{taskId}")
     public ResponseEntity<?> submitRegistrationForm(@RequestBody FormSubmissionDTO formSubmissionDTO, @PathVariable String taskId) throws UserAlreadyExistsException {
