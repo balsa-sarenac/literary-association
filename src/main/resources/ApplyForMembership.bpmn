@@ -67,7 +67,7 @@
     <bpmn:boundaryEvent id="Event_1msbc32" attachedToRef="Activity_0l2glvo">
       <bpmn:outgoing>Flow_1nrkz9b</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_1q0akjc">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P14D</bpmn:timeDuration>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P7D</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
     <bpmn:boundaryEvent id="Event_0zvj12y" attachedToRef="Activity_0c8z5t9">
