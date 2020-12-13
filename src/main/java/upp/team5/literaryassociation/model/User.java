@@ -37,6 +37,30 @@ public class User implements UserDetails { //, org.camunda.bpm.engine.identity.U
     @Column(nullable = false)
     private String password;
 
+    @ManyToMany
+    @JoinTable(name = "authors_books",
+            joinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id")
+    )
+    private Set<Book> authorBooks;
+
+    @ManyToMany
+    @JoinTable(name = "lector_books",
+            joinColumns = @JoinColumn(name = "lector_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id")
+    )
+    private Set<Book> lectorBooks;
+
+    @ManyToMany
+    @JoinTable(name = "editor_books",
+            joinColumns = @JoinColumn(name = "editor_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id")
+    )
+    private Set<Book> editorBooks;
+
+    @OneToMany(mappedBy = "chiefEditor", fetch = FetchType.LAZY)
+    private Set<Book> chiefEditorOfBooks;
+
     @Column
     private boolean enabled;
 
