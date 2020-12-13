@@ -21,4 +21,13 @@ public class Book {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chief_editor_id", referencedColumnName = "id")
     private User chiefEditor;
+
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+    private Set<PublishingRequest> publishingRequests;
+
+    @ManyToMany
+    @JoinTable(name = "books_genres",
+        joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id"))
+    private Set<Genre> genres;
 }
