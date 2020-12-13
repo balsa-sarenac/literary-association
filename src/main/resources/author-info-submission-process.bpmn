@@ -29,12 +29,37 @@
     <bpmn:userTask id="Activity_1rqq3h8" name="Fill registration fields">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="firstName" label="First Name" type="string" />
-          <camunda:formField id="lastName" label="Last Name" type="string" />
-          <camunda:formField id="country" label="Country" type="string" />
-          <camunda:formField id="city" label="City" type="string" />
-          <camunda:formField id="email" label="E-mail" type="string" />
-          <camunda:formField id="password" label="Password" type="string" />
+          <camunda:formField id="firstName" label="First Name" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="lastName" label="Last Name" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="country" label="Country" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="city" label="City" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="email" label="E-mail" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="password" label="Password" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+              <camunda:constraint name="minLength" config="8" />
+            </camunda:validation>
+          </camunda:formField>
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_04dasq2</bpmn:incoming>
@@ -62,20 +87,21 @@
   <bpmn:message id="Message_1afdhm9" name="LinkClicked" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="author-reg">
-      <bpmndi:BPMNEdge id="Flow_1yu4v6o_di" bpmnElement="Flow_1yu4v6o">
-        <di:waypoint x="370" y="210" />
-        <di:waypoint x="500" y="210" />
+      <bpmndi:BPMNEdge id="Flow_04dasq2_di" bpmnElement="Flow_04dasq2">
+        <di:waypoint x="188" y="210" />
+        <di:waypoint x="270" y="210" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0st1pe0_di" bpmnElement="Flow_0st1pe0">
-        <di:waypoint x="600" y="210" />
-        <di:waypoint x="685" y="210" />
+      <bpmndi:BPMNEdge id="Flow_1ua2bgo_di" bpmnElement="Flow_1ua2bgo">
+        <di:waypoint x="1180" y="210" />
+        <di:waypoint x="1242" y="210" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0k0yckm_di" bpmnElement="Flow_0k0yckm">
-        <di:waypoint x="735" y="210" />
-        <di:waypoint x="830" y="210" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="762" y="223" width="15" height="14" />
-        </bpmndi:BPMNLabel>
+      <bpmndi:BPMNEdge id="Flow_0nh8hw1_di" bpmnElement="Flow_0nh8hw1">
+        <di:waypoint x="1018" y="210" />
+        <di:waypoint x="1080" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11owbb5_di" bpmnElement="Flow_11owbb5">
+        <di:waypoint x="930" y="210" />
+        <di:waypoint x="982" y="210" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0qaw5rg_di" bpmnElement="Flow_0qaw5rg">
         <di:waypoint x="710" y="185" />
@@ -84,21 +110,20 @@
           <dc:Bounds x="685" y="133" width="18" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_11owbb5_di" bpmnElement="Flow_11owbb5">
-        <di:waypoint x="930" y="210" />
-        <di:waypoint x="982" y="210" />
+      <bpmndi:BPMNEdge id="Flow_0k0yckm_di" bpmnElement="Flow_0k0yckm">
+        <di:waypoint x="735" y="210" />
+        <di:waypoint x="830" y="210" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="762" y="223" width="15" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0nh8hw1_di" bpmnElement="Flow_0nh8hw1">
-        <di:waypoint x="1018" y="210" />
-        <di:waypoint x="1080" y="210" />
+      <bpmndi:BPMNEdge id="Flow_0st1pe0_di" bpmnElement="Flow_0st1pe0">
+        <di:waypoint x="600" y="210" />
+        <di:waypoint x="685" y="210" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1ua2bgo_di" bpmnElement="Flow_1ua2bgo">
-        <di:waypoint x="1180" y="210" />
-        <di:waypoint x="1242" y="210" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_04dasq2_di" bpmnElement="Flow_04dasq2">
-        <di:waypoint x="188" y="210" />
-        <di:waypoint x="270" y="210" />
+      <bpmndi:BPMNEdge id="Flow_1yu4v6o_di" bpmnElement="Flow_1yu4v6o">
+        <di:waypoint x="370" y="210" />
+        <di:waypoint x="500" y="210" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Activity_0uc2nxm_di" bpmnElement="Activity_0uc2nxm">
         <dc:Bounds x="500" y="170" width="100" height="80" />
@@ -121,6 +146,9 @@
           <dc:Bounds x="960" y="155" width="80" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0vlsvf0_di" bpmnElement="Event_0vlsvf0">
+        <dc:Bounds x="692" y="82" width="36" height="36" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1rqq3h8_di" bpmnElement="Activity_1rqq3h8">
         <dc:Bounds x="270" y="170" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -129,9 +157,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0pk8rgg_di" bpmnElement="Event_0pk8rgg">
         <dc:Bounds x="1242" y="192" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0vlsvf0_di" bpmnElement="Event_0vlsvf0">
-        <dc:Bounds x="692" y="82" width="36" height="36" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
