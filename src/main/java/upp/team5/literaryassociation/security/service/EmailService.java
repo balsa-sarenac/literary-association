@@ -9,6 +9,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.model.VerificationInformation;
+import upp.team5.literaryassociation.security.repository.VerificationInformationRepository;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;

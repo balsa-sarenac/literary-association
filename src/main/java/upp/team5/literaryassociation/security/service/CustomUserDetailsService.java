@@ -1,6 +1,7 @@
 package upp.team5.literaryassociation.security.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,17 +11,26 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.exception.BadRequestException;
 import upp.team5.literaryassociation.exception.UserNotFoundException;
+import upp.team5.literaryassociation.model.Role;
 import upp.team5.literaryassociation.model.User;
+import upp.team5.literaryassociation.security.dto.RequestDTO;
+import upp.team5.literaryassociation.security.repository.RoleRepository;
 import upp.team5.literaryassociation.security.repository.UserRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Service @Slf4j
 public class CustomUserDetailsService implements UserDetailsService {
 
     private UserRepository userRepository;
+    private RoleRepository roleRepository;
 
     @Autowired
-    public CustomUserDetailsService(UserRepository userRepository) {
+    public CustomUserDetailsService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -56,5 +66,31 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private User getUser(Long userId) {
         return this.userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+    }
+
+    public ResponseEntity<List<RequestDTO>> getRegistrationRequests() {
+        log.info("Searching for all registration requests");
+        List<Role> roles = this.roleRepository.findAllByNameIn(List.of("ROLE_LECTOR", "ROLE_EDITOR"));
+        List<User> users = this.userRepository.findAllByEnabledAndRolesIn(false, roles);
+
+        List<RequestDTO> requests = new ArrayList<>();
+        for (User user : users) {
+            ModelMapper modelMapper = new ModelMapper();
+            RequestDTO requestDTO = modelMapper.map(user, RequestDTO.class);
+            Set<Role> userRoles = user.getRoles();
+            if (userRoles.size() != 0)
+                requestDTO.setRole(userRoles.iterator().next().getName().substring(5).toLowerCase().replace('_', ' '));
+
+            requests.add(requestDTO);
+        }
+        log.info("Returning list of requests");
+        return new ResponseEntity<>(requests, HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> delete(Long userId) {
+        log.info("Deleting user with given id");
+        this.userRepository.deleteById(userId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
