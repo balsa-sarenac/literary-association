@@ -61,6 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/").hasAnyAuthority("ADMIN", "...")
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers("/auth/**").permitAll()
+                .antMatchers("/membership/**").permitAll()
                 .antMatchers("/camunda/**").permitAll()
                 .antMatchers("/camunda*").permitAll()
                 .anyRequest().authenticated()

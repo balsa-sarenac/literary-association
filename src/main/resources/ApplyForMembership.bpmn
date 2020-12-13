@@ -5,7 +5,7 @@
       <bpmn:incoming>Flow_1aj9v8e</bpmn:incoming>
       <bpmn:outgoing>Flow_121s02m</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:serviceTask id="Activity_0qv8oyr" name="Procees application" camunda:class="upp.team5.literaryassociation.authorMembershipApplication.ProcessApplicationService">
+    <bpmn:serviceTask id="Activity_0qv8oyr" name="Procees application" camunda:class="upp.team5.literaryassociation.membershipApplication.service.ProcessApplicationService">
       <bpmn:incoming>Flow_0w7r3z5</bpmn:incoming>
       <bpmn:outgoing>Flow_0l9fwsk</bpmn:outgoing>
     </bpmn:serviceTask>
