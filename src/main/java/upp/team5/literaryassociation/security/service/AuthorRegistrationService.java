@@ -32,7 +32,7 @@ public class AuthorRegistrationService implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
-        HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("author-register-data");
+        HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("register-data");
 
         boolean userExists;
         var u = userRepository.getUserByEmail(formSubmission.get("email").toString());

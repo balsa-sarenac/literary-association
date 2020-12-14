@@ -71,7 +71,7 @@ public class RegistrationController {
 
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         String processInstanceId = task.getProcessInstanceId();
-        runtimeService.setVariable(processInstanceId, "author-register-data", map);
+        runtimeService.setVariable(processInstanceId, "register-data", map);
 
         formService.submitTaskForm(taskId, map);
     }
