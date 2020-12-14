@@ -1,4 +1,4 @@
-package upp.team5.literaryassociation.security;
+package upp.team5.literaryassociation.security.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.FormService;
@@ -14,14 +14,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upp.team5.literaryassociation.exception.UserAlreadyExistsException;
-
-import java.util.HashMap;
-import java.util.List;
+import upp.team5.literaryassociation.security.repository.VerificationInformationRepository;
 import upp.team5.literaryassociation.security.dto.FormFieldsDTO;
 import upp.team5.literaryassociation.security.dto.FormSubmissionDTO;
 import upp.team5.literaryassociation.security.dto.FormSubmissionFieldDTO;
 import upp.team5.literaryassociation.security.dto.RegistrationDTO;
+import upp.team5.literaryassociation.security.service.RegistrationService;
 
+import java.util.HashMap;
+import java.util.List;
+
+@CrossOrigin
 @RestController
 @Slf4j
 @RequestMapping(produces = "application/json", path = "/auth")
@@ -68,7 +71,7 @@ public class RegistrationController {
 
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         String processInstanceId = task.getProcessInstanceId();
-        runtimeService.setVariable(processInstanceId, "author-register-data", map);
+        runtimeService.setVariable(processInstanceId, "register-data", map);
 
         formService.submitTaskForm(taskId, map);
     }

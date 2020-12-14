@@ -1,10 +1,11 @@
-package upp.team5.literaryassociation.security;
+package upp.team5.literaryassociation.security.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import upp.team5.literaryassociation.security.repository.UserRepository;
 
 import java.util.HashMap;
 

@@ -37,6 +37,51 @@ public class User implements UserDetails { //, org.camunda.bpm.engine.identity.U
     @Column(nullable = false)
     private String password;
 
+    @ManyToMany
+    @JoinTable(name = "authors_books",
+            joinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id")
+    )
+    private Set<Book> authorBooks;
+
+    @ManyToMany
+    @JoinTable(name = "lector_books",
+            joinColumns = @JoinColumn(name = "lector_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id")
+    )
+    private Set<Book> lectorBooks;
+
+    @ManyToMany
+    @JoinTable(name = "editor_books",
+            joinColumns = @JoinColumn(name = "editor_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id")
+    )
+    private Set<Book> editorBooks;
+
+    @OneToMany(mappedBy = "chiefEditor", fetch = FetchType.LAZY)
+    private Set<Book> chiefEditorOfBooks;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinTable(name = "author_membershipRequest",
+        joinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "request_id", referencedColumnName = "id"))
+    private MembershipRequest membershipRequest;
+
+    @ManyToMany
+    @JoinTable(name = "user_genre",
+        joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id"))
+    private Set<Genre> genres;
+
+    @ManyToMany
+    @JoinTable(name = "beta_reader_genres",
+        joinColumns = @JoinColumn(name = "beta_user_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id"))
+    private Set<Genre> betaGenres;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<Note> notes;
+
     @Column
     private boolean enabled;
 

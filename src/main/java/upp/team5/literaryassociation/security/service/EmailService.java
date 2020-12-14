@@ -1,4 +1,4 @@
-package upp.team5.literaryassociation.security;
+package upp.team5.literaryassociation.security.service;
 
 import com.google.common.hash.Hashing;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +9,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.model.VerificationInformation;
+import upp.team5.literaryassociation.security.repository.VerificationInformationRepository;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
