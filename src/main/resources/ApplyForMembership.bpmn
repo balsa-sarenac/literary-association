@@ -50,7 +50,11 @@
     <bpmn:userTask id="Activity_0whclll" name="Submit documents">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="FormField_1hoq3od" label="Documents" type="file" />
+          <camunda:formField id="files" label="Documents" type="file">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_07menlq</bpmn:incoming>
