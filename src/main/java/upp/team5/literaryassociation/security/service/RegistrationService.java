@@ -10,14 +10,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.exception.UserAlreadyExistsException;
+import upp.team5.literaryassociation.model.Genre;
 import upp.team5.literaryassociation.model.Role;
 import upp.team5.literaryassociation.model.User;
 import upp.team5.literaryassociation.security.dto.RegistrationDTO;
+import upp.team5.literaryassociation.security.repository.GenreRepository;
 import upp.team5.literaryassociation.security.repository.RoleRepository;
 import upp.team5.literaryassociation.security.repository.UserRepository;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -26,14 +29,16 @@ public class RegistrationService implements JavaDelegate {
 
     private UserRepository userRepository;
     private RoleRepository roleRepository;
+    private GenreRepository genreRepository;
     private PasswordEncoder passwordEncoder;
     @Autowired
     private RuntimeService runtimeService;
 
     @Autowired
-    public RegistrationService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public RegistrationService(UserRepository userRepository, RoleRepository roleRepository, GenreRepository genreRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.genreRepository = genreRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -59,6 +64,10 @@ public class RegistrationService implements JavaDelegate {
         this.userRepository.save(user);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public List<Genre> findAllGenres() {
+        return this.genreRepository.findAll();
     }
 
     @Override

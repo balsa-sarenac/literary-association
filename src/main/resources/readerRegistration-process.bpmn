@@ -47,6 +47,7 @@
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="isBetaReader" label="Beta reader" type="boolean" defaultValue="false" />
+          <camunda:formField id="genres" label="Genres" type="enum" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0ts4j2f</bpmn:incoming>

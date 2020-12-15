@@ -6,6 +6,7 @@ import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
+import org.camunda.bpm.engine.impl.form.type.EnumFormType;
 import org.camunda.bpm.engine.runtime.MessageCorrelationResult;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
@@ -14,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upp.team5.literaryassociation.exception.UserAlreadyExistsException;
+import upp.team5.literaryassociation.model.Genre;
+import upp.team5.literaryassociation.security.repository.GenreRepository;
 import upp.team5.literaryassociation.security.repository.VerificationInformationRepository;
 import upp.team5.literaryassociation.security.dto.FormFieldsDTO;
 import upp.team5.literaryassociation.security.dto.FormSubmissionDTO;
@@ -23,6 +26,7 @@ import upp.team5.literaryassociation.security.service.RegistrationService;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin
 @RestController
@@ -32,6 +36,7 @@ public class RegistrationController {
 
     private RegistrationService registrationService;
     private VerificationInformationRepository verificationInformationRepository;
+    private GenreRepository genreRepository;
 
     @Autowired
     private RuntimeService runtimeService;
@@ -41,9 +46,10 @@ public class RegistrationController {
     private FormService formService;
 
     @Autowired
-    public RegistrationController(RegistrationService registrationService, VerificationInformationRepository verificationInformationRepository) {
+    public RegistrationController(RegistrationService registrationService, VerificationInformationRepository verificationInformationRepository, GenreRepository genreRepository) {
         this.registrationService = registrationService;
         this.verificationInformationRepository = verificationInformationRepository;
+        this.genreRepository = genreRepository;
     }
 
     @PostMapping(name = "register", path = "/register")
@@ -82,8 +88,20 @@ public class RegistrationController {
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("registration-process");
         Task regTask = taskService.createTaskQuery().processInstanceId(processInstance.getId()).list().get(0);
 
+        List<Genre> genres = genreRepository.findAll();
+
         TaskFormData taskFormData = formService.getTaskFormData(regTask.getId());
         List<FormField> fields = taskFormData.getFormFields();
+
+        for(FormField field : fields){
+            if(field.getId().equals("genres")){
+                Map<String, String> enumType = ((EnumFormType) field.getType()).getValues();
+                enumType.clear();
+                for(Genre g: genres){
+                    enumType.put(g.getName(), g.getName());
+                }
+            }
+        }
 
         FormFieldsDTO formFieldsDTO = new FormFieldsDTO(processInstance.getId(), regTask.getId(), fields);
         return new ResponseEntity<>(formFieldsDTO, HttpStatus.OK);
