@@ -1,4 +1,4 @@
-package upp.team5.literaryassociation.security.service;
+package upp.team5.literaryassociation.security;
 
 import com.google.common.hash.Hashing;
 import lombok.extern.slf4j.Slf4j;

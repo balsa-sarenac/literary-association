@@ -1,7 +1,9 @@
 package upp.team5.literaryassociation.security.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.camunda.bpm.BpmPlatform;
 import org.camunda.bpm.engine.FormService;
+import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.form.FormField;
@@ -16,14 +18,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upp.team5.literaryassociation.exception.UserAlreadyExistsException;
 import upp.team5.literaryassociation.model.Genre;
+import upp.team5.literaryassociation.security.dto.*;
 import upp.team5.literaryassociation.security.repository.GenreRepository;
 import upp.team5.literaryassociation.security.repository.VerificationInformationRepository;
-import upp.team5.literaryassociation.security.dto.FormFieldsDTO;
-import upp.team5.literaryassociation.security.dto.FormSubmissionDTO;
-import upp.team5.literaryassociation.security.dto.FormSubmissionFieldDTO;
-import upp.team5.literaryassociation.security.dto.RegistrationDTO;
-import upp.team5.literaryassociation.security.service.RegistrationService;
+import upp.team5.literaryassociation.security.RegistrationService;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,7 +103,7 @@ public class RegistrationController {
             }
         }
 
-        FormFieldsDTO formFieldsDTO = new FormFieldsDTO(processInstance.getId(), regTask.getId(), fields);
+        FormFieldsDTO formFieldsDTO = new FormFieldsDTO(processInstance.getProcessInstanceId(), regTask.getId(), fields);
         return new ResponseEntity<>(formFieldsDTO, HttpStatus.OK);
     }
 
@@ -119,7 +119,92 @@ public class RegistrationController {
         runtimeService.setVariable(processInstanceId, "register-data", regFormData);
         runtimeService.setVariable(processInstanceId, "isBetaReader", isBetaReader);
 
+        TaskFormData taskFormData = formService.getTaskFormData(task.getId());
+        List<FormField> fields = taskFormData.getFormFields();
+        List<Genre> genres = genreRepository.findAll();
+        for(FormField field : fields){
+            if(field.getId().equals("genres")){
+                Map<String, String> enumType = ((EnumFormType) field.getType()).getValues();
+                enumType.clear();
+                for(Genre g: genres){
+                    enumType.put(g.getName(), g.getName());
+                }
+            }
+        }
+
+        if(regFormData.get("genres").toString() != "") {
+            List<String> selectedGenres = Arrays.asList(regFormData.get("genres").toString().split(","));
+            regFormData.put("genres", selectedGenres.get(0));
+        }
+        else {
+            regFormData.put("genres", "");
+        }
+
+        var user = "regular";
+        if(isBetaReader)
+            user = "beta";
+
         formService.submitTaskForm(taskId, regFormData);
+
+        return  new ResponseEntity<>(new UserTypeDTO(user), HttpStatus.OK);
+    }
+
+    @GetMapping(name = "getAdditionalGenresForm", path = "/form-genres/{processId}")
+    public ResponseEntity<FormFieldsDTO> getAdditionalGenresForm(@PathVariable String processId) {
+        log.info("Additional genres form requested");
+
+        var task = taskService.createTaskQuery().active().processInstanceId(processId).list().stream().findFirst();
+
+        if(task != null) {
+            List<Genre> genres = genreRepository.findAll();
+
+            TaskFormData taskFormData = formService.getTaskFormData(task.get().getId());
+
+            List<FormField> fields = taskFormData.getFormFields();
+
+            for(FormField field : fields){
+                if(field.getId().equals("betaGenres")){
+                    Map<String, String> enumType = ((EnumFormType) field.getType()).getValues();
+                    enumType.clear();
+                    for(Genre g: genres){
+                        enumType.put(g.getName(), g.getName());
+                    }
+                }
+            }
+
+            FormFieldsDTO formFieldsDTO = new FormFieldsDTO(processId, task.get().getId(), fields);
+            return new ResponseEntity<>(formFieldsDTO, HttpStatus.OK);
+
+        }
+        else
+            return new ResponseEntity<>(null, HttpStatus.OK);
+
+
+
+    }
+
+    @PostMapping(name = "submitAdditionalGenres", path = "/submitAdditionalGenres/{processId}")
+    public ResponseEntity<?> submitAdditionalGenres(@RequestBody FormSubmissionDTO formSubmissionDTO, @PathVariable String processId) {
+        log.info("Additional genres submitted");
+        HashMap<String, Object> genreFormData = this.listToMap(formSubmissionDTO.getFormFields());
+        runtimeService.setVariable(processId, "additional-genres", genreFormData);
+
+        var task = taskService.createTaskQuery().active().processInstanceId(processId).list().stream().findFirst();
+        if(task != null) {
+            TaskFormData taskFormData = formService.getTaskFormData(task.get().getId());
+            List<FormField> fields = taskFormData.getFormFields();
+            List<Genre> genres = genreRepository.findAll();
+            for(FormField field : fields){
+                if(field.getId().equals("betaGenres")){
+                    Map<String, String> enumType = ((EnumFormType) field.getType()).getValues();
+                    enumType.clear();
+                    for(Genre g: genres){
+                        enumType.put(g.getName(), g.getName());
+                    }
+                }
+            }
+            formService.submitTaskForm(task.get().getId(), genreFormData);
+        }
         return  new ResponseEntity<>(HttpStatus.OK);
     }
 

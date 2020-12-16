@@ -102,13 +102,13 @@ insert into users_roles (user_id, role_id) values (12, 8);
 insert into users_roles (user_id, role_id) values (13, 9);
 
 --GENRES
-insert into genre_table (id, name) values (1,'Action');
-insert into genre_table (id, name) values (2,'Adventure');
-insert into genre_table (id, name) values (3,'Comic Book');
-insert into genre_table (id, name) values (4,'Fantasy');
-insert into genre_table (id, name) values (5,'Mystery');
-insert into genre_table (id, name) values (6,'Historical Fiction');
-insert into genre_table (id, name) values (7,'Horror');
-insert into genre_table (id, name) values (8,'Science Fiction');
-insert into genre_table (id, name) values (9,'Short Story');
-insert into genre_table (id, name) values (10,'Thriller');
+insert into genre (id, name) values (1,'Action');
+insert into genre (id, name) values (2,'Adventure');
+insert into genre (id, name) values (3,'Comic Book');
+insert into genre (id, name) values (4,'Fantasy');
+insert into genre (id, name) values (5,'Mystery');
+insert into genre (id, name) values (6,'Historical Fiction');
+insert into genre (id, name) values (7,'Horror');
+insert into genre (id, name) values (8,'Science Fiction');
+insert into genre (id, name) values (9,'Short Story');
+insert into genre (id, name) values (10,'Thriller');

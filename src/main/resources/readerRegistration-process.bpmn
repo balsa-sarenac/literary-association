@@ -110,6 +110,11 @@
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_03wxsli" sourceRef="Activity_0fay6rj" targetRef="Gateway_1umaslk" />
     <bpmn:userTask id="Activity_0fay6rj" name="Add additional genres">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="betaGenres" label="Please choose genres" type="enum" />
+        </camunda:formData>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0ae065j</bpmn:incoming>
       <bpmn:outgoing>Flow_03wxsli</bpmn:outgoing>
     </bpmn:userTask>

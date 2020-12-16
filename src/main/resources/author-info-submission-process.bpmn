@@ -10,7 +10,7 @@
       <bpmn:outgoing>Flow_0k0yckm</bpmn:outgoing>
       <bpmn:outgoing>Flow_0qaw5rg</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sendTask id="Activity_1c4fb44" name="Send verification link" camunda:class="upp.team5.literaryassociation.security.service.EmailService">
+    <bpmn:sendTask id="Activity_1c4fb44" name="Send verification link" camunda:class="upp.team5.literaryassociation.security.EmailService">
       <bpmn:incoming>Flow_0k0yckm</bpmn:incoming>
       <bpmn:outgoing>Flow_11owbb5</bpmn:outgoing>
     </bpmn:sendTask>
