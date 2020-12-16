@@ -134,6 +134,8 @@ public class RegistrationController {
 
         if(regFormData.get("genres").toString() != "") {
             List<String> selectedGenres = Arrays.asList(regFormData.get("genres").toString().split(","));
+            if(selectedGenres.size() < 2)
+                return  new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             regFormData.put("genres", selectedGenres.get(0));
         }
         else {
@@ -187,6 +189,9 @@ public class RegistrationController {
     public ResponseEntity<?> submitAdditionalGenres(@RequestBody FormSubmissionDTO formSubmissionDTO, @PathVariable String processId) {
         log.info("Additional genres submitted");
         HashMap<String, Object> genreFormData = this.listToMap(formSubmissionDTO.getFormFields());
+        if(genreFormData.size() < 2) {
+            return  new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         runtimeService.setVariable(processId, "additional-genres", genreFormData);
 
         var task = taskService.createTaskQuery().active().processInstanceId(processId).list().stream().findFirst();
