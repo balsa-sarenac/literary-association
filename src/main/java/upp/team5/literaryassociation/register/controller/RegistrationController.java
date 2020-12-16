@@ -1,4 +1,4 @@
-package upp.team5.literaryassociation.security.controller;
+package upp.team5.literaryassociation.register.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.FormService;
@@ -14,12 +14,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upp.team5.literaryassociation.exception.UserAlreadyExistsException;
-import upp.team5.literaryassociation.security.repository.VerificationInformationRepository;
-import upp.team5.literaryassociation.security.dto.FormFieldsDTO;
-import upp.team5.literaryassociation.security.dto.FormSubmissionDTO;
-import upp.team5.literaryassociation.security.dto.FormSubmissionFieldDTO;
-import upp.team5.literaryassociation.security.dto.RegistrationDTO;
-import upp.team5.literaryassociation.security.service.RegistrationService;
+import upp.team5.literaryassociation.register.repository.VerificationInformationRepository;
+import upp.team5.literaryassociation.register.dto.FormFieldsDTO;
+import upp.team5.literaryassociation.register.dto.FormSubmissionDTO;
+import upp.team5.literaryassociation.register.dto.FormSubmissionFieldDTO;
+import upp.team5.literaryassociation.register.dto.RegistrationDTO;
+import upp.team5.literaryassociation.register.service.RegistrationService;
 
 import java.util.HashMap;
 import java.util.List;

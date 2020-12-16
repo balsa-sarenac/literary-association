@@ -1,4 +1,4 @@
-package upp.team5.literaryassociation.security.dto;
+package upp.team5.literaryassociation.register.dto;
 
 import lombok.*;
 

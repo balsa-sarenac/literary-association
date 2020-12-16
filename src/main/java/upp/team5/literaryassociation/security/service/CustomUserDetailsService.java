@@ -13,7 +13,7 @@ import upp.team5.literaryassociation.exception.BadRequestException;
 import upp.team5.literaryassociation.exception.UserNotFoundException;
 import upp.team5.literaryassociation.model.Role;
 import upp.team5.literaryassociation.model.User;
-import upp.team5.literaryassociation.security.dto.RequestDTO;
+import upp.team5.literaryassociation.register.dto.RequestDTO;
 import upp.team5.literaryassociation.security.repository.RoleRepository;
 import upp.team5.literaryassociation.security.repository.UserRepository;
 

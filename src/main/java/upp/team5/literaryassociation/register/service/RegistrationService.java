@@ -1,4 +1,4 @@
-package upp.team5.literaryassociation.security.service;
+package upp.team5.literaryassociation.register.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.RuntimeService;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.exception.UserAlreadyExistsException;
 import upp.team5.literaryassociation.model.Role;
 import upp.team5.literaryassociation.model.User;
-import upp.team5.literaryassociation.security.dto.RegistrationDTO;
+import upp.team5.literaryassociation.register.dto.RegistrationDTO;
 import upp.team5.literaryassociation.security.repository.RoleRepository;
 import upp.team5.literaryassociation.security.repository.UserRepository;
 
