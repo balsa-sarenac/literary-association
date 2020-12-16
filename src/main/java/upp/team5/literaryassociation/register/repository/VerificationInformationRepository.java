@@ -1,4 +1,4 @@
-package upp.team5.literaryassociation.security.repository;
+package upp.team5.literaryassociation.register.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import upp.team5.literaryassociation.model.VerificationInformation;

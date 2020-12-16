@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
-import upp.team5.literaryassociation.security.dto.FormSubmissionFieldDTO;
+import upp.team5.literaryassociation.register.dto.FormSubmissionFieldDTO;
 import upp.team5.literaryassociation.security.dto.LoginRequestDTO;
 import upp.team5.literaryassociation.security.service.CustomUserDetailsService;
 import upp.team5.literaryassociation.security.service.LoginService;
@@ -62,6 +62,11 @@ public class UserController {
         return this.userDetailsService.disable(userId);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @DeleteMapping(name = "delete", path = "/delete/{userId}")
+    public ResponseEntity<?> delete(@PathVariable Long userId) {
+        log.info("Calling service to delete given user");
+        return this.userDetailsService.delete(userId); }
 
     private HashMap<String, Object> listToMap(List<FormSubmissionFieldDTO> formSubmissionDTOS) {
         HashMap<String, Object> map = new HashMap<>();
@@ -70,10 +75,4 @@ public class UserController {
         }
         return map;
     }
-
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    @DeleteMapping(name = "delete", path = "/delete/{userId}")
-    public ResponseEntity<?> delete(@PathVariable Long userId) {
-        log.info("Calling service to delete given user");
-        return this.userDetailsService.delete(userId); }
 }

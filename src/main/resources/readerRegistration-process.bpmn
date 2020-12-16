@@ -79,7 +79,7 @@
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1w8vw92" sourceRef="Activity_1byw8lf" targetRef="Event_0lba8cv" />
     <bpmn:sequenceFlow id="Flow_01qmwm7" sourceRef="Event_0lba8cv" targetRef="Activity_0yae5y0" />
-    <bpmn:serviceTask id="Activity_0yae5y0" name="Verify account" camunda:class="upp.team5.literaryassociation.security.service.VerificationService">
+    <bpmn:serviceTask id="Activity_0yae5y0" name="Verify account" camunda:class="upp.team5.literaryassociation.register.service.VerificationService">
       <bpmn:incoming>Flow_01qmwm7</bpmn:incoming>
       <bpmn:outgoing>Flow_1wiotym</bpmn:outgoing>
     </bpmn:serviceTask>
