@@ -8,15 +8,18 @@ import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upp.team5.literaryassociation.exception.UserAlreadyExistsException;
+import upp.team5.literaryassociation.security.dto.FileFormSubmissionDTO;
 import upp.team5.literaryassociation.security.dto.FormFieldsDTO;
 import upp.team5.literaryassociation.security.dto.FormSubmissionDTO;
 import upp.team5.literaryassociation.security.dto.FormSubmissionFieldDTO;
 
+import javax.persistence.Tuple;
 import java.util.HashMap;
 import java.util.List;
 
@@ -47,16 +50,10 @@ public class MembershipApplicationController {
     }
 
     @PostMapping(name = "submitRegistrationForm", path = "/submitForm/{taskId}")
-    public ResponseEntity<?> submitDocuments(@RequestBody FormSubmissionDTO formSubmissionDTO, @PathVariable String taskId) throws UserAlreadyExistsException {
+    public ResponseEntity<?> submitDocuments(@RequestBody FileFormSubmissionDTO fileFormSubmissionDTO, @PathVariable String taskId) throws UserAlreadyExistsException {
         log.info("Membership form submitted");
-        HashMap<String, Object> regFormData = this.listToMap(formSubmissionDTO.getFormFields());
 
-        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-        String processInstanceId = task.getProcessInstanceId();
-
-        runtimeService.setVariable(processInstanceId, "submitted-documents", regFormData);
-
-        formService.submitTaskForm(taskId, regFormData);
+        
         return  new ResponseEntity<>(HttpStatus.OK);
     }
 
