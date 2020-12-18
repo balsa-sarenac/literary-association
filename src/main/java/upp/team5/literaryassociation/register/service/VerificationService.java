@@ -20,7 +20,7 @@ public class VerificationService implements JavaDelegate {
     public void execute(DelegateExecution delegateExecution) throws Exception {
         log.info("Initiating account verification");
 
-        HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("register-data");
+        HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data");
 
         var user = userRepository.getUserByEmail(formSubmission.get("email").toString());
         user.setEnabled(true);

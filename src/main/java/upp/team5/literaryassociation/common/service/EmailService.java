@@ -32,7 +32,7 @@ public class EmailService implements JavaDelegate {
     public void execute(DelegateExecution delegateExecution) throws Exception {
         log.info("Initiating sending email");
 
-        HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("register-data");
+        HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data");
         delegateExecution.setProcessBusinessKey(delegateExecution.getProcessInstanceId());
         VerificationInformation verInf = new VerificationInformation();
         verInf.setProcessBusinessKey(delegateExecution.getProcessInstanceId());
