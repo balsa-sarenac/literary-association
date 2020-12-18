@@ -6,7 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upp.team5.literaryassociation.form.service.GenericFormService;
-import upp.team5.literaryassociation.register.dto.FormFieldsDTO;
+import upp.team5.literaryassociation.form.dto.FormFieldsDTO;
+import upp.team5.literaryassociation.form.dto.FormSubmissionDTO;
 
 @CrossOrigin
 @RestController
@@ -22,9 +23,14 @@ public class FormController {
     }
 
     @GetMapping(name = "getForm", path="/get/{processInstanceId}")
-    public ResponseEntity<FormFieldsDTO> authorRegFrom(@PathVariable String processInstanceId) {
+    public ResponseEntity<FormFieldsDTO> getFrom(@PathVariable String processInstanceId) {
         FormFieldsDTO formFieldsDTO = genericFormService.getForm(processInstanceId);
         return new ResponseEntity<>(formFieldsDTO, HttpStatus.OK);
+    }
+
+    @PostMapping(name = "submitForm", path = "/submit/{processInstanceId}")
+    public void submitForm(@RequestBody FormSubmissionDTO formSubmissionDTO, @PathVariable String processInstanceId) {
+        genericFormService.submitForm(processInstanceId, formSubmissionDTO);
     }
 }
 
