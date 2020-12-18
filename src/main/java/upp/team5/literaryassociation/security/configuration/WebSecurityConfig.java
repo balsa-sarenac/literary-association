@@ -62,6 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/").hasAnyAuthority("ADMIN", "...")
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers("/auth/**").permitAll()
+                .antMatchers("/form/**").permitAll()
                 .antMatchers("/camunda/**").permitAll()
                 .antMatchers("/camunda*").permitAll()
                 .anyRequest().authenticated()
@@ -78,6 +79,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         // TokenAuthenticationFilter ce ignorisati sve ispod navedene putanje
         web.ignoring().antMatchers(HttpMethod.POST, "/auth/**");
+        web.ignoring().antMatchers(HttpMethod.POST, "/form/**");
 
         web.ignoring().antMatchers(HttpMethod.GET, "/camunda-welcome");
         web.ignoring().antMatchers(HttpMethod.GET, "/camunda/**");

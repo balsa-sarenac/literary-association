@@ -65,7 +65,7 @@ public class RegistrationService implements JavaDelegate {
     public void execute(DelegateExecution delegateExecution) throws UserAlreadyExistsException {
         log.info("Registration - user create initiated");
 
-        HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("register-data");
+        HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data");
 
         var u = userRepository.getUserByEmail(formSubmission.get("email").toString());
         if(u != null) {

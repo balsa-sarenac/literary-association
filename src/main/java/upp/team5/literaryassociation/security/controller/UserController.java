@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
-import upp.team5.literaryassociation.register.dto.FormSubmissionFieldDTO;
+import upp.team5.literaryassociation.form.dto.FormSubmissionFieldDTO;
 import upp.team5.literaryassociation.security.dto.LoginRequestDTO;
 import upp.team5.literaryassociation.security.service.CustomUserDetailsService;
 import upp.team5.literaryassociation.security.service.LoginService;
