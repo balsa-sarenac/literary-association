@@ -1,4 +1,4 @@
-package upp.team5.literaryassociation.security.service;
+package upp.team5.literaryassociation.register.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -32,7 +32,7 @@ public class AuthorRegistrationService implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
-        HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("register-data");
+        HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data");
 
         boolean userExists;
         var u = userRepository.getUserByEmail(formSubmission.get("email").toString());

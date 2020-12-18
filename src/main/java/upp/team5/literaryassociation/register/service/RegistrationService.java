@@ -1,4 +1,4 @@
-package upp.team5.literaryassociation.security;
+package upp.team5.literaryassociation.register.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.RuntimeService;
@@ -10,15 +10,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.exception.UserAlreadyExistsException;
-import upp.team5.literaryassociation.model.Genre;
 import upp.team5.literaryassociation.model.Role;
 import upp.team5.literaryassociation.model.User;
-import upp.team5.literaryassociation.security.dto.RegistrationDTO;
-import upp.team5.literaryassociation.security.repository.GenreRepository;
+import upp.team5.literaryassociation.register.dto.RegistrationDTO;
 import upp.team5.literaryassociation.security.repository.RoleRepository;
 import upp.team5.literaryassociation.security.repository.UserRepository;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -26,16 +26,14 @@ public class RegistrationService implements JavaDelegate {
 
     private UserRepository userRepository;
     private RoleRepository roleRepository;
-    private GenreRepository genreRepository;
     private PasswordEncoder passwordEncoder;
     @Autowired
     private RuntimeService runtimeService;
 
     @Autowired
-    public RegistrationService(UserRepository userRepository, RoleRepository roleRepository, GenreRepository genreRepository, PasswordEncoder passwordEncoder) {
+    public RegistrationService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.genreRepository = genreRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -63,15 +61,11 @@ public class RegistrationService implements JavaDelegate {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public List<Genre> findAllGenres() {
-        return this.genreRepository.findAll();
-    }
-
     @Override
     public void execute(DelegateExecution delegateExecution) throws UserAlreadyExistsException {
         log.info("Registration - user create initiated");
 
-        HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("register-data");
+        HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data");
 
         var u = userRepository.getUserByEmail(formSubmission.get("email").toString());
         if(u != null) {
@@ -92,33 +86,10 @@ public class RegistrationService implements JavaDelegate {
             user.setAccountNonExpired(true);
             user.setAccountNonLocked(true);
 
-            var genresStr = formSubmission.get("genres").toString();
-            Set<Genre> myGenres = new HashSet<>();
-            List<String> genres = Arrays.asList(formSubmission.get("genres").toString().split(","));
-            var allGenres = genreRepository.findAll();
-            for(Genre g: allGenres) {
-                if(genres.contains(g.getName())){
-                    myGenres.add(g);
-                }
-            }
-            user.setGenres(myGenres);
-
             Set<Role> rolesSet = new HashSet<>();
             var isBeta = Boolean.parseBoolean(formSubmission.get("isBetaReader").toString());
-            if(isBeta) {
-                Set<Genre> betaG = new HashSet<Genre>();
+            if(isBeta)
                 rolesSet.add(roleRepository.findByName("ROLE_BETA_READER"));
-                HashMap<String, Object> betaGenres = (HashMap<String, Object>) delegateExecution.getVariable("additional-genres");
-                Iterator it = betaGenres.entrySet().iterator();
-                while (it.hasNext()) {
-                    Map.Entry pair = (Map.Entry)it.next();
-                    Genre g = genreRepository.findByName(pair.getKey().toString());
-                    if(g != null)
-                        betaG.add(g);
-                    it.remove(); // avoids a ConcurrentModificationException
-                }
-                user.setBetaGenres(betaG);
-            }
             else
                 rolesSet.add(roleRepository.findByName("ROLE_READER"));
             user.setRoles(rolesSet);
