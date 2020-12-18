@@ -13,11 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import upp.team5.literaryassociation.common.dto.ProcessDTO;
 import upp.team5.literaryassociation.exception.UserAlreadyExistsException;
 import upp.team5.literaryassociation.register.repository.VerificationInformationRepository;
-import upp.team5.literaryassociation.register.dto.FormFieldsDTO;
-import upp.team5.literaryassociation.register.dto.FormSubmissionDTO;
-import upp.team5.literaryassociation.register.dto.FormSubmissionFieldDTO;
+import upp.team5.literaryassociation.form.dto.FormFieldsDTO;
+import upp.team5.literaryassociation.form.dto.FormSubmissionDTO;
+import upp.team5.literaryassociation.form.dto.FormSubmissionFieldDTO;
 import upp.team5.literaryassociation.register.dto.RegistrationDTO;
 import upp.team5.literaryassociation.register.service.RegistrationService;
 
@@ -51,17 +52,31 @@ public class RegistrationController {
         return registrationService.register(registrationDTO);
     }
 
-    @GetMapping(name = "authorRegForm", path="/author-reg-form")
-    public ResponseEntity<FormFieldsDTO> authorRegFrom() {
+
+    @GetMapping(name = "authorReg", path="/start-author-reg")
+    public ResponseEntity<ProcessDTO> startAuthorRegProcess() {
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("author-reg");
-        Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).list().get(0);
+//        Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).list().get(0);
+//
+//        TaskFormData taskFormData = formService.getTaskFormData(task.getId());
+//        List<FormField> properties = taskFormData.getFormFields();
+//
+        ProcessDTO processDTO = new ProcessDTO(processInstance.getId());
 
-        TaskFormData taskFormData = formService.getTaskFormData(task.getId());
-        List<FormField> properties = taskFormData.getFormFields();
+        return new ResponseEntity<>(processDTO, HttpStatus.OK);
+    }
 
-        FormFieldsDTO formFieldsDTO = new FormFieldsDTO(processInstance.getId(), task.getId(), properties);
+    @GetMapping(name = "readerReg", path="/start-reader-reg")
+    public ResponseEntity<ProcessDTO> startReaderRegProcess() {
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("reader-registration-process");
+//        Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).list().get(0);
+//
+//        TaskFormData taskFormData = formService.getTaskFormData(task.getId());
+//        List<FormField> properties = taskFormData.getFormFields();
+//
+        ProcessDTO processDTO = new ProcessDTO(processInstance.getId());
 
-        return new ResponseEntity<>(formFieldsDTO, HttpStatus.OK);
+        return new ResponseEntity<>(processDTO, HttpStatus.OK);
     }
 
     @PostMapping(name = "register-author", path = "/register-author/{taskId}")
