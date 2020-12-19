@@ -1,6 +1,7 @@
 package upp.team5.literaryassociation.register.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
@@ -27,8 +28,12 @@ public class RegistrationService implements JavaDelegate {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
+
     @Autowired
     private RuntimeService runtimeService;
+
+    @Autowired
+    private IdentityService identityService;
 
     @Autowired
     public RegistrationService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
@@ -96,7 +101,20 @@ public class RegistrationService implements JavaDelegate {
 
             this.userRepository.save(user);
         }
-
-
     }
+
+    /**
+     * Creates user and saves it in camunda identity service
+     * @param user User object that is saved to db
+     * @param password users password since its hashed in User object
+     */
+    public void createCamundaUser(User user, String password) {
+        org.camunda.bpm.engine.identity.User cUser = identityService.newUser(user.getEmail());
+        cUser.setEmail(user.getEmail());
+        cUser.setFirstName(user.getFirstName());
+        cUser.setLastName(user.getLastName());
+        cUser.setPassword(password);
+        identityService.saveUser(cUser);
+    }
+
 }
