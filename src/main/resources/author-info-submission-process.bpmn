@@ -52,6 +52,7 @@
           <camunda:formField id="email" label="E-mail" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
+              <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.EmailValidator" />
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="password" label="Password" type="string">
