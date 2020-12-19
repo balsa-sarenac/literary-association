@@ -47,7 +47,6 @@
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="isBetaReader" label="Beta reader" type="boolean" defaultValue="false" />
-          <camunda:formField id="genres" label="Genres" type="enum" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0ts4j2f</bpmn:incoming>
@@ -71,7 +70,7 @@
     <bpmn:sequenceFlow id="Flow_0b0agc0" name="Yes" sourceRef="Gateway_0d2xdgm" targetRef="Event_0p3e675">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${userExists==true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sendTask id="Activity_1byw8lf" name="Send verification link" camunda:class="upp.team5.literaryassociation.common.service.EmailService">
+    <bpmn:sendTask id="Activity_1byw8lf" name="Send verification link" camunda:class="upp.team5.literaryassociation.register.service.SendLinkService">
       <bpmn:incoming>Flow_15rvl1u</bpmn:incoming>
       <bpmn:outgoing>Flow_1w8vw92</bpmn:outgoing>
     </bpmn:sendTask>
@@ -110,11 +109,6 @@
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_03wxsli" sourceRef="Activity_0fay6rj" targetRef="Gateway_1umaslk" />
     <bpmn:userTask id="Activity_0fay6rj" name="Add additional genres">
-      <bpmn:extensionElements>
-        <camunda:formData>
-          <camunda:formField id="betaGenres" label="Please choose genres" type="enum" />
-        </camunda:formData>
-      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0ae065j</bpmn:incoming>
       <bpmn:outgoing>Flow_03wxsli</bpmn:outgoing>
     </bpmn:userTask>
