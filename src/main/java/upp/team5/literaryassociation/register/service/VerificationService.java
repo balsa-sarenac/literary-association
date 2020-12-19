@@ -33,7 +33,7 @@ public class VerificationService implements JavaDelegate {
         user.setEnabled(true);
         userRepository.save(user);
 
-        delegateExecution.setProcessBusinessKey(user.getEmail());
+        delegateExecution.setProcessBusinessKey(user.getId().toString());
 //
 //        User verified = identityService.newUser(user.getEmail());
 //        verified.setPassword(user.getPassword());

@@ -59,8 +59,12 @@ public class GenericFormService {
         return map;
     }
 
-    public ProcessDTO getProcessId(String userEmail) {
-        ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceBusinessKeyLike(userEmail).singleResult();
+    public ProcessDTO getProcessId(String userId) {
+        ProcessInstance pi = runtimeService
+                                .createProcessInstanceQuery()
+                                .processInstanceBusinessKey(userId)
+                                .singleResult();
+
         String processId = pi.getProcessInstanceId();
         return new ProcessDTO(processId);
     }

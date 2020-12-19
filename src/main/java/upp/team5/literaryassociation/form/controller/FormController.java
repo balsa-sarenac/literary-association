@@ -11,7 +11,7 @@ import upp.team5.literaryassociation.form.service.GenericFormService;
 import upp.team5.literaryassociation.form.dto.FormFieldsDTO;
 import upp.team5.literaryassociation.form.dto.FormSubmissionDTO;
 
-@CrossOrigin
+@CrossOrigin()
 @RestController
 @Slf4j
 @RequestMapping(produces = "application/json", path = "/form")
@@ -35,10 +35,9 @@ public class FormController {
         genericFormService.submitForm(processInstanceId, formSubmissionDTO);
     }
 
-    @PreAuthorize("ROLE_PENDING_AUTHOR")
-    @GetMapping(name = "getProcessId", path = "/getProcessId/{userEmail}")
-    public  ResponseEntity<ProcessDTO> getProcessId(@PathVariable String userEmail){
-        return new ResponseEntity<ProcessDTO>(genericFormService.getProcessId(userEmail), HttpStatus.OK);
+    @GetMapping(name = "getProcessId", path = "/getProcessId/{userId}")
+    public  ResponseEntity<ProcessDTO> getProcessId(@PathVariable String userId){
+        return new ResponseEntity<ProcessDTO>(genericFormService.getProcessId(userId), HttpStatus.OK);
     }
 }
 
