@@ -47,7 +47,16 @@
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="isBetaReader" label="Beta reader" type="boolean" defaultValue="false" />
+          <camunda:formField id="genres" label="Genres" type="multiselect">
+            <camunda:properties>
+              <camunda:property id="Property_3lmqbpo" value="xssss" />
+            </camunda:properties>
+            <camunda:validation>
+              <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.GenresValidator" />
+            </camunda:validation>
+          </camunda:formField>
         </camunda:formData>
+        <camunda:taskListener class="upp.team5.literaryassociation.camunda.eventListener.OnTaskCreate" event="create" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0ts4j2f</bpmn:incoming>
       <bpmn:outgoing>Flow_05xrd04</bpmn:outgoing>
@@ -109,6 +118,12 @@
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_03wxsli" sourceRef="Activity_0fay6rj" targetRef="Gateway_1umaslk" />
     <bpmn:userTask id="Activity_0fay6rj" name="Add additional genres">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="genres" label="Genres" type="multiselect" />
+        </camunda:formData>
+        <camunda:taskListener class="upp.team5.literaryassociation.camunda.eventListener.OnTaskCreate" event="create" />
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0ae065j</bpmn:incoming>
       <bpmn:outgoing>Flow_03wxsli</bpmn:outgoing>
     </bpmn:userTask>
