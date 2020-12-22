@@ -14,7 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class FileDB {
     @Id
-    @GeneratedValue(generator = "uuid")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     private String name;
@@ -23,4 +23,10 @@ public class FileDB {
 
     @Lob
     private byte[] data;
+
+    public FileDB(String name, String type, byte[] data) {
+        this.name = name;
+        this.type = type;
+        this.data = data;
+    }
 }
