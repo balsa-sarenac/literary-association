@@ -4,8 +4,13 @@ import org.camunda.bpm.engine.impl.form.type.SimpleFormFieldType;
 import org.camunda.bpm.engine.variable.Variables;
 import org.camunda.bpm.engine.variable.value.FileValue;
 import org.camunda.bpm.engine.variable.value.TypedValue;
+import upp.team5.literaryassociation.file.model.FileDB;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 public class FileFormFieldType extends SimpleFormFieldType {
     public final static String FORM_TYPE = "file";
@@ -35,7 +40,7 @@ public class FileFormFieldType extends SimpleFormFieldType {
             if(value == null) {
                 return Variables.fileValue("null").create();
             } else {
-                return Variables.fileValue((File) value);
+                return Variables.untypedValue((HashSet<FileDB>)value);
             }
         }
     }
