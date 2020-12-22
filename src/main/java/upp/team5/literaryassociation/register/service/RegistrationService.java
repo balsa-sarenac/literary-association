@@ -33,9 +33,6 @@ public class RegistrationService implements JavaDelegate {
     private RuntimeService runtimeService;
 
     @Autowired
-    private IdentityService identityService;
-
-    @Autowired
     public RegistrationService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -101,20 +98,6 @@ public class RegistrationService implements JavaDelegate {
 
             this.userRepository.save(user);
         }
-    }
-
-    /**
-     * Creates user and saves it in camunda identity service
-     * @param user User object that is saved to db
-     * @param password users password since its hashed in User object
-     */
-    public void createCamundaUser(User user, String password) {
-        org.camunda.bpm.engine.identity.User cUser = identityService.newUser(user.getEmail());
-        cUser.setEmail(user.getEmail());
-        cUser.setFirstName(user.getFirstName());
-        cUser.setLastName(user.getLastName());
-        cUser.setPassword(password);
-        identityService.saveUser(cUser);
     }
 
 }
