@@ -77,12 +77,8 @@ public class RegistrationService implements JavaDelegate {
                 rolesSet.add(roleRepository.findByName("ROLE_READER"));
             user.setRoles(rolesSet);
 
-
-
             this.userRepository.save(user);
         }
-
-
     }
 
     private void SetGenres(HashMap<String, Object> formSubmission, User user) {
