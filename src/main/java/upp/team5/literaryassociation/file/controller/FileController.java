@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import upp.team5.literaryassociation.file.service.FileService;
+import upp.team5.literaryassociation.form.dto.FormSubmissionDTO;
 
 @CrossOrigin
 @RestController
@@ -19,10 +20,10 @@ public class FileController {
     private FileService storageService;
 
     @PostMapping(name="upload", path = "/upload/{processId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file, @PathVariable String processId){
+    public ResponseEntity<?> upload(@RequestParam("file") MultipartFile[] files, @PathVariable String processId){
         log.info("Uploading files");
         try {
-            storageService.store(file);
+            storageService.store(files, processId);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
