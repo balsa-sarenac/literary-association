@@ -53,6 +53,7 @@
             <camunda:validation>
               <camunda:constraint name="required" />
               <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.EmailValidator" />
+              <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.EmailExistsValidator" />
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="password" label="Password" type="string">
