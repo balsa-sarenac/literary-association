@@ -1,22 +1,18 @@
 package upp.team5.literaryassociation.file.service;
 
 import org.camunda.bpm.engine.FormService;
-import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import upp.team5.literaryassociation.file.model.FileDB;
+import upp.team5.literaryassociation.model.FileDB;
 import upp.team5.literaryassociation.file.repository.FileDBRepository;
-import upp.team5.literaryassociation.form.dto.FormSubmissionFieldDTO;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 
 @Service
 public class FileService {

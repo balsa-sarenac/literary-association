@@ -1,4 +1,4 @@
-package upp.team5.literaryassociation.file.model;
+package upp.team5.literaryassociation.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

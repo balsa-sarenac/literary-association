@@ -3,7 +3,7 @@ package upp.team5.literaryassociation.camunda.validator;
 import org.camunda.bpm.engine.impl.form.validator.FormFieldValidator;
 import org.camunda.bpm.engine.impl.form.validator.FormFieldValidatorContext;
 import org.springframework.stereotype.Component;
-import upp.team5.literaryassociation.file.model.FileDB;
+import upp.team5.literaryassociation.model.FileDB;
 
 import java.util.HashSet;
 
