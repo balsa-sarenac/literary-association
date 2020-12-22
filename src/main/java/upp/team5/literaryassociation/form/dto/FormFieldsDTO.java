@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.camunda.bpm.engine.form.FormField;
+import org.camunda.bpm.engine.impl.form.type.SimpleFormFieldType;
 
 import java.util.List;
 

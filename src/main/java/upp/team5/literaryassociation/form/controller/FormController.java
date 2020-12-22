@@ -1,5 +1,8 @@
 package upp.team5.literaryassociation.form.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,9 +26,12 @@ public class FormController {
     }
 
     @GetMapping(name = "getForm", path="/get/{processInstanceId}")
-    public ResponseEntity<FormFieldsDTO> getFrom(@PathVariable String processInstanceId) {
+    public ResponseEntity<?> getFrom(@PathVariable String processInstanceId) throws JsonProcessingException {
         FormFieldsDTO formFieldsDTO = genericFormService.getForm(processInstanceId);
-        return new ResponseEntity<>(formFieldsDTO, HttpStatus.OK);
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = ow.writeValueAsString(formFieldsDTO);
+        log.info(json);
+        return new ResponseEntity<>(json, HttpStatus.OK);
     }
 
     @PostMapping(name = "submitForm", path = "/submit/{processInstanceId}")

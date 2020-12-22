@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 @Service
 @Slf4j
-public class EmailService implements JavaDelegate {
+public class EmailService {
     @Autowired
     JavaMailSender javaMailSender;
 
@@ -27,37 +27,12 @@ public class EmailService implements JavaDelegate {
         this.verificationInformationRepository = verificationInformationRepository;
     }
 
-
-    @Override
-    public void execute(DelegateExecution delegateExecution) throws Exception {
-        log.info("Initiating sending email");
-
-        HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data");
-        delegateExecution.setProcessBusinessKey(delegateExecution.getProcessInstanceId());
-        VerificationInformation verInf = new VerificationInformation();
-        verInf.setProcessBusinessKey(delegateExecution.getProcessInstanceId());
-        verInf.setEmail(formSubmission.get("email").toString());
-        var hashCode = Hashing.sha256()
-                .hashString(verInf.getProcessBusinessKey(), StandardCharsets.UTF_8)
-                .toString();
-        verInf.setHash(hashCode);
-        verificationInformationRepository.save(verInf);
-
-        var firstName = formSubmission.get("firstName");
-
+    public void Send(String to, String body, String subject) {
         SimpleMailMessage message = new SimpleMailMessage();
 
-        message.setTo(formSubmission.get("email").toString());
-        message.setSubject("Account verification");
-        String messageText = "Hello, " + firstName + "!" + "\n\n";
-        messageText += "You have recently registered on our literary association website.";
-        messageText += "To verify your account, please click the following link: ";
-        delegateExecution.setProcessBusinessKey(delegateExecution.getProcessInstanceId());
-        messageText += "http://localhost:8080/auth/clickVerification/" + formSubmission.get("email").toString() + "/" + hashCode  + "\n\n";
-        messageText += "If you did not register on our website, please ignore this message.";
-        message.setText(messageText);
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(body);
         javaMailSender.send(message);
-
-        log.info("Email sent");
     }
 }
