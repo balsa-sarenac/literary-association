@@ -1,6 +1,7 @@
 package upp.team5.literaryassociation.register.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
@@ -27,6 +28,7 @@ public class RegistrationService implements JavaDelegate {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
+
     @Autowired
     private RuntimeService runtimeService;
 
@@ -96,7 +98,6 @@ public class RegistrationService implements JavaDelegate {
 
             this.userRepository.save(user);
         }
-
-
     }
+
 }
