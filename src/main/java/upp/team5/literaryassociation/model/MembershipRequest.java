@@ -24,7 +24,7 @@ public class MembershipRequest {
       private User author;
 
       @OneToMany(mappedBy = "membershipRequest")
-      private Set<Document> documents;
+      private Set<FileDB> documents;
 
 
 }

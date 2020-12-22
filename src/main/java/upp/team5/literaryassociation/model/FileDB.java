@@ -25,6 +25,11 @@ public class FileDB implements Serializable {
     @Lob
     private byte[] data;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "membership_request_id", referencedColumnName = "id")
+    private MembershipRequest membershipRequest;
+
+
     public FileDB(String name, String type, byte[] data) {
         this.name = name;
         this.type = type;
