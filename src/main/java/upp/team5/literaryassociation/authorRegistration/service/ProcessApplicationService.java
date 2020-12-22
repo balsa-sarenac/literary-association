@@ -13,6 +13,7 @@ import upp.team5.literaryassociation.model.User;
 import upp.team5.literaryassociation.security.repository.RoleRepository;
 import upp.team5.literaryassociation.security.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -37,11 +38,11 @@ public class ProcessApplicationService implements JavaDelegate {
 
         membershipRequestService.addNewRequest(files, execution.getProcessInstanceId());
 
-        HashSet<String> roleName = new HashSet<String>();
+        List<String> roleName = new ArrayList<String>();
         roleName.add("ROLE_COMMITTEE_MEMBER");
         roleName.add("ROLE_HEAD_OF_COMMITTEE");
-        List<Role> roles = roleRepository.findAllByNameIn((List<String>) roleName);
-        List<User> commitee = userRepository.findAllByEnabledAndRolesIn(true, roles);
+        List<Role> roles = roleRepository.findAllByNameIn(roleName);
+        List<User> commitee = userRepository.findAllByRolesIn(roles);
 
         execution.setVariable("assigneeList", commitee);
 

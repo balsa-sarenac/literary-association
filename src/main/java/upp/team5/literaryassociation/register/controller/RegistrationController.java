@@ -2,6 +2,7 @@ package upp.team5.literaryassociation.register.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.FormService;
+import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.form.FormField;
@@ -15,16 +16,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upp.team5.literaryassociation.common.dto.ProcessDTO;
 import upp.team5.literaryassociation.exception.UserAlreadyExistsException;
+import upp.team5.literaryassociation.model.Role;
+import upp.team5.literaryassociation.model.User;
 import upp.team5.literaryassociation.register.repository.VerificationInformationRepository;
 import upp.team5.literaryassociation.form.dto.FormFieldsDTO;
 import upp.team5.literaryassociation.form.dto.FormSubmissionDTO;
 import upp.team5.literaryassociation.form.dto.FormSubmissionFieldDTO;
 import upp.team5.literaryassociation.register.dto.RegistrationDTO;
 import upp.team5.literaryassociation.register.service.RegistrationService;
+import upp.team5.literaryassociation.security.repository.RoleRepository;
+import upp.team5.literaryassociation.security.repository.UserRepository;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.http.HttpClient;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -43,6 +49,12 @@ public class RegistrationController {
     private TaskService taskService;
     @Autowired
     private FormService formService;
+    @Autowired
+    private IdentityService identityService;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Autowired
     public RegistrationController(RegistrationService registrationService, VerificationInformationRepository verificationInformationRepository) {
@@ -61,6 +73,18 @@ public class RegistrationController {
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("author-reg");
 
         ProcessDTO processDTO = new ProcessDTO(processInstance.getId());
+
+        List<String> roleNames= new ArrayList<String>();
+        roleNames.add("ROLE_COMMITTEE_MEMBER");
+        roleNames.add("ROLE_HEAD_OF_COMMITTEE");
+
+        List<Role> roles = roleRepository.findAllByNameIn(roleNames);
+        List<User> users = userRepository.findAllByRolesIn(roles);
+
+        for(User user:users){
+            this.createCamundaUser(user, "asdf");
+        }
+
 
         return new ResponseEntity<>(processDTO, HttpStatus.OK);
     }
@@ -99,6 +123,14 @@ public class RegistrationController {
             map.put(fs.getId(), fs.getValue());
         }
         return map;
+    }
+    public void createCamundaUser(upp.team5.literaryassociation.model.User user, String password) {
+        org.camunda.bpm.engine.identity.User cUser = identityService.newUser(user.getId().toString());
+        cUser.setEmail(user.getEmail());
+        cUser.setFirstName(user.getFirstName());
+        cUser.setLastName(user.getLastName());
+        cUser.setPassword(password);
+        identityService.saveUser(cUser);
     }
 
 }

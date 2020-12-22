@@ -5,6 +5,8 @@ import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.identity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.authorRegistration.repository.MembershipRequestRepository;
 import upp.team5.literaryassociation.model.FileDB;
@@ -18,7 +20,7 @@ import java.util.HashSet;
 public class MembershipRequestService {
 
     @Autowired
-    private RuntimeService runtimeService;
+    private IdentityService identityService;
 
     @Autowired
     private MembershipRequestRepository membershipRequestRepository;
@@ -28,10 +30,19 @@ public class MembershipRequestService {
 
 
     public void addNewRequest(HashSet<FileDB> files, String processId) {
-        String userId = ((User)runtimeService.getVariable(processId,"loggedUser")).getId();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+        if(principal instanceof UserDetails){
+             username = ((UserDetails)principal).getUsername();
+        }
+        else{
+             username = principal.toString();
+        }
+
+        User user = identityService.createUserQuery().userEmail(username).singleResult();
         MembershipRequest membershipRequest = new MembershipRequest();
-        membershipRequest.setAuthor(userRepository.getUserByEmail(userId));
+        membershipRequest.setAuthor(userRepository.getUserByEmail(user.getEmail()));
         membershipRequest.setDocuments(files);
-        membershipRequestRepository.save(membershipRequest);
+        membershipRequest = membershipRequestRepository.save(membershipRequest);
     }
 }
