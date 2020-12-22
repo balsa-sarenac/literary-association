@@ -25,7 +25,7 @@ public class VerificationService implements JavaDelegate {
     public void execute(DelegateExecution delegateExecution) throws Exception {
         log.info("Initiating account verification");
 
-        HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data");
+        HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data-basic-information");
 
         var user = userRepository.getUserByEmail(formSubmission.get("email").toString());
         user.setEnabled(true);
@@ -42,7 +42,7 @@ public class VerificationService implements JavaDelegate {
      * @param password users password since its hashed in User object
      */
     public void createCamundaUser(User user, String password) {
-        org.camunda.bpm.engine.identity.User cUser = identityService.newUser(user.getEmail());
+        org.camunda.bpm.engine.identity.User cUser = identityService.newUser(user.getId().toString());
         cUser.setEmail(user.getEmail());
         cUser.setFirstName(user.getFirstName());
         cUser.setLastName(user.getLastName());

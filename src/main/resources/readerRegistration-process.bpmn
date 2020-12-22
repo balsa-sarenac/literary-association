@@ -41,13 +41,8 @@
               <camunda:constraint name="required" />
             </camunda:validation>
           </camunda:formField>
-          <camunda:formField id="confirmPassword" label="Confirm Password" type="string">
-            <camunda:validation>
-              <camunda:constraint name="required" />
-            </camunda:validation>
-          </camunda:formField>
           <camunda:formField id="isBetaReader" label="Beta reader" type="boolean" defaultValue="false" />
-          <camunda:formField id="genres" label="Genres" type="multiselect">
+          <camunda:formField id="genres" label="Genres I am interested in:" type="multiselect">
             <camunda:properties>
               <camunda:property id="Property_3lmqbpo" value="xssss" />
             </camunda:properties>
@@ -120,7 +115,7 @@
     <bpmn:userTask id="additional-genres" name="Add additional genres">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="genres" label="Genres" type="multiselect" />
+          <camunda:formField id="genres" label="Select genres you are interested in" type="multiselect" />
         </camunda:formData>
         <camunda:taskListener class="upp.team5.literaryassociation.camunda.eventListener.OnTaskCreate" event="create" />
       </bpmn:extensionElements>

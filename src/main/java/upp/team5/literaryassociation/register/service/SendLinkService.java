@@ -29,7 +29,7 @@ public class SendLinkService implements JavaDelegate {
     public void execute(DelegateExecution delegateExecution) throws Exception {
         log.info("Initiating sending email");
 
-        HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data");
+        HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data-basic-information");
 
         String businessKey = delegateExecution.getProcessInstanceId();
         delegateExecution.setProcessBusinessKey(businessKey);
