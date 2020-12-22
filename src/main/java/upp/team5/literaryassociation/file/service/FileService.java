@@ -47,7 +47,7 @@ public class FileService {
         Task task = taskService.createTaskQuery().processInstanceId(processId).active().singleResult();
 
         runtimeService.setVariable(processId, "files", toMap);
-        runtimeService.setVariable(processId, "loggedUser", task.getAssignee());
+
         HashMap<String, Object> map = listToMap(toMap);
 
         formService.submitTaskForm(task.getId(), map );

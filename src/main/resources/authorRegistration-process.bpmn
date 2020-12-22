@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0yusdow" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.4.0">
   <bpmn:process id="author-reg" name="Author registration process" isExecutable="true">
-    <bpmn:serviceTask id="Activity_0uc2nxm" name="Create user" camunda:class="upp.team5.literaryassociation.register.service.AuthorRegistrationService">
+    <bpmn:serviceTask id="data-basic-information" name="Create user" camunda:class="upp.team5.literaryassociation.register.service.AuthorRegistrationService">
       <bpmn:incoming>Flow_1yu4v6o</bpmn:incoming>
       <bpmn:outgoing>Flow_0st1pe0</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -10,7 +10,7 @@
       <bpmn:outgoing>Flow_0k0yckm</bpmn:outgoing>
       <bpmn:outgoing>Flow_0qaw5rg</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sendTask id="Activity_1c4fb44" name="Send verification link" camunda:class="upp.team5.literaryassociation.common.service.EmailService">
+    <bpmn:sendTask id="Activity_1c4fb44" name="Send verification link" camunda:class="upp.team5.literaryassociation.register.service.SendLinkService">
       <bpmn:incoming>Flow_0k0yckm</bpmn:incoming>
       <bpmn:outgoing>Flow_11owbb5</bpmn:outgoing>
     </bpmn:sendTask>
@@ -26,7 +26,7 @@
     <bpmn:endEvent id="Event_0vlsvf0">
       <bpmn:incoming>Flow_0qaw5rg</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:userTask id="Activity_1rqq3h8" name="Fill registration fields">
+    <bpmn:userTask id="basic-information" name="Fill registration fields">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="firstName" label="First Name" type="string">
@@ -68,8 +68,8 @@
     <bpmn:startEvent id="Event_00nur5h">
       <bpmn:outgoing>Flow_04dasq2</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:sequenceFlow id="Flow_1yu4v6o" sourceRef="Activity_1rqq3h8" targetRef="Activity_0uc2nxm" />
-    <bpmn:sequenceFlow id="Flow_0st1pe0" sourceRef="Activity_0uc2nxm" targetRef="Gateway_1mqn0xc" />
+    <bpmn:sequenceFlow id="Flow_1yu4v6o" sourceRef="basic-information" targetRef="data-basic-information" />
+    <bpmn:sequenceFlow id="Flow_0st1pe0" sourceRef="data-basic-information" targetRef="Gateway_1mqn0xc" />
     <bpmn:sequenceFlow id="Flow_0k0yckm" name="No" sourceRef="Gateway_1mqn0xc" targetRef="Activity_1c4fb44">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!userExists}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
@@ -78,7 +78,7 @@
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_11owbb5" sourceRef="Activity_1c4fb44" targetRef="Event_0dn6roz" />
     <bpmn:sequenceFlow id="Flow_0nh8hw1" sourceRef="Event_0dn6roz" targetRef="Activity_1b3a6a9" />
-    <bpmn:sequenceFlow id="Flow_04dasq2" sourceRef="Event_00nur5h" targetRef="Activity_1rqq3h8" />
+    <bpmn:sequenceFlow id="Flow_04dasq2" sourceRef="Event_00nur5h" targetRef="basic-information" />
     <bpmn:userTask id="Activity_0hcajpf" name="Submit more documents">
       <bpmn:incoming>Flow_11vskta</bpmn:incoming>
       <bpmn:outgoing>Flow_1xh3edb</bpmn:outgoing>
@@ -282,7 +282,7 @@
         <di:waypoint x="370" y="210" />
         <di:waypoint x="500" y="210" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Activity_0uc2nxm_di" bpmnElement="Activity_0uc2nxm">
+      <bpmndi:BPMNShape id="Activity_0uc2nxm_di" bpmnElement="data-basic-information">
         <dc:Bounds x="500" y="170" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1mqn0xc_di" bpmnElement="Gateway_1mqn0xc" isMarkerVisible="true">
@@ -306,7 +306,7 @@
       <bpmndi:BPMNShape id="Event_0vlsvf0_di" bpmnElement="Event_0vlsvf0">
         <dc:Bounds x="692" y="82" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1rqq3h8_di" bpmnElement="Activity_1rqq3h8">
+      <bpmndi:BPMNShape id="Activity_1rqq3h8_di" bpmnElement="basic-information">
         <dc:Bounds x="270" y="170" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_00nur5h_di" bpmnElement="Event_00nur5h">
