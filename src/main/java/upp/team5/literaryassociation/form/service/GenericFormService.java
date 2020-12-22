@@ -7,6 +7,7 @@ import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
+import org.camunda.bpm.engine.impl.form.type.SimpleFormFieldType;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,7 +47,7 @@ public class GenericFormService {
 
         Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).active().singleResult();
         //String processInstanceId = task.getProcessInstanceId();
-        runtimeService.setVariable(processInstanceId, "data", map);
+        runtimeService.setVariable(processInstanceId, "data-" + task.getTaskDefinitionKey(), map);
 
         formService.submitTaskForm(task.getId(), map);
     }
