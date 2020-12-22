@@ -62,8 +62,7 @@ public class GenericFormService {
     public ProcessDTO getProcessId(String userId) {
         ProcessInstance pi = runtimeService
                                 .createProcessInstanceQuery()
-                                .processInstanceBusinessKey(userId)
-                                .singleResult();
+                                .processInstanceBusinessKey(userId).list().get(0);
 
         String processId = pi.getProcessInstanceId();
         return new ProcessDTO(processId);
