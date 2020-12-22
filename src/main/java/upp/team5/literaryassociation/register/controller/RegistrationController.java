@@ -93,11 +93,6 @@ public class RegistrationController {
         }
     }
 
-    @GetMapping(name = "test", path = "/test")
-    public void Test(HttpServletResponse httpServletResponse) throws IOException {
-        httpServletResponse.sendRedirect("http://localhost:4200/verified");
-    }
-
     private HashMap<String, Object> listToMap(List<FormSubmissionFieldDTO> formSubmissionDTOS) {
         HashMap<String, Object> map = new HashMap<>();
         for (FormSubmissionFieldDTO fs : formSubmissionDTOS) {
