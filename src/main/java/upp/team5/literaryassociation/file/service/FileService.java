@@ -1,6 +1,7 @@
 package upp.team5.literaryassociation.file.service;
 
 import org.camunda.bpm.engine.FormService;
+import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class FileService {
     @Autowired
     private TaskService taskService;
 
+    @Autowired
+    private RuntimeService runtimeService;
+
 
 
     public void store(MultipartFile[] files, String processId) throws IOException {
@@ -34,12 +38,18 @@ public class FileService {
             String fileName = StringUtils.cleanPath(file.getOriginalFilename());
             FileDB fileDB = new FileDB(fileName, file.getContentType(), file.getBytes());
 
-            toMap.add(fileDB);
+
             fileDBRepository.save(fileDB);
+
+            toMap.add(fileDB);
         }
 
-        HashMap<String, Object> map = listToMap(toMap);
         Task task = taskService.createTaskQuery().processInstanceId(processId).active().singleResult();
+
+        runtimeService.setVariable(processId, "files", toMap);
+        runtimeService.setVariable(processId, "loggedUser", task.getAssignee());
+        HashMap<String, Object> map = listToMap(toMap);
+
         formService.submitTaskForm(task.getId(), map );
     }
 
