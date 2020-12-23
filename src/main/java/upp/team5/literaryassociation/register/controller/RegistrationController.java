@@ -22,6 +22,9 @@ import upp.team5.literaryassociation.form.dto.FormSubmissionFieldDTO;
 import upp.team5.literaryassociation.register.dto.RegistrationDTO;
 import upp.team5.literaryassociation.register.service.RegistrationService;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.http.HttpClient;
 import java.util.HashMap;
 import java.util.List;
 
@@ -74,7 +77,7 @@ public class RegistrationController {
   
 
     @GetMapping(name = "clickVerification", path = "/clickVerification/{email}/{hash}")
-    public ResponseEntity<?> clickVerification(@PathVariable String email, @PathVariable String hash) {
+    public void clickVerification(@PathVariable String email, @PathVariable String hash, HttpServletResponse httpServletResponse) throws IOException {
         log.info("Verification link clicked");
 
         var verInf = verificationInformationRepository.getVerificationInformationByHash(hash);
@@ -85,10 +88,9 @@ public class RegistrationController {
                         .setVariable("userVerified", true)
                         .correlateWithResult();
                 result.getExecution();
-                return new ResponseEntity<>(HttpStatus.OK);
+                httpServletResponse.sendRedirect("http://localhost:4200/verified");
             }
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     private HashMap<String, Object> listToMap(List<FormSubmissionFieldDTO> formSubmissionDTOS) {

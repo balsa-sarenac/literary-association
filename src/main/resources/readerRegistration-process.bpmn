@@ -4,7 +4,7 @@
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_0ts4j2f</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:userTask id="Activity_0wwao5w" name="Fill basic registration fields">
+    <bpmn:userTask id="basic-information" name="Fill basic registration fields">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="firstName" label="First Name" type="string">
@@ -41,18 +41,22 @@
               <camunda:constraint name="required" />
             </camunda:validation>
           </camunda:formField>
-          <camunda:formField id="confirmPassword" label="Confirm Password" type="string">
+          <camunda:formField id="isBetaReader" label="Beta reader" type="boolean" defaultValue="false" />
+          <camunda:formField id="genres" label="Genres I am interested in:" type="multiselect">
+            <camunda:properties>
+              <camunda:property id="Property_3lmqbpo" value="xssss" />
+            </camunda:properties>
             <camunda:validation>
-              <camunda:constraint name="required" />
+              <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.GenresValidator" />
             </camunda:validation>
           </camunda:formField>
-          <camunda:formField id="isBetaReader" label="Beta reader" type="boolean" defaultValue="false" />
         </camunda:formData>
+        <camunda:taskListener class="upp.team5.literaryassociation.camunda.eventListener.OnTaskCreate" event="create" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0ts4j2f</bpmn:incoming>
       <bpmn:outgoing>Flow_05xrd04</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="Flow_0ts4j2f" sourceRef="StartEvent_1" targetRef="Activity_0wwao5w" />
+    <bpmn:sequenceFlow id="Flow_0ts4j2f" sourceRef="StartEvent_1" targetRef="basic-information" />
     <bpmn:serviceTask id="Activity_0fld9af" name="Create user" camunda:class="upp.team5.literaryassociation.register.service.RegistrationService">
       <bpmn:incoming>Flow_0uarq1d</bpmn:incoming>
       <bpmn:outgoing>Flow_1h6ctqk</bpmn:outgoing>
@@ -70,7 +74,7 @@
     <bpmn:sequenceFlow id="Flow_0b0agc0" name="Yes" sourceRef="Gateway_0d2xdgm" targetRef="Event_0p3e675">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${userExists==true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sendTask id="Activity_1byw8lf" name="Send verification link" camunda:class="upp.team5.literaryassociation.common.service.EmailService">
+    <bpmn:sendTask id="Activity_1byw8lf" name="Send verification link" camunda:class="upp.team5.literaryassociation.register.service.SendLinkService">
       <bpmn:incoming>Flow_15rvl1u</bpmn:incoming>
       <bpmn:outgoing>Flow_1w8vw92</bpmn:outgoing>
     </bpmn:sendTask>
@@ -94,32 +98,30 @@
       <bpmn:outgoing>Flow_0ae065j</bpmn:outgoing>
       <bpmn:outgoing>Flow_1dzvoee</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_05xrd04" sourceRef="Activity_0wwao5w" targetRef="Gateway_1j7v1x0" />
+    <bpmn:sequenceFlow id="Flow_05xrd04" sourceRef="basic-information" targetRef="Gateway_1j7v1x0" />
     <bpmn:exclusiveGateway id="Gateway_1umaslk">
       <bpmn:incoming>Flow_1dzvoee</bpmn:incoming>
       <bpmn:incoming>Flow_03wxsli</bpmn:incoming>
       <bpmn:outgoing>Flow_0uarq1d</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_0uarq1d" sourceRef="Gateway_1umaslk" targetRef="Activity_0fld9af" />
-    <bpmn:sequenceFlow id="Flow_0ae065j" name="yes" sourceRef="Gateway_1j7v1x0" targetRef="Activity_0fay6rj">
+    <bpmn:sequenceFlow id="Flow_0ae065j" name="yes" sourceRef="Gateway_1j7v1x0" targetRef="additional-genres">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isBetaReader==true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1dzvoee" name="no" sourceRef="Gateway_1j7v1x0" targetRef="Gateway_1umaslk">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isBetaReader==false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_03wxsli" sourceRef="Activity_0fay6rj" targetRef="Gateway_1umaslk" />
-    <bpmn:userTask id="Activity_0fay6rj" name="Add additional genres">
+    <bpmn:sequenceFlow id="Flow_03wxsli" sourceRef="additional-genres" targetRef="Gateway_1umaslk" />
+    <bpmn:userTask id="additional-genres" name="Add additional genres">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="genres" label="Select genres you are interested in" type="multiselect" />
+        </camunda:formData>
+        <camunda:taskListener class="upp.team5.literaryassociation.camunda.eventListener.OnTaskCreate" event="create" />
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0ae065j</bpmn:incoming>
       <bpmn:outgoing>Flow_03wxsli</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:textAnnotation id="TextAnnotation_0grsukj">
-      <bpmn:text>u konstruktoru komponente pozvati metodu koja ce dobaviti formu sa trenutnog taska</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:association id="Association_02e1aqd" sourceRef="Activity_0fay6rj" targetRef="TextAnnotation_0grsukj" />
-    <bpmn:textAnnotation id="TextAnnotation_1n57vae">
-      <bpmn:text>next dugme</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:association id="Association_17pwuc1" sourceRef="Activity_0wwao5w" targetRef="TextAnnotation_1n57vae" />
   </bpmn:process>
   <bpmn:message id="Message_1ce1g0m" name="LinkClicked" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
@@ -190,7 +192,7 @@
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="152" y="532" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0wwao5w_di" bpmnElement="Activity_0wwao5w">
+      <bpmndi:BPMNShape id="Activity_0wwao5w_di" bpmnElement="basic-information">
         <dc:Bounds x="310" y="510" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0fld9af_di" bpmnElement="Activity_0fld9af">
@@ -229,23 +231,9 @@
           <dc:Bounds x="374" y="122" width="13" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0ht6kq2_di" bpmnElement="Activity_0fay6rj">
+      <bpmndi:BPMNShape id="Activity_0ht6kq2_di" bpmnElement="additional-genres">
         <dc:Bounds x="310" y="260" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_0grsukj_di" bpmnElement="TextAnnotation_0grsukj">
-        <dc:Bounds x="180" y="220" width="100" height="98" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_1n57vae_di" bpmnElement="TextAnnotation_1n57vae">
-        <dc:Bounds x="420" y="590" width="98" height="26" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Association_02e1aqd_di" bpmnElement="Association_02e1aqd">
-        <di:waypoint x="310" y="275" />
-        <di:waypoint x="280" y="260" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_17pwuc1_di" bpmnElement="Association_17pwuc1">
-        <di:waypoint x="410" y="575" />
-        <di:waypoint x="440" y="590" />
-      </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>

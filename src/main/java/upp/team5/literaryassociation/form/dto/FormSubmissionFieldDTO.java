@@ -11,5 +11,5 @@ import java.io.Serializable;
 @NoArgsConstructor @AllArgsConstructor
 public class FormSubmissionFieldDTO implements Serializable {
     private String id;
-    private String value;
+    private Object value;
 }

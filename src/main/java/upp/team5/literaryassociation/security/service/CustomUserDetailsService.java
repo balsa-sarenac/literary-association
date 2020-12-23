@@ -68,6 +68,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         return this.userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
     }
 
+    public User getUserByEmail(String email) { return userRepository.getUserByEmail(email); }
+
     public ResponseEntity<List<RequestDTO>> getRegistrationRequests() {
         log.info("Searching for all registration requests");
         List<Role> roles = this.roleRepository.findAllByNameIn(List.of("ROLE_LECTOR", "ROLE_EDITOR"));
