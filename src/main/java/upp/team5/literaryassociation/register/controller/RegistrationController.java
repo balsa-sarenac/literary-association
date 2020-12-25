@@ -72,19 +72,7 @@ public class RegistrationController {
     public ResponseEntity<ProcessDTO> startAuthorRegProcess() {
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("author-reg");
 
-        ProcessDTO processDTO = new ProcessDTO(processInstance.getId());
-
-        List<String> roleNames= new ArrayList<String>();
-        roleNames.add("ROLE_COMMITTEE_MEMBER");
-        roleNames.add("ROLE_HEAD_OF_COMMITTEE");
-
-        List<Role> roles = roleRepository.findAllByNameIn(roleNames);
-        List<User> users = userRepository.findAllByRolesIn(roles);
-
-        for(User user:users){
-            this.createCamundaUser(user, "asdf");
-        }
-
+        ProcessDTO processDTO = new ProcessDTO(processInstance.getProcessInstanceId());
 
         return new ResponseEntity<>(processDTO, HttpStatus.OK);
     }

@@ -1,5 +1,6 @@
 package upp.team5.literaryassociation.file.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
@@ -10,12 +11,14 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import upp.team5.literaryassociation.model.FileDB;
 import upp.team5.literaryassociation.file.repository.FileDBRepository;
+import upp.team5.literaryassociation.model.MembershipRequest;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 
 @Service
+@Slf4j
 public class FileService {
     @Autowired
     private FileDBRepository fileDBRepository;
@@ -38,11 +41,10 @@ public class FileService {
             String fileName = StringUtils.cleanPath(file.getOriginalFilename());
             FileDB fileDB = new FileDB(fileName, file.getContentType(), file.getBytes());
 
-
-            fileDBRepository.save(fileDB);
-
             toMap.add(fileDB);
         }
+
+        fileDBRepository.saveAll(toMap);
 
         Task task = taskService.createTaskQuery().processInstanceId(processId).active().singleResult();
 
@@ -57,5 +59,14 @@ public class FileService {
         HashMap<String, Object> map = new HashMap<>(); //obrisati
         map.put("files", files);
         return map;
+    }
+
+    public void updateFiles(HashSet<FileDB> files, MembershipRequest membershipRequest) {
+        for(FileDB file:files){
+            file.setMembershipRequest(membershipRequest);
+
+            log.info("updated file");
+        }
+        //fileDBRepository.saveAll(files);
     }
 }

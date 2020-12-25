@@ -23,7 +23,7 @@ public class MembershipRequest {
       @OneToOne(mappedBy = "membershipRequest")
       private User author;
 
-      @OneToMany(mappedBy = "membershipRequest")
+      @OneToMany(mappedBy = "membershipRequest", cascade = CascadeType.ALL)
       private Set<FileDB> documents;
 
 

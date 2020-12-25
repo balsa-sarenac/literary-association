@@ -9,11 +9,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.authorRegistration.repository.MembershipRequestRepository;
+import upp.team5.literaryassociation.file.service.FileService;
 import upp.team5.literaryassociation.model.FileDB;
 import upp.team5.literaryassociation.model.MembershipRequest;
 import upp.team5.literaryassociation.security.repository.UserRepository;
 
 import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -28,6 +30,9 @@ public class MembershipRequestService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private FileService fileService;
+
 
     public void addNewRequest(HashSet<FileDB> files, String processId) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -40,9 +45,19 @@ public class MembershipRequestService {
         }
 
         User user = identityService.createUserQuery().userEmail(username).singleResult();
+
+        upp.team5.literaryassociation.model.User dbUser = userRepository.getUserByEmail(username);
+
         MembershipRequest membershipRequest = new MembershipRequest();
-        membershipRequest.setAuthor(userRepository.getUserByEmail(user.getEmail()));
-        membershipRequest.setDocuments(files);
+
+        membershipRequest.setAuthor(dbUser);
+        membershipRequest.setDocuments((Set<FileDB>)files);
+        membershipRequest.setFeePaid(false);
+
         membershipRequest = membershipRequestRepository.save(membershipRequest);
+
+        //dbUser.setMembershipRequest(membershipRequest);
+
+        //fileService.updateFiles(files, membershipRequest);
     }
 }
