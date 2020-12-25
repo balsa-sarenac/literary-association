@@ -56,7 +56,6 @@ public class FileService {
     }
 
     private HashMap<String, Object> listToMap(HashSet<FileDB> files) {
-        HashMap<String, Object> map = new HashMap<>(); //obrisati
         map.put("files", files);
         return map;
     }
