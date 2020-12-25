@@ -82,6 +82,7 @@
           <camunda:formField id="synopsis" label="Synopsis" type="string" />
           <camunda:formField id="genre" label="Genre" type="enum" />
         </camunda:formData>
+        <camunda:taskListener class="upp.team5.literaryassociation.camunda.eventListener.OnTaskCreatePublishBook" event="create" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1m521c3</bpmn:incoming>
       <bpmn:outgoing>Flow_0f10ijm</bpmn:outgoing>
