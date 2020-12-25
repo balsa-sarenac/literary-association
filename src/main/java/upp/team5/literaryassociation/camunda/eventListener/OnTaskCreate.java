@@ -60,12 +60,4 @@ public class OnTaskCreate implements TaskListener {
         }
         return map;
     }
-
-    private List<String> listToList(List<Genre> genres) {
-        List<String> list = new LinkedList<>();
-        for (Genre g : genres) {
-            list.add(g.getName());
-        }
-        return list;
-    }
 }
