@@ -56,6 +56,7 @@ public class FileService {
     }
 
     private HashMap<String, Object> listToMap(HashSet<FileDB> files) {
+        HashMap<String, Object> map = new HashMap<String, Object>();
         map.put("files", files);
         return map;
     }
