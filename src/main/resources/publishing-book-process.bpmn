@@ -78,9 +78,21 @@
     <bpmn:userTask id="Activity_1k2ykcs" name="Fill book info">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="title" label="Title" type="string" />
-          <camunda:formField id="synopsis" label="Synopsis" type="string" />
-          <camunda:formField id="genre" label="Genre" type="enum" />
+          <camunda:formField id="title" label="Title" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="synopsis" label="Synopsis" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="genre" label="Genre" type="enum">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
         </camunda:formData>
         <camunda:taskListener class="upp.team5.literaryassociation.camunda.eventListener.OnTaskCreatePublishBook" event="create" />
       </bpmn:extensionElements>
