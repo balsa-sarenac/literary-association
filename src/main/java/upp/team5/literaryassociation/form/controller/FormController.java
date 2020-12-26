@@ -41,9 +41,6 @@ public class FormController {
         genericFormService.submitForm(processInstanceId, formSubmissionDTO);
     }
 
-    @GetMapping(name = "getProcessId", path = "/getProcessId/{userId}")
-    public  ResponseEntity<ProcessDTO> getProcessId(@PathVariable String userId){
-        return new ResponseEntity<ProcessDTO>(genericFormService.getProcessId(userId), HttpStatus.OK);
-    }
+
 }
 
