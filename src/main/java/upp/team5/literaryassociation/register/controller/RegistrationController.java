@@ -1,5 +1,6 @@
 package upp.team5.literaryassociation.register.controller;
 
+import camundajar.impl.com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.IdentityService;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upp.team5.literaryassociation.common.dto.ProcessDTO;
 import upp.team5.literaryassociation.exception.UserAlreadyExistsException;
+import upp.team5.literaryassociation.form.controller.FormController;
 import upp.team5.literaryassociation.model.Role;
 import upp.team5.literaryassociation.model.User;
 import upp.team5.literaryassociation.register.repository.VerificationInformationRepository;
@@ -27,9 +29,15 @@ import upp.team5.literaryassociation.register.service.RegistrationService;
 import upp.team5.literaryassociation.security.repository.RoleRepository;
 import upp.team5.literaryassociation.security.repository.UserRepository;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,6 +63,8 @@ public class RegistrationController {
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private FormController formController;
 
     @Autowired
     public RegistrationController(RegistrationService registrationService, VerificationInformationRepository verificationInformationRepository) {
@@ -89,7 +99,7 @@ public class RegistrationController {
   
 
     @GetMapping(name = "clickVerification", path = "/clickVerification/{email}/{hash}")
-    public void clickVerification(@PathVariable String email, @PathVariable String hash, HttpServletResponse httpServletResponse) throws IOException {
+    public ResponseEntity<?> clickVerification(@PathVariable String email, @PathVariable String hash, HttpServletResponse httpServletResponse) throws IOException {
         log.info("Verification link clicked");
 
         var verInf = verificationInformationRepository.getVerificationInformationByHash(hash);
@@ -100,9 +110,23 @@ public class RegistrationController {
                         .setVariable("userVerified", true)
                         .correlateWithResult();
                 result.getExecution();
-                httpServletResponse.sendRedirect("http://localhost:4200/verified");
+
+                Role role = roleRepository.findByName("ROLE_PENDING_AUTHOR");
+                User dbUser = userRepository.getUserByEmail(verInf.getEmail());
+                if(dbUser.getRoles().contains(role)){
+                    ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(verInf.getProcessBusinessKey()).singleResult();
+                    //ProcessDTO pdto = new ProcessDTO(pi.getProcessInstanceId());
+                    //httpServletResponse.addHeader("processId", pi.getProcessInstanceId());
+                    httpServletResponse.sendRedirect("http://localhost:4200/upload-documents");
+                    return formController.getFrom(pi.getProcessInstanceId());
+                }
+                else{
+                    httpServletResponse.sendRedirect("http://localhost:4200/verified");
+                }
+
             }
         }
+        return null;
     }
 
     private HashMap<String, Object> listToMap(List<FormSubmissionFieldDTO> formSubmissionDTOS) {
