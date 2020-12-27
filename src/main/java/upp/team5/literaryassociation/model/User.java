@@ -62,7 +62,7 @@ public class User implements UserDetails { //, org.camunda.bpm.engine.identity.U
     private Set<Book> chiefEditorOfBooks;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinTable(name = "author_membershipRequest",
+    @JoinTable(name = "author_membership_request",
         joinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"),
         inverseJoinColumns = @JoinColumn(name = "request_id", referencedColumnName = "id"))
     private MembershipRequest membershipRequest;

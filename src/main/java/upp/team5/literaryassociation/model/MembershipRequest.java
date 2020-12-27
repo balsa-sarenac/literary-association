@@ -18,6 +18,9 @@ public class MembershipRequest {
       private Long id;
 
       @Column
+      private boolean active;
+
+      @Column
       private boolean feePaid;
 
       @OneToOne(mappedBy = "membershipRequest")
