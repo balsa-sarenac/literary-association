@@ -1,4 +1,4 @@
-package upp.team5.literaryassociation.file.repository;
+package upp.team5.literaryassociation.common.file.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

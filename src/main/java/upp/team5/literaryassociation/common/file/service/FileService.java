@@ -1,4 +1,4 @@
-package upp.team5.literaryassociation.file.service;
+package upp.team5.literaryassociation.common.file.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.FormService;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import upp.team5.literaryassociation.model.FileDB;
-import upp.team5.literaryassociation.file.repository.FileDBRepository;
+import upp.team5.literaryassociation.common.file.repository.FileDBRepository;
 import upp.team5.literaryassociation.model.MembershipRequest;
 
 import java.io.IOException;
