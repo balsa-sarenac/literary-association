@@ -9,6 +9,8 @@ public class Book {
     @Id
     private Long id;
 
+    private String title;
+
     @ManyToMany(mappedBy = "authorBooks")
     private Set<User> authors;
 
