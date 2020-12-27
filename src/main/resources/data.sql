@@ -51,7 +51,7 @@ insert into user_table (first_name, last_name, city, country, email, password, e
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
 ('Stanko', 'Stankovic', 'Novi Sad', 'Serbia', 'stanko@example.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  false, true, true, true, null);
-
+ -- 9
 insert into user_table (first_name, last_name, city, country, email, password, enabled,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
 ('Milica', 'Milic', 'Novi Sad', 'Serbia', 'milica@example.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
