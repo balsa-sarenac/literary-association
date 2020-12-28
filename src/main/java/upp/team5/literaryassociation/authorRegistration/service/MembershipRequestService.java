@@ -61,6 +61,7 @@ public class MembershipRequestService {
         membershipRequest = membershipRequestRepository.save(membershipRequest);
 
         dbUser.setMembershipRequest(membershipRequest);
+
         this.userRepository.save(dbUser);
 
 //        fileService.updateFiles(files, membershipRequest);

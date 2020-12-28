@@ -23,7 +23,7 @@ public class MembershipRequest {
       @Column
       private boolean feePaid;
 
-      @OneToOne(mappedBy = "membershipRequest")
+      @OneToOne
       private User author;
 
       @OneToMany(mappedBy = "membershipRequest", cascade = CascadeType.ALL)
