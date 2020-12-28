@@ -56,7 +56,7 @@ public class MembershipRequestService {
 
         membershipRequest = membershipRequestRepository.save(membershipRequest);
 
-        //dbUser.setMembershipRequest(membershipRequest);
+        dbUser.setMembershipRequest(membershipRequest);
 
         //fileService.updateFiles(files, membershipRequest);
     }
