@@ -11,6 +11,6 @@ import upp.team5.literaryassociation.common.dto.UserDTO;
 @AllArgsConstructor
 public class MembershipRequestDTO {
     private Long id;
-    private UserDTO userDTO;
+    private UserDTO user;
 //    private List<FileDTO> files;
 }

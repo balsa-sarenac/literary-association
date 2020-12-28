@@ -2,6 +2,7 @@ package upp.team5.literaryassociation.authorRegistration.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.IdentityService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +16,7 @@ import upp.team5.literaryassociation.model.MembershipRequest;
 import upp.team5.literaryassociation.model.User;
 import upp.team5.literaryassociation.security.repository.UserRepository;
 
+import javax.ws.rs.NotFoundException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -35,6 +37,9 @@ public class MembershipRequestService {
     @Autowired
     private FileService fileService;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     public void addNewRequest(HashSet<FileDB> files, String processId) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username;
@@ -54,6 +59,11 @@ public class MembershipRequestService {
         membershipRequest.setAuthor(dbUser);
         membershipRequest.setFeePaid(false);
         membershipRequest.setActive(true);
+
+        if (membershipRequest.getDocuments() == null) {
+            membershipRequest.setDocuments(new HashSet<>());
+        }
+
         for (FileDB file : files) {
             membershipRequest.getDocuments().add(file);
         }
@@ -77,10 +87,21 @@ public class MembershipRequestService {
             User user = request.getAuthor();
             UserDTO userDTO = new UserDTO(user.getId(), user.getFirstName(), user.getLastName(),
                     user.getCity(), user.getCountry(), user.getEmail());
-            membershipRequestDTO.setUserDTO(userDTO);
+            membershipRequestDTO.setUser(userDTO);
             requestDTOS.add(membershipRequestDTO);
         }
 
         return requestDTOS;
+    }
+
+    public MembershipRequestDTO getRequest(Long id) {
+        log.info("Retrieving membership request with id: {}", id);
+        MembershipRequest membershipRequest = this.membershipRequestRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Membership request with given id doesn't exist"));
+
+        UserDTO userDTO = modelMapper.map(membershipRequest.getAuthor(), UserDTO.class);
+        MembershipRequestDTO membershipRequestDTO = new MembershipRequestDTO(membershipRequest.getId(), userDTO);
+
+        return membershipRequestDTO;
     }
 }

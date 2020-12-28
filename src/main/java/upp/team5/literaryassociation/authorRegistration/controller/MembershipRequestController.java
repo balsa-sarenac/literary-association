@@ -4,10 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 import upp.team5.literaryassociation.authorRegistration.dto.MembershipRequestDTO;
 import upp.team5.literaryassociation.authorRegistration.service.MembershipRequestService;
 
@@ -26,9 +24,17 @@ public class MembershipRequestController {
         this.membershipRequestService = membershipRequestService;
     }
 
+    @PreAuthorize("hasAuthority('ROLE_COMMITTEE_MEMBER')")
     @GetMapping
     public ResponseEntity<List<MembershipRequestDTO>> getRequests() {
         List<MembershipRequestDTO> requestDTOS = this.membershipRequestService.getAllRequests();
         return new ResponseEntity<>(requestDTOS, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_COMMITTEE_MEMBER')")
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<MembershipRequestDTO> getRequest(@PathVariable Long id) {
+        MembershipRequestDTO request = this.membershipRequestService.getRequest(id);
+        return new ResponseEntity<>(request, HttpStatus.OK);
     }
 }
