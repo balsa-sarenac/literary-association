@@ -31,7 +31,7 @@ public class User implements UserDetails { //, org.camunda.bpm.engine.identity.U
     @Column(nullable = false)
     private String country;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String email;
 
     @Column(nullable = false)

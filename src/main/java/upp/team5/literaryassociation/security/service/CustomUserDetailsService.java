@@ -70,6 +70,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     public User getUserByEmail(String email) { return userRepository.getUserByEmail(email); }
 
+    public List<User> getUsersByRole(Long id) { return userRepository.findByRoles_Id(id); }
+
+    public void saveUser(User user) { userRepository.save(user); }
+
     public ResponseEntity<List<RequestDTO>> getRegistrationRequests() {
         log.info("Searching for all registration requests");
         List<Role> roles = this.roleRepository.findAllByNameIn(List.of("ROLE_LECTOR", "ROLE_EDITOR"));

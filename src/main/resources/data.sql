@@ -34,27 +34,27 @@ insert into user_table (first_name, last_name, city, country, email, password, e
 
 insert into user_table (first_name, last_name, city, country, email, password, enabled,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
-('Ana', 'Antic', 'Kragujevac', 'Serbia', 'ana@example.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
+('Ana', 'Antic', 'Kragujevac', 'Serbia', 'nina.sarenac@hotmail.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  false, true, true, true, null);
 
 insert into user_table (first_name, last_name, city, country, email, password, enabled,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
-('Stefan', 'Stefanovic', 'Kragujevac', 'Serbia', 'stefan@example.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
+('Stefan', 'Stefanovic', 'Kragujevac', 'Serbia', 'nina.sarenac@hotmail.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  false, true, true, true, null);
 
 insert into user_table (first_name, last_name, city, country, email, password, enabled,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
-('Filip', 'Filipovic', 'Novi Sad', 'Serbia', 'filip@example.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
+('Filip', 'Filipovic', 'Novi Sad', 'Serbia', 'nina.sarenac@hotmail.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  false, true, true, true, null);
 
 insert into user_table (first_name, last_name, city, country, email, password, enabled,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
-('Stanko', 'Stankovic', 'Novi Sad', 'Serbia', 'stanko@example.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
+('Stanko', 'Stankovic', 'Novi Sad', 'Serbia', 'nina.sarenac@hotmail.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  false, true, true, true, null);
 
 insert into user_table (first_name, last_name, city, country, email, password, enabled,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
-('Milica', 'Milic', 'Novi Sad', 'Serbia', 'milica@example.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
+('Milica', 'Milic', 'Novi Sad', 'Serbia', 'nina.sarenac@hotmail.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  false, true, true, true, null);
 
 insert into user_table (first_name, last_name, city, country, email, password, enabled,
@@ -76,6 +76,11 @@ insert into user_table (first_name, last_name, city, country, email, password, e
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
 ('Nikola', 'Nikolic', 'Novi Sad', 'Serbia', 'nikola@example.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  false, true, true, true, null);
+
+insert into user_table (first_name, last_name, city, country, email, password, enabled,
+                        account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
+('Milan', 'Milanovic', 'Novi Sad', 'Serbia', 'nina.sarenac444@gmail.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
+ true, true, true, true, null);
 
 
 -- USERS_ROLES
@@ -100,6 +105,9 @@ insert into users_roles (user_id, role_id) values (12, 8);
 
 -- HEAD OF COMMITTEE
 insert into users_roles (user_id, role_id) values (13, 9);
+
+-- AUTHOR
+insert into users_roles (user_id, role_id) values (14, 4);
 
 --GENRES
 insert into genre (id, name) values (1,'Action');

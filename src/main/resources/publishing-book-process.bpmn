@@ -7,7 +7,7 @@
     <bpmn:laneSet id="LaneSet_16wd6r3">
       <bpmn:lane id="Lane_1cy7hrj" name="Author">
         <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Activity_1k2ykcs</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>fill-book-info</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0f7jq51</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_14orjt1</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0nmil9s</bpmn:flowNodeRef>
@@ -75,7 +75,7 @@
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_1m521c3</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:userTask id="Activity_1k2ykcs" name="Fill book info">
+    <bpmn:userTask id="fill-book-info" name="Fill book info">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="title" label="Title" type="string">
@@ -99,7 +99,7 @@
       <bpmn:incoming>Flow_1m521c3</bpmn:incoming>
       <bpmn:outgoing>Flow_0f10ijm</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:serviceTask id="Activity_0f7jq51" name="Choose chief editor" camunda:class="upp.team5.literaryassociation.publishing.service.ChooseEditorService">
+    <bpmn:serviceTask id="Activity_0f7jq51" name="Save book and choose chief editor" camunda:class="upp.team5.literaryassociation.publishing.service.ChooseEditorService">
       <bpmn:incoming>Flow_0f10ijm</bpmn:incoming>
       <bpmn:outgoing>Flow_1akaf2o</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -346,8 +346,8 @@
         <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P14D</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="Flow_1m521c3" sourceRef="StartEvent_1" targetRef="Activity_1k2ykcs" />
-    <bpmn:sequenceFlow id="Flow_0f10ijm" sourceRef="Activity_1k2ykcs" targetRef="Activity_0f7jq51" />
+    <bpmn:sequenceFlow id="Flow_1m521c3" sourceRef="StartEvent_1" targetRef="fill-book-info" />
+    <bpmn:sequenceFlow id="Flow_0f10ijm" sourceRef="fill-book-info" targetRef="Activity_0f7jq51" />
     <bpmn:sequenceFlow id="Flow_1akaf2o" sourceRef="Activity_0f7jq51" targetRef="Activity_14orjt1" />
     <bpmn:sequenceFlow id="Flow_1chh4t4" sourceRef="Event_0r8he79" targetRef="Event_01nyb44" />
     <bpmn:sequenceFlow id="Flow_1dpu26n" sourceRef="Activity_0nmil9s" targetRef="Activity_1by13au" />
@@ -768,7 +768,7 @@
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="239" y="242" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_04k2mak_di" bpmnElement="Activity_1k2ykcs">
+      <bpmndi:BPMNShape id="Activity_04k2mak_di" bpmnElement="fill-book-info">
         <dc:Bounds x="340" y="220" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1iwfmjk_di" bpmnElement="Activity_0f7jq51">
