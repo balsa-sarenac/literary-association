@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import upp.team5.literaryassociation.authorRegistration.dto.MembershipRequestDTO;
 import upp.team5.literaryassociation.authorRegistration.repository.MembershipRequestRepository;
+import upp.team5.literaryassociation.common.dto.FileDTO;
 import upp.team5.literaryassociation.common.dto.UserDTO;
 import upp.team5.literaryassociation.common.file.service.FileService;
 import upp.team5.literaryassociation.model.FileDB;
@@ -20,6 +22,7 @@ import javax.ws.rs.NotFoundException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -100,7 +103,25 @@ public class MembershipRequestService {
                 .orElseThrow(() -> new NotFoundException("Membership request with given id doesn't exist"));
 
         UserDTO userDTO = modelMapper.map(membershipRequest.getAuthor(), UserDTO.class);
-        MembershipRequestDTO membershipRequestDTO = new MembershipRequestDTO(membershipRequest.getId(), userDTO);
+
+        List<FileDTO> files = membershipRequest.getDocuments().stream().map(file -> {
+            String fileDownloadUri = ServletUriComponentsBuilder
+                    .fromCurrentContextPath()
+                    .path("/document/")
+                    .path(file.getId())
+                    .toUriString();
+
+            return new FileDTO(
+                    file.getName(),
+                    fileDownloadUri,
+                    file.getType(),
+                    file.getData().length);
+        }).collect(Collectors.toList());
+
+        MembershipRequestDTO membershipRequestDTO = new MembershipRequestDTO();
+        membershipRequestDTO.setId(membershipRequest.getId());
+        membershipRequestDTO.setUser(userDTO);
+        membershipRequestDTO.setFiles(files);
 
         return membershipRequestDTO;
     }
