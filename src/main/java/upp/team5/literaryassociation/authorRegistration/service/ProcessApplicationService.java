@@ -21,8 +21,8 @@ import java.util.List;
 @Slf4j
 public class ProcessApplicationService implements JavaDelegate {
 
-    @Autowired
-    private MembershipRequestService membershipRequestService;
+//    @Autowired
+//    private MembershipRequestService membershipRequestService;
 
     @Autowired
     private UserRepository userRepository;
@@ -34,17 +34,15 @@ public class ProcessApplicationService implements JavaDelegate {
     public void execute(DelegateExecution execution) throws Exception {
         log.info("Process Application started");
 
-        HashSet<FileDB> files = (HashSet<FileDB>)execution.getVariable("files");
-
-        membershipRequestService.addNewRequest(files, execution.getProcessInstanceId());
+//        HashSet<FileDB> files = (HashSet<FileDB>)execution.getVariable("files");
 
         List<String> roleName = new ArrayList<String>();
         roleName.add("ROLE_COMMITTEE_MEMBER");
         roleName.add("ROLE_HEAD_OF_COMMITTEE");
         List<Role> roles = roleRepository.findAllByNameIn(roleName);
-        List<User> commitee = userRepository.findAllByRolesIn(roles);
+        List<User> committee = userRepository.findAllByRolesIn(roles);
 
-        execution.setVariable("assigneeList", commitee);
+        execution.setVariable("assigneeList", committee);
 
     }
 }

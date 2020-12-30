@@ -37,4 +37,9 @@ public class MembershipRequestController {
         MembershipRequestDTO request = this.membershipRequestService.getRequest(id);
         return new ResponseEntity<>(request, HttpStatus.OK);
     }
+
+    @GetMapping(path = "/documents/{id}")
+    public ResponseEntity<byte[]> getDocument(@PathVariable Long id) {
+        return this.membershipRequestService.getDocument(id);
+    }
 }

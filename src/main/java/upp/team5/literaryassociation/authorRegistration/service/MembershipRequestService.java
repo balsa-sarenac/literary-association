@@ -2,8 +2,11 @@ package upp.team5.literaryassociation.authorRegistration.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.IdentityService;
+import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,7 @@ import upp.team5.literaryassociation.authorRegistration.repository.MembershipReq
 import upp.team5.literaryassociation.common.dto.FileDTO;
 import upp.team5.literaryassociation.common.dto.UserDTO;
 import upp.team5.literaryassociation.common.file.service.FileService;
+import upp.team5.literaryassociation.exception.UserNotFoundException;
 import upp.team5.literaryassociation.model.FileDB;
 import upp.team5.literaryassociation.model.MembershipRequest;
 import upp.team5.literaryassociation.model.User;
@@ -43,19 +47,20 @@ public class MembershipRequestService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public void addNewRequest(HashSet<FileDB> files, String processId) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username;
-        if(principal instanceof UserDetails){
-             username = ((UserDetails)principal).getUsername();
-        }
-        else{
-             username = principal.toString();
-        }
+    public void addNewRequest(DelegateExecution delegateExecution) {
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        String username;
+//        if(principal instanceof UserDetails){
+//             username = ((UserDetails)principal).getUsername();
+//        }
+//        else{
+//             username = principal.toString();
+//        }
+//
+//        org.camunda.bpm.engine.identity.User user = identityService.createUserQuery().userEmail(username).singleResult();
 
-        org.camunda.bpm.engine.identity.User user = identityService.createUserQuery().userEmail(username).singleResult();
-
-        upp.team5.literaryassociation.model.User dbUser = userRepository.getUserByEmail(username);
+        Long id = (Long) delegateExecution.getVariable("userId");
+        upp.team5.literaryassociation.model.User dbUser = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
 
         MembershipRequest membershipRequest = new MembershipRequest();
 
@@ -63,13 +68,13 @@ public class MembershipRequestService {
         membershipRequest.setFeePaid(false);
         membershipRequest.setActive(true);
 
-        if (membershipRequest.getDocuments() == null) {
-            membershipRequest.setDocuments(new HashSet<>());
-        }
-
-        for (FileDB file : files) {
-            membershipRequest.getDocuments().add(file);
-        }
+//        if (membershipRequest.getDocuments() == null) {
+//            membershipRequest.setDocuments(new HashSet<>());
+//        }
+//
+//        for (FileDB file : files) {
+//            membershipRequest.getDocuments().add(file);
+//        }
 
         membershipRequest = membershipRequestRepository.save(membershipRequest);
 
@@ -77,7 +82,11 @@ public class MembershipRequestService {
 
         this.userRepository.save(dbUser);
 
-//        fileService.updateFiles(files, membershipRequest);
+//        for (FileDB file : files) {
+//            file.setMembershipRequest(membershipRequest);
+//        }
+//
+//        fileService.updateFiles(files);
     }
 
     public List<MembershipRequestDTO> getAllRequests() {
@@ -90,6 +99,7 @@ public class MembershipRequestService {
             User user = request.getAuthor();
             UserDTO userDTO = new UserDTO(user.getId(), user.getFirstName(), user.getLastName(),
                     user.getCity(), user.getCountry(), user.getEmail());
+            membershipRequestDTO.setId(request.getId());
             membershipRequestDTO.setUser(userDTO);
             requestDTOS.add(membershipRequestDTO);
         }
@@ -104,11 +114,20 @@ public class MembershipRequestService {
 
         UserDTO userDTO = modelMapper.map(membershipRequest.getAuthor(), UserDTO.class);
 
-        List<FileDTO> files = membershipRequest.getDocuments().stream().map(file -> {
+
+        List<FileDB> requestFiles = null;
+        try {
+            requestFiles = this.fileService.findAllByMembershipRequest(membershipRequest);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+        assert requestFiles != null;
+        List<FileDTO> files = requestFiles.stream().map(file -> {
             String fileDownloadUri = ServletUriComponentsBuilder
                     .fromCurrentContextPath()
-                    .path("/document/")
-                    .path(file.getId())
+                    .path("/membership-requests/documents/")
+                    .path(String.valueOf(file.getId()))
                     .toUriString();
 
             return new FileDTO(
@@ -124,5 +143,13 @@ public class MembershipRequestService {
         membershipRequestDTO.setFiles(files);
 
         return membershipRequestDTO;
+    }
+
+    public ResponseEntity<byte[]> getDocument(Long id) {
+        FileDB fileDB = this.fileService.findById(id);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDB.getName() + "\"")
+                .body(fileDB.getData());
     }
 }
