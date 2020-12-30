@@ -30,5 +30,7 @@ public class MembershipRequest implements Serializable {
       @OneToMany(mappedBy = "membershipRequest", cascade = CascadeType.ALL)
       private Set<FileDB> documents;
 
+      @OneToMany(mappedBy = "membershipRequest", cascade = CascadeType.ALL)
+      private Set<Vote> votes;
 
 }
