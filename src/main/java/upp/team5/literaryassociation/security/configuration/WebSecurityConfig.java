@@ -63,7 +63,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/form/**").permitAll()
-                //.antMatchers("/file/**").permitAll()
+                .antMatchers("/membership-requests/documents/**").permitAll()
+//                .antMatchers("/file/**").permitAll()
                 .antMatchers("/camunda/**").permitAll()
                 .antMatchers("/camunda*").permitAll()
                 .anyRequest().authenticated()
@@ -81,6 +82,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // TokenAuthenticationFilter ce ignorisati sve ispod navedene putanje
         web.ignoring().antMatchers(HttpMethod.POST, "/auth/**");
         web.ignoring().antMatchers(HttpMethod.POST, "/form/**");
+
+        web.ignoring().antMatchers(HttpMethod.GET, "/membership-requests/documents/**");
 
         web.ignoring().antMatchers(HttpMethod.GET, "/camunda-welcome");
         web.ignoring().antMatchers(HttpMethod.GET, "/camunda/**");
