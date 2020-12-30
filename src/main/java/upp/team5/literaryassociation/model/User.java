@@ -6,6 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -14,7 +15,7 @@ import java.util.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "user_table")
-public class User implements UserDetails { //, org.camunda.bpm.engine.identity.User {
+public class User implements UserDetails, Serializable { //, org.camunda.bpm.engine.identity.User {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

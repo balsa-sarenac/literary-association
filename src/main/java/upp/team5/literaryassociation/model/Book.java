@@ -1,10 +1,11 @@
 package upp.team5.literaryassociation.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
-public class Book {
+public class Book implements Serializable {
 
     @Id
     private Long id;

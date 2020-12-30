@@ -6,13 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Genre {
+public class Genre implements Serializable {
       @Id
       @GeneratedValue(strategy = GenerationType.IDENTITY)
       private Long id;
