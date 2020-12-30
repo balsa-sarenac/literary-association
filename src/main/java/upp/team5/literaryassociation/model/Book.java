@@ -1,6 +1,7 @@
 package upp.team5.literaryassociation.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
@@ -24,7 +25,7 @@ public class Book {
     @JoinColumn(name = "chief_editor_id", referencedColumnName = "id")
     private User chiefEditor;
 
-    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
     private Set<PublishingRequest> publishingRequests;
 
     @ManyToMany
@@ -32,4 +33,5 @@ public class Book {
         joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
         inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id"))
     private Set<Genre> genres;
+
 }
