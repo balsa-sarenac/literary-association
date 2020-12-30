@@ -17,6 +17,6 @@ import java.util.HashSet;
 public class PublishingRequestDTO {
     Long id;
     Boolean approved;
-    Book book;
+    BookDTO book;
     //HashSet<Note> notes;
 }
