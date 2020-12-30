@@ -135,7 +135,7 @@
           </camunda:formField>
         </camunda:formData>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1f5ytk5</bpmn:incoming>
+      <bpmn:incoming>Flow_1i0tn81</bpmn:incoming>
       <bpmn:outgoing>Flow_04fo4x8</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:exclusiveGateway id="Gateway_0q504la" default="Flow_17lmb52">
@@ -172,7 +172,12 @@
     <bpmn:sequenceFlow id="Flow_10lgmdy" sourceRef="Activity_0csgwoq" targetRef="Event_1afy7qx" />
     <bpmn:sequenceFlow id="Flow_18wvnkj" sourceRef="Event_1hcqnnb" targetRef="Event_1b8kttr" />
     <bpmn:sequenceFlow id="Flow_04fo4x8" sourceRef="Activity_0p31vz3" targetRef="Gateway_0q504la" />
-    <bpmn:sequenceFlow id="Flow_1f5ytk5" sourceRef="Activity_1b3a6a9" targetRef="Activity_0p31vz3" />
+    <bpmn:sequenceFlow id="Flow_1f5ytk5" sourceRef="Activity_1b3a6a9" targetRef="Activity_1vj4fv2" />
+    <bpmn:sequenceFlow id="Flow_1i0tn81" sourceRef="Activity_1vj4fv2" targetRef="Activity_0p31vz3" />
+    <bpmn:serviceTask id="Activity_1vj4fv2" name="Create membership request" camunda:class="upp.team5.literaryassociation.authorRegistration.service.CreateMembershipRequest">
+      <bpmn:incoming>Flow_1f5ytk5</bpmn:incoming>
+      <bpmn:outgoing>Flow_1i0tn81</bpmn:outgoing>
+    </bpmn:serviceTask>
   </bpmn:process>
   <bpmn:message id="Message_1afdhm9" name="LinkClicked" />
   <bpmn:message id="Message_1s8vrjk" name="SubmissionTimeoutMessage" />
@@ -184,7 +189,7 @@
         <di:waypoint x="1130" y="250" />
         <di:waypoint x="1130" y="350" />
         <di:waypoint x="560" y="350" />
-        <di:waypoint x="560" y="500" />
+        <di:waypoint x="560" y="370" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_04fo4x8_di" bpmnElement="Flow_04fo4x8">
         <di:waypoint x="610" y="540" />
@@ -282,6 +287,10 @@
         <di:waypoint x="370" y="210" />
         <di:waypoint x="500" y="210" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1i0tn81_di" bpmnElement="Flow_1i0tn81">
+        <di:waypoint x="560" y="450" />
+        <di:waypoint x="560" y="500" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Activity_0uc2nxm_di" bpmnElement="data-basic-information">
         <dc:Bounds x="500" y="170" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -362,6 +371,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0q504la_di" bpmnElement="Gateway_0q504la" isMarkerVisible="true">
         <dc:Bounds x="705" y="515" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_17srl03_di" bpmnElement="Activity_1vj4fv2">
+        <dc:Bounds x="510" y="370" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1hcqnnb_di" bpmnElement="Event_1hcqnnb">
         <dc:Bounds x="1602" y="402" width="36" height="36" />
