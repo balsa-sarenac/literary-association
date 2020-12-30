@@ -1,8 +1,11 @@
 package upp.team5.literaryassociation.register.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,7 @@ public class AuthorRegistrationService implements JavaDelegate {
     private PasswordEncoder passwordEncoder;
     private RoleRepository roleRepository;
 
+
     @Autowired
     AuthorRegistrationService(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository){
         this.userRepository = userRepository;
@@ -32,7 +36,7 @@ public class AuthorRegistrationService implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
-        HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data");
+        HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data-basic-information");
 
         boolean userExists;
         var u = userRepository.getUserByEmail(formSubmission.get("email").toString());
