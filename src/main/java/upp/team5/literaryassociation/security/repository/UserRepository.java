@@ -17,10 +17,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findAllByEnabledAndRolesIn(boolean enabled, List<Role> roles);
 
-    //List<User> findUsersByRoles(Set<Role> roles);
-
     @Query( "select u from User u inner join u.roles r where r.name in :roles" )
     List<User> findBySpecificRoles(@Param("roles") List<Role> roles);
 
     List<User> findByRoles_Id(Long id);
+
+    List<User> findAllByRolesIn(List<Role> roles);
 }

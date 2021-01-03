@@ -7,6 +7,7 @@ import org.camunda.bpm.engine.impl.form.type.AbstractFormFieldType;
 import org.camunda.bpm.spring.boot.starter.configuration.Ordering;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import java.util.ArrayList;
 import upp.team5.literaryassociation.camunda.type.MultiselectFormFieldType;
 
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class CustomConfiguration implements ProcessEnginePlugin {
         }
 
         List<AbstractFormFieldType> formTypes = processEngineConfiguration.getCustomFormTypes();
+        formTypes.add(new FileFormFieldType());
         formTypes.add(new MultiselectFormFieldType(new HashMap<>()));
     }
 

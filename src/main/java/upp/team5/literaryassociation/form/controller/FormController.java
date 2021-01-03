@@ -7,14 +7,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import upp.team5.literaryassociation.common.dto.ProcessDTO;
 import upp.team5.literaryassociation.form.service.GenericFormService;
 import upp.team5.literaryassociation.form.dto.FormFieldsDTO;
 import upp.team5.literaryassociation.form.dto.FormSubmissionDTO;
 
-@CrossOrigin
+@CrossOrigin()
 @RestController
 @Slf4j
 @RequestMapping(produces = "application/json", path = "/form")
@@ -40,5 +40,7 @@ public class FormController {
     public void submitForm(@RequestBody FormSubmissionDTO formSubmissionDTO, @PathVariable String processInstanceId) {
         genericFormService.submitForm(processInstanceId, formSubmissionDTO);
     }
+
+
 }
 

@@ -16,6 +16,8 @@ public class Note {
       @GeneratedValue(strategy = GenerationType.IDENTITY)
       private Long id;
 
+      private String content;
+
       @Enumerated(value = EnumType.STRING)
       private NoteType type;
 
