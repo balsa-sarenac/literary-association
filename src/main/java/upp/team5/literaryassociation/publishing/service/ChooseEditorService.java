@@ -12,6 +12,7 @@ import upp.team5.literaryassociation.register.service.GenreService;
 import upp.team5.literaryassociation.security.repository.RoleRepository;
 import upp.team5.literaryassociation.security.repository.UserRepository;
 import upp.team5.literaryassociation.security.service.CustomUserDetailsService;
+import upp.team5.literaryassociation.security.service.RoleService;
 
 import java.util.*;
 
@@ -19,7 +20,7 @@ import java.util.*;
 @Slf4j
 public class ChooseEditorService implements JavaDelegate {
     @Autowired
-    private RoleRepository roleRepository;
+    private RoleService roleService;
     @Autowired
     private CustomUserDetailsService userService;
     @Autowired
@@ -41,8 +42,8 @@ public class ChooseEditorService implements JavaDelegate {
             }
         }
 
-        Role role = roleRepository.findByName("ROLE_EDITOR");
-        Role newRole = roleRepository.findByName("ROLE_CHIEF_EDITOR");
+        Role role = roleService.getByName("ROLE_EDITOR");
+        Role newRole = roleService.getByName("ROLE_CHIEF_EDITOR");
 
         List<User> editors = userService.getUsersByRole(role.getId());
         int rand = getRandomNumber(0, editors.size()-1);
@@ -84,6 +85,10 @@ public class ChooseEditorService implements JavaDelegate {
     }
 
     private int getRandomNumber(int min, int max) {
-        return (int) ((Math.random() * (max - min)) + min);
+        Random random = new Random();
+        int randomWithNextInt = random.nextInt();
+        return  random.nextInt(max - min) + min;
+        //double rnd = Math.random();
+        //return (int) ((rnd * (max - min)) + min);
     }
 }
