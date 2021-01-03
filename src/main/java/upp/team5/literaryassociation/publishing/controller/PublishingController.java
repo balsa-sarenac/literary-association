@@ -42,6 +42,7 @@ public class PublishingController {
 
     private PublishingService publishingService;
 
+    @Autowired
     PublishingController(PublishingService publishingService){
         this.publishingService = publishingService;
     }
