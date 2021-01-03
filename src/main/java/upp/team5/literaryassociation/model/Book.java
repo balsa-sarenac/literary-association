@@ -1,13 +1,25 @@
 package upp.team5.literaryassociation.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Book {
 
     @Id
     private Long id;
+
+    private String title;
 
     @ManyToMany(mappedBy = "authorBooks")
     private Set<User> authors;
@@ -22,7 +34,7 @@ public class Book {
     @JoinColumn(name = "chief_editor_id", referencedColumnName = "id")
     private User chiefEditor;
 
-    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
     private Set<PublishingRequest> publishingRequests;
 
     @ManyToMany
@@ -30,4 +42,5 @@ public class Book {
         joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
         inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id"))
     private Set<Genre> genres;
+
 }
