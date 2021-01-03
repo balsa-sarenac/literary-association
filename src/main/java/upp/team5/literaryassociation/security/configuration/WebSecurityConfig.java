@@ -63,7 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers("/auth/**").permitAll()
                 //.antMatchers("/form/**").permitAll()
-                .antMatchers("/publish/**").permitAll()
+                //.antMatchers("/publish/**").permitAll()
                 //.antMatchers("/file/**").permitAll()
                 .antMatchers("/camunda/**").permitAll()
                 .antMatchers("/camunda*").permitAll()
