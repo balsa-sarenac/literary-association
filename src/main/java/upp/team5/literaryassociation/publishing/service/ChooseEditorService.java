@@ -68,7 +68,6 @@ public class ChooseEditorService implements JavaDelegate {
         genres.add(genre);
         book.setGenres(genres);
 
-
         bookService.saveBook(book);
 
         PublishingRequest req = new PublishingRequest();

@@ -67,9 +67,6 @@ public class PublishingController {
             PublishingRequestDTO pubReq = modelMapper.map(req, PublishingRequestDTO.class);
             retVal.add(pubReq);
         }
-
-
-
         return new ResponseEntity<HashSet<PublishingRequestDTO>>(retVal, HttpStatus.OK);
     }
 }
