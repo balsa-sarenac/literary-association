@@ -137,14 +137,14 @@ insert into genre (id, name) values (9,'Short Story');
 insert into genre (id, name) values (10,'Thriller');
 
 
-insert into user_table (first_name, last_name, city, country, email, password, enabled,
-                        account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
-('Sima', 'Simic', 'Novi Sad', 'Serbia', 'sima@example.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
- true, true, true, true, null);
+--insert into user_table (first_name, last_name, city, country, email, password, enabled,
+--                        account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
+--('Sima', 'Simic', 'Novi Sad', 'Serbia', 'sima@example.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
+-- true, true, true, true, null);
 
-insert into users_roles (user_id, role_id) values (1, 7);
+--insert into users_roles (user_id, role_id) values (1, 7);
 
-insert into book(id, title, chief_editor_id) values (1, 'book1', 1);
-insert into authors_books(author_id, book_id) values (14, 1);
+--insert into book(id, title, chief_editor_id) values (1, 'book1', 1);
+--insert into authors_books(author_id, book_id) values (14, 1);
 
-insert into publishing_request(approved, book_id) values (false, 1);
+--insert into publishing_request(approved, book_id) values (false, 1);
