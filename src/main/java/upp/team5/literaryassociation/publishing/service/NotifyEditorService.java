@@ -27,7 +27,7 @@ public class NotifyEditorService implements JavaDelegate {
             var pubReq = request.get();
             String to = pubReq.getBook().getChiefEditor().getEmail();
             String subject = "New publishing request";
-            String body = "There was a new publishing request waiting for review.";
+            String body = "There is a new publishing request waiting for review.";
             emailService.Send(to, body, subject);
         }
     }

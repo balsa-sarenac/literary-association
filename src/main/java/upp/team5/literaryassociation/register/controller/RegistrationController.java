@@ -40,21 +40,13 @@ import java.util.List;
 @RequestMapping(produces = "application/json", path = "/auth")
 public class RegistrationController {
 
-    private RegistrationService registrationService;
-    private VerificationInformationRepository verificationInformationRepository;
+    private final RegistrationService registrationService;
+    private final VerificationInformationRepository verificationInformationRepository;
 
     @Autowired
     private RuntimeService runtimeService;
     @Autowired
-    private TaskService taskService;
-    @Autowired
-    private FormService formService;
-    @Autowired
     private IdentityService identityService;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private RoleRepository roleRepository;
 
     @Autowired
     public RegistrationController(RegistrationService registrationService, VerificationInformationRepository verificationInformationRepository) {

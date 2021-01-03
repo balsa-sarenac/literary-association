@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class PublishingService {
-    private PublishingRequestRepository publishingRequestRepository;
-    private UserRepository userRepository;
+    private final PublishingRequestRepository publishingRequestRepository;
+    private final UserRepository userRepository;
 
     PublishingService(PublishingRequestRepository publishingRequestRepository, UserRepository userRepository){
         this.publishingRequestRepository = publishingRequestRepository;

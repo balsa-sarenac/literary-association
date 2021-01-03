@@ -9,8 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.model.*;
 import upp.team5.literaryassociation.register.service.GenreService;
-import upp.team5.literaryassociation.security.repository.RoleRepository;
-import upp.team5.literaryassociation.security.repository.UserRepository;
 import upp.team5.literaryassociation.security.service.CustomUserDetailsService;
 import upp.team5.literaryassociation.security.service.RoleService;
 
@@ -55,7 +53,8 @@ public class ChooseEditorService implements JavaDelegate {
 
         userService.saveUser(chief);
 
-        HashMap<String, Object> bookInfoSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data-fill-book-info");
+        HashMap<String, Object> bookInfoSubmission;
+        bookInfoSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data-fill-book-info");
 
         Book book = new Book();
         book.setTitle(bookInfoSubmission.get("title").toString());
@@ -86,9 +85,6 @@ public class ChooseEditorService implements JavaDelegate {
 
     private int getRandomNumber(int min, int max) {
         Random random = new Random();
-        int randomWithNextInt = random.nextInt();
         return  random.nextInt(max - min) + min;
-        //double rnd = Math.random();
-        //return (int) ((rnd * (max - min)) + min);
     }
 }
