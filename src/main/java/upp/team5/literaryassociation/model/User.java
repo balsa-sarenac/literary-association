@@ -84,6 +84,9 @@ public class User implements UserDetails, Serializable { //, org.camunda.bpm.eng
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<Note> notes;
 
+    @OneToMany(mappedBy = "committeeMember")
+    private Set<Vote> votes;
+
     @Column
     private boolean enabled;
 
