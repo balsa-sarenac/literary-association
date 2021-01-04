@@ -85,18 +85,18 @@
     </bpmn:userTask>
     <bpmn:serviceTask id="Activity_1x9vl8u" name="Procees application" camunda:class="upp.team5.literaryassociation.authorRegistration.service.ProcessApplicationService">
       <bpmn:incoming>Flow_17lmb52</bpmn:incoming>
-      <bpmn:outgoing>Flow_1lf0nox</bpmn:outgoing>
+      <bpmn:outgoing>Flow_13ct1k1</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:endEvent id="Event_1flwsnu" name="Notify about submission timeout ">
       <bpmn:incoming>Flow_1fvpvil</bpmn:incoming>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0sznadi" messageRef="Message_1s8vrjk" camunda:class="upp.team5.literaryassociation.authorMembershipApplication.NotifyAuthorService" />
     </bpmn:endEvent>
-    <bpmn:sendTask id="Activity_19t9fyt" name="Notify about approval" camunda:class="upp.team5.literaryassociation.authorMembershipApplication.common.service.EmailService">
+    <bpmn:sendTask id="Activity_19t9fyt" name="Notify about approval" camunda:class="upp.team5.literaryassociation.authorRegistration.delegate.ApproveAuthor">
       <bpmn:incoming>Flow_1hcza5r</bpmn:incoming>
       <bpmn:outgoing>Flow_1rra36f</bpmn:outgoing>
     </bpmn:sendTask>
     <bpmn:exclusiveGateway id="Gateway_00xsvqw" name="Is approved and number of submissions isn&#39;t exceeded?" default="Flow_1hcza5r">
-      <bpmn:incoming>Flow_0p6vmda</bpmn:incoming>
+      <bpmn:incoming>Flow_1gicx8d</bpmn:incoming>
       <bpmn:outgoing>Flow_1hcza5r</bpmn:outgoing>
       <bpmn:outgoing>Flow_1clhld9</bpmn:outgoing>
       <bpmn:outgoing>Flow_09h63bw</bpmn:outgoing>
@@ -114,16 +114,16 @@
     </bpmn:endEvent>
     <bpmn:endEvent id="Event_0lnsiiz" name="Notify about rejection">
       <bpmn:incoming>Flow_1clhld9</bpmn:incoming>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_1cn1pfu" messageRef="Message_0pn9x8r" camunda:class="upp.team5.literaryassociation.authorMembershipApplication.NotifyAuthorService" />
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1cn1pfu" messageRef="Message_0pn9x8r" camunda:class="upp.team5.literaryassociation.authorRegistration.delegate.RejectAuthor" />
     </bpmn:endEvent>
-    <bpmn:sendTask id="Activity_00gu06j" name="Notify author" camunda:class="upp.team5.literaryassociation.authorMembershipApplication.common.service.EmailService">
+    <bpmn:sendTask id="Activity_00gu06j" name="Notify author" camunda:class="upp.team5.literaryassociation.authorRegistration.delegate.RequestMoreDelegate">
       <bpmn:incoming>Flow_09h63bw</bpmn:incoming>
       <bpmn:outgoing>Flow_11vskta</bpmn:outgoing>
     </bpmn:sendTask>
-    <bpmn:userTask id="Activity_182cdhn" name="Review documents">
-      <bpmn:incoming>Flow_1lf0nox</bpmn:incoming>
+    <bpmn:userTask id="Activity_182cdhn" name="Review documents" camunda:assignee="${assignee.id}">
+      <bpmn:incoming>Flow_13ct1k1</bpmn:incoming>
       <bpmn:outgoing>Flow_0p6vmda</bpmn:outgoing>
-      <bpmn:multiInstanceLoopCharacteristics camunda:collection="${assigneeList}" />
+      <bpmn:multiInstanceLoopCharacteristics camunda:collection="${assigneeList}" camunda:elementVariable="assignee" />
     </bpmn:userTask>
     <bpmn:userTask id="Activity_0p31vz3" name="Submit documents">
       <bpmn:extensionElements>
@@ -157,12 +157,10 @@
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_11vskta" sourceRef="Activity_00gu06j" targetRef="Activity_0hcajpf" />
     <bpmn:sequenceFlow id="Flow_1xh3edb" sourceRef="Activity_0hcajpf" targetRef="Gateway_0q504la" />
-    <bpmn:sequenceFlow id="Flow_17lmb52" sourceRef="Gateway_0q504la" targetRef="Activity_1x9vl8u" />
-    <bpmn:sequenceFlow id="Flow_1lf0nox" sourceRef="Activity_1x9vl8u" targetRef="Activity_182cdhn" />
     <bpmn:sequenceFlow id="Flow_1fvpvil" sourceRef="Event_1ogdcb2" targetRef="Event_1flwsnu" />
     <bpmn:sequenceFlow id="Flow_1hcza5r" sourceRef="Gateway_00xsvqw" targetRef="Activity_19t9fyt" />
     <bpmn:sequenceFlow id="Flow_1rra36f" sourceRef="Activity_19t9fyt" targetRef="Activity_0csgwoq" />
-    <bpmn:sequenceFlow id="Flow_0p6vmda" sourceRef="Activity_182cdhn" targetRef="Gateway_00xsvqw" />
+    <bpmn:sequenceFlow id="Flow_0p6vmda" sourceRef="Activity_182cdhn" targetRef="Activity_0b8b7bl" />
     <bpmn:sequenceFlow id="Flow_1clhld9" name="rejected or exceeded" sourceRef="Gateway_00xsvqw" targetRef="Event_0lnsiiz">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!approved || exceeded}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
@@ -171,13 +169,20 @@
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_10lgmdy" sourceRef="Activity_0csgwoq" targetRef="Event_1afy7qx" />
     <bpmn:sequenceFlow id="Flow_18wvnkj" sourceRef="Event_1hcqnnb" targetRef="Event_1b8kttr" />
-    <bpmn:sequenceFlow id="Flow_04fo4x8" sourceRef="Activity_0p31vz3" targetRef="Gateway_0q504la" />
     <bpmn:sequenceFlow id="Flow_1f5ytk5" sourceRef="Activity_1b3a6a9" targetRef="Activity_1vj4fv2" />
-    <bpmn:sequenceFlow id="Flow_1i0tn81" sourceRef="Activity_1vj4fv2" targetRef="Activity_0p31vz3" />
     <bpmn:serviceTask id="Activity_1vj4fv2" name="Create membership request" camunda:class="upp.team5.literaryassociation.authorRegistration.service.CreateMembershipRequest">
       <bpmn:incoming>Flow_1f5ytk5</bpmn:incoming>
       <bpmn:outgoing>Flow_1i0tn81</bpmn:outgoing>
     </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1gicx8d" sourceRef="Activity_0b8b7bl" targetRef="Gateway_00xsvqw" />
+    <bpmn:serviceTask id="Activity_0b8b7bl" name="Process vote" camunda:class="upp.team5.literaryassociation.authorRegistration.service.VoteService">
+      <bpmn:incoming>Flow_0p6vmda</bpmn:incoming>
+      <bpmn:outgoing>Flow_1gicx8d</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_13ct1k1" sourceRef="Activity_1x9vl8u" targetRef="Activity_182cdhn" />
+    <bpmn:sequenceFlow id="Flow_04fo4x8" sourceRef="Activity_0p31vz3" targetRef="Gateway_0q504la" />
+    <bpmn:sequenceFlow id="Flow_1i0tn81" sourceRef="Activity_1vj4fv2" targetRef="Activity_0p31vz3" />
+    <bpmn:sequenceFlow id="Flow_17lmb52" sourceRef="Gateway_0q504la" targetRef="Activity_1x9vl8u" />
   </bpmn:process>
   <bpmn:message id="Message_1afdhm9" name="LinkClicked" />
   <bpmn:message id="Message_1s8vrjk" name="SubmissionTimeoutMessage" />
@@ -185,6 +190,19 @@
   <bpmn:message id="Message_0pn9x8r" name="RejectionMessage" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="author-reg">
+      <bpmndi:BPMNEdge id="Flow_13ct1k1_di" bpmnElement="Flow_13ct1k1">
+        <di:waypoint x="860" y="680" />
+        <di:waypoint x="920" y="680" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1gicx8d_di" bpmnElement="Flow_1gicx8d">
+        <di:waypoint x="1210" y="680" />
+        <di:waypoint x="1340" y="680" />
+        <di:waypoint x="1340" y="565" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1i0tn81_di" bpmnElement="Flow_1i0tn81">
+        <di:waypoint x="560" y="450" />
+        <di:waypoint x="560" y="500" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1f5ytk5_di" bpmnElement="Flow_1f5ytk5">
         <di:waypoint x="1130" y="250" />
         <di:waypoint x="1130" y="350" />
@@ -218,9 +236,8 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0p6vmda_di" bpmnElement="Flow_0p6vmda">
-        <di:waypoint x="1210" y="680" />
-        <di:waypoint x="1340" y="680" />
-        <di:waypoint x="1340" y="565" />
+        <di:waypoint x="1020" y="680" />
+        <di:waypoint x="1110" y="680" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1rra36f_di" bpmnElement="Flow_1rra36f">
         <di:waypoint x="1490" y="460" />
@@ -236,14 +253,10 @@
         <di:waypoint x="970" y="420" />
         <di:waypoint x="828" y="420" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1lf0nox_di" bpmnElement="Flow_1lf0nox">
-        <di:waypoint x="970" y="680" />
-        <di:waypoint x="1110" y="680" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_17lmb52_di" bpmnElement="Flow_17lmb52">
         <di:waypoint x="730" y="565" />
         <di:waypoint x="730" y="680" />
-        <di:waypoint x="870" y="680" />
+        <di:waypoint x="760" y="680" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1xh3edb_di" bpmnElement="Flow_1xh3edb">
         <di:waypoint x="910" y="540" />
@@ -287,10 +300,6 @@
         <di:waypoint x="370" y="210" />
         <di:waypoint x="500" y="210" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1i0tn81_di" bpmnElement="Flow_1i0tn81">
-        <di:waypoint x="560" y="450" />
-        <di:waypoint x="560" y="500" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Activity_0uc2nxm_di" bpmnElement="data-basic-information">
         <dc:Bounds x="500" y="170" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -325,7 +334,7 @@
         <dc:Bounds x="910" y="500" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1x9vl8u_di" bpmnElement="Activity_1x9vl8u">
-        <dc:Bounds x="870" y="640" width="100" height="80" />
+        <dc:Bounds x="760" y="640" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1flwsnu_di" bpmnElement="Event_1flwsnu">
         <dc:Bounds x="792" y="402" width="36" height="36" />
@@ -339,7 +348,7 @@
       <bpmndi:BPMNShape id="Gateway_00xsvqw_di" bpmnElement="Gateway_00xsvqw" isMarkerVisible="true">
         <dc:Bounds x="1315" y="515" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1348" y="563" width="84" height="53" />
+          <dc:Bounds x="1349" y="563" width="83" height="53" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0csgwoq_di" bpmnElement="Activity_0csgwoq">
@@ -364,7 +373,7 @@
         <dc:Bounds x="1110" y="500" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_182cdhn_di" bpmnElement="Activity_182cdhn">
-        <dc:Bounds x="1110" y="640" width="100" height="80" />
+        <dc:Bounds x="920" y="640" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0p31vz3_di" bpmnElement="Activity_0p31vz3">
         <dc:Bounds x="510" y="500" width="100" height="80" />
@@ -374,6 +383,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_17srl03_di" bpmnElement="Activity_1vj4fv2">
         <dc:Bounds x="510" y="370" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1sgamit_di" bpmnElement="Activity_0b8b7bl">
+        <dc:Bounds x="1110" y="640" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1hcqnnb_di" bpmnElement="Event_1hcqnnb">
         <dc:Bounds x="1602" y="402" width="36" height="36" />
