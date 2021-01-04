@@ -35,12 +35,8 @@ import java.util.List;
 public class PublishingController {
     @Autowired
     private RuntimeService runtimeService;
-    @Autowired
-    private TaskService taskService;
-    @Autowired
-    private FormService formService;
 
-    private PublishingService publishingService;
+    private final PublishingService publishingService;
 
     @Autowired
     PublishingController(PublishingService publishingService){
@@ -67,6 +63,6 @@ public class PublishingController {
             PublishingRequestDTO pubReq = modelMapper.map(req, PublishingRequestDTO.class);
             retVal.add(pubReq);
         }
-        return new ResponseEntity<HashSet<PublishingRequestDTO>>(retVal, HttpStatus.OK);
+        return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 }
