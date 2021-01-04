@@ -104,11 +104,8 @@
     <bpmn:userTask id="Activity_0csgwoq" name="Pay membership fee">
       <bpmn:incoming>Flow_1rra36f</bpmn:incoming>
       <bpmn:outgoing>Flow_10lgmdy</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1naoogw</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:endEvent id="Event_1b8kttr" name="Notify about payment timeout">
-      <bpmn:incoming>Flow_18wvnkj</bpmn:incoming>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_0ge1ky8" messageRef="Message_1qks3fi" camunda:class="upp.team5.literaryassociation.authorMembershipApplication.NotifyAuthorService" />
-    </bpmn:endEvent>
     <bpmn:endEvent id="Event_1afy7qx">
       <bpmn:incoming>Flow_10lgmdy</bpmn:incoming>
     </bpmn:endEvent>
@@ -173,6 +170,14 @@
     <bpmn:sequenceFlow id="Flow_18wvnkj" sourceRef="Event_1hcqnnb" targetRef="Event_1b8kttr" />
     <bpmn:sequenceFlow id="Flow_04fo4x8" sourceRef="Activity_0p31vz3" targetRef="Gateway_0q504la" />
     <bpmn:sequenceFlow id="Flow_1f5ytk5" sourceRef="Activity_1b3a6a9" targetRef="Activity_0p31vz3" />
+    <bpmn:endEvent id="Event_1b8kttr" name="Notify about payment timeout">
+      <bpmn:incoming>Flow_18wvnkj</bpmn:incoming>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0ge1ky8" messageRef="Message_1qks3fi" camunda:class="upp.team5.literaryassociation.authorMembershipApplication.NotifyAuthorService" />
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1naoogw" sourceRef="Activity_0csgwoq" targetRef="Activity_1m1l5hn" />
+    <bpmn:serviceTask id="Activity_1m1l5hn" name="Process payment" camunda:class="upp.team5.literaryassociation.authorRegistration.service.ProcessPaymentService">
+      <bpmn:incoming>Flow_1naoogw</bpmn:incoming>
+    </bpmn:serviceTask>
   </bpmn:process>
   <bpmn:message id="Message_1afdhm9" name="LinkClicked" />
   <bpmn:message id="Message_1s8vrjk" name="SubmissionTimeoutMessage" />
@@ -196,7 +201,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10lgmdy_di" bpmnElement="Flow_10lgmdy">
         <di:waypoint x="1660" y="460" />
-        <di:waypoint x="1722" y="460" />
+        <di:waypoint x="1912" y="460" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_09h63bw_di" bpmnElement="Flow_09h63bw">
         <di:waypoint x="1315" y="540" />
@@ -282,6 +287,10 @@
         <di:waypoint x="370" y="210" />
         <di:waypoint x="500" y="210" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1naoogw_di" bpmnElement="Flow_1naoogw">
+        <di:waypoint x="1660" y="460" />
+        <di:waypoint x="1730" y="460" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Activity_0uc2nxm_di" bpmnElement="data-basic-information">
         <dc:Bounds x="500" y="170" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -342,9 +351,6 @@
           <dc:Bounds x="1578" y="275" width="83" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1afy7qx_di" bpmnElement="Event_1afy7qx">
-        <dc:Bounds x="1722" y="442" width="36" height="36" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0lnsiiz_di" bpmnElement="Event_0lnsiiz">
         <dc:Bounds x="1492" y="522" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -362,6 +368,12 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0q504la_di" bpmnElement="Gateway_0q504la" isMarkerVisible="true">
         <dc:Bounds x="705" y="515" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1afy7qx_di" bpmnElement="Event_1afy7qx">
+        <dc:Bounds x="1912" y="442" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_14vlzus_di" bpmnElement="Activity_1m1l5hn">
+        <dc:Bounds x="1730" y="420" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1hcqnnb_di" bpmnElement="Event_1hcqnnb">
         <dc:Bounds x="1602" y="402" width="36" height="36" />
