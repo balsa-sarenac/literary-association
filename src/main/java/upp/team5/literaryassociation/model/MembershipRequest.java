@@ -24,6 +24,9 @@ public class MembershipRequest implements Serializable {
       @Column
       private boolean feePaid;
 
+      @Column
+      private int voteRound;
+
       @OneToOne
       private User author;
 

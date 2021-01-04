@@ -20,6 +20,7 @@ import upp.team5.literaryassociation.exception.UserNotFoundException;
 import upp.team5.literaryassociation.model.FileDB;
 import upp.team5.literaryassociation.model.MembershipRequest;
 import upp.team5.literaryassociation.model.User;
+import upp.team5.literaryassociation.model.Vote;
 import upp.team5.literaryassociation.security.repository.UserRepository;
 
 import javax.ws.rs.NotFoundException;
@@ -48,17 +49,6 @@ public class MembershipRequestService {
     private ModelMapper modelMapper;
 
     public void addNewRequest(DelegateExecution delegateExecution) {
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        String username;
-//        if(principal instanceof UserDetails){
-//             username = ((UserDetails)principal).getUsername();
-//        }
-//        else{
-//             username = principal.toString();
-//        }
-//
-//        org.camunda.bpm.engine.identity.User user = identityService.createUserQuery().userEmail(username).singleResult();
-
         Long id = (Long) delegateExecution.getVariable("userId");
         upp.team5.literaryassociation.model.User dbUser = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
 
@@ -67,34 +57,40 @@ public class MembershipRequestService {
         membershipRequest.setAuthor(dbUser);
         membershipRequest.setFeePaid(false);
         membershipRequest.setActive(true);
-
-//        if (membershipRequest.getDocuments() == null) {
-//            membershipRequest.setDocuments(new HashSet<>());
-//        }
-//
-//        for (FileDB file : files) {
-//            membershipRequest.getDocuments().add(file);
-//        }
+        membershipRequest.setVoteRound(0);
 
         membershipRequest = membershipRequestRepository.save(membershipRequest);
 
         dbUser.setMembershipRequest(membershipRequest);
 
-        this.userRepository.save(dbUser);
+        delegateExecution.setVariable("membershipRequestId", membershipRequest.getId());
 
-//        for (FileDB file : files) {
-//            file.setMembershipRequest(membershipRequest);
-//        }
-//
-//        fileService.updateFiles(files);
+        this.userRepository.save(dbUser);
     }
 
     public List<MembershipRequestDTO> getAllRequests() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email;
+        if(principal instanceof UserDetails){
+            email = ((UserDetails)principal).getUsername();
+        }
+        else{
+            email = principal.toString();
+        }
+
+        User committee = this.userRepository.findByEmail(email);
+
         log.info("Retrieving all requests from database");
         List<MembershipRequest> requests = this.membershipRequestRepository.findAllByActive(true);
 
         List<MembershipRequestDTO> requestDTOS = new ArrayList<>();
         for (MembershipRequest request : requests) {
+            List<Vote> votes = request.getVotes().stream()
+                    .filter(vote -> vote.getCommitteeMember().equals(committee)).collect(Collectors.toList());
+
+            if (votes.stream().anyMatch(vote -> vote.getRound() >= request.getVoteRound())) {
+                continue;
+            }
             MembershipRequestDTO membershipRequestDTO = new MembershipRequestDTO();
             User user = request.getAuthor();
             UserDTO userDTO = new UserDTO(user.getId(), user.getFirstName(), user.getLastName(),
@@ -108,9 +104,7 @@ public class MembershipRequestService {
     }
 
     public MembershipRequestDTO getRequest(Long id) {
-        log.info("Retrieving membership request with id: {}", id);
-        MembershipRequest membershipRequest = this.membershipRequestRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Membership request with given id doesn't exist"));
+        MembershipRequest membershipRequest = getMembershipRequest(id);
 
         UserDTO userDTO = modelMapper.map(membershipRequest.getAuthor(), UserDTO.class);
 
@@ -143,6 +137,12 @@ public class MembershipRequestService {
         membershipRequestDTO.setFiles(files);
 
         return membershipRequestDTO;
+    }
+
+    public MembershipRequest getMembershipRequest(Long id) {
+        log.info("Retrieving membership request with id: {}", id);
+        return this.membershipRequestRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Membership request with given id doesn't exist"));
     }
 
     public ResponseEntity<byte[]> getDocument(Long id) {
