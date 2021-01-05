@@ -152,4 +152,8 @@ public class MembershipRequestService {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDB.getName() + "\"")
                 .body(fileDB.getData());
     }
+
+    public void save(MembershipRequest membershipRequest) {
+        this.membershipRequestRepository.save(membershipRequest);
+    }
 }
