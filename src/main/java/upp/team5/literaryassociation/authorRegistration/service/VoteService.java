@@ -125,25 +125,15 @@ public class VoteService implements JavaDelegate {
 
         if (requestMoreVotes != 0) {
             if (membershipRequest.getVoteRound() > 2) {
-                delegateExecution.setVariable("exceeded", true);
-                delegateExecution.setVariable("moreDocuments", false);
+                delegateExecution.setVariable("decision", "rejected");
             } else {
-                delegateExecution.setVariable("exceeded", false);
-                delegateExecution.setVariable("moreDocuments", true);
+                delegateExecution.setVariable("decision", "moreDocuments");
             }
-        } else {
-            delegateExecution.setVariable("moreDocuments", false);
-            delegateExecution.setVariable("exceeded", false);
+        } else if (refusedVotes > assigneeList.size() / 2) {
+            delegateExecution.setVariable("decision", "rejected");
+        } else if (approvedVotes >= assigneeList.size() / 2) {
+            delegateExecution.setVariable("decision", "approved");
         }
-
-        if (refusedVotes > assigneeList.size() / 2) {
-            delegateExecution.setVariable("approved", false);
-        }
-
-        if (approvedVotes >= assigneeList.size() / 2) {
-            delegateExecution.setVariable("approved", true);
-        }
-
 
     }
 }
