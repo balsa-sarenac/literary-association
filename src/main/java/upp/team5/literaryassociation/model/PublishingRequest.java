@@ -13,7 +13,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class PublishingRequest{
+public class PublishingRequest implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

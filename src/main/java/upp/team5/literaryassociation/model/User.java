@@ -6,6 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -14,7 +15,7 @@ import java.util.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "user_table")
-public class User implements UserDetails { //, org.camunda.bpm.engine.identity.User {
+public class User implements UserDetails, Serializable { //, org.camunda.bpm.engine.identity.User {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -61,6 +62,10 @@ public class User implements UserDetails { //, org.camunda.bpm.engine.identity.U
     @OneToMany(mappedBy = "chiefEditor", fetch = FetchType.LAZY)
     private Set<Book> chiefEditorOfBooks;
 
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinTable(name = "author_membership_request",
+//        joinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"),
+//        inverseJoinColumns = @JoinColumn(name = "request_id", referencedColumnName = "id"))
     @OneToOne
     private MembershipRequest membershipRequest;
 
@@ -78,6 +83,9 @@ public class User implements UserDetails { //, org.camunda.bpm.engine.identity.U
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<Note> notes;
+
+    @OneToMany(mappedBy = "committeeMember")
+    private Set<Vote> votes;
 
     @Column
     private boolean enabled;

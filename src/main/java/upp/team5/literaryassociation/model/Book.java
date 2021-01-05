@@ -14,7 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Book {
+public class Book implements Serializable {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

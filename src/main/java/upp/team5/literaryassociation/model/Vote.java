@@ -7,32 +7,32 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
-@Entity
-@Table(name = "files")
-@Setter @Getter
-@AllArgsConstructor
+@Getter @Setter
 @NoArgsConstructor
-public class FileDB implements Serializable {
+@AllArgsConstructor
+@Entity
+public class Vote implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @Enumerated(value = EnumType.STRING)
+    private VoteOption voteOption;
 
-    private String type;
+    @Column
+    private Date voteTime;
 
-    @Lob
-    private byte[] data;
+    @Column
+    private int round;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "membership_request_id", referencedColumnName = "id")
     private MembershipRequest membershipRequest;
 
-
-    public FileDB(String name, String type, byte[] data) {
-        this.name = name;
-        this.type = type;
-        this.data = data;
-    }
+    @ManyToOne
+    @JoinColumn(name = "committee_id", referencedColumnName = "id")
+    private User committeeMember;
 }
