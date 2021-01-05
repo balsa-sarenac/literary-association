@@ -32,7 +32,7 @@ public class User implements UserDetails, Serializable { //, org.camunda.bpm.eng
     @Column(nullable = false)
     private String country;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String email;
 
     @Column(nullable = false)

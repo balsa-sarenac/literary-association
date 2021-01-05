@@ -59,12 +59,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().and() //.authenticationEntryPoint(restAuthenticationEntryPoint).and()
 
                 .authorizeRequests()
-//                .antMatchers("/").hasAnyAuthority("ADMIN", "...")
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/form/**").permitAll()
+
                 .antMatchers("/membership-requests/documents/**").permitAll()
-//                .antMatchers("/file/**").permitAll()
+
+                .antMatchers("/publish/**").permitAll()
+
                 .antMatchers("/camunda/**").permitAll()
                 .antMatchers("/camunda*").permitAll()
                 .anyRequest().authenticated()

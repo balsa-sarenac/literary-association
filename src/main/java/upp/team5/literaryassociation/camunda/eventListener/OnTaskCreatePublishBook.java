@@ -8,6 +8,7 @@ import org.camunda.bpm.engine.delegate.DelegateTask;
 import org.camunda.bpm.engine.delegate.TaskListener;
 import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
+import org.camunda.bpm.engine.impl.form.type.EnumFormType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.camunda.type.MultiselectFormFieldType;
@@ -15,14 +16,12 @@ import upp.team5.literaryassociation.model.Genre;
 import upp.team5.literaryassociation.register.service.GenreService;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 @Service
 @Slf4j
-public class OnTaskCreate implements TaskListener {
-
+public class OnTaskCreatePublishBook implements TaskListener {
     @Autowired
     private TaskService taskService;
     @Autowired
@@ -32,7 +31,7 @@ public class OnTaskCreate implements TaskListener {
 
     private GenreService genreService;
 
-    public OnTaskCreate(GenreService genreService){
+    public OnTaskCreatePublishBook(GenreService genreService){
         this.genreService = genreService;
     }
 
@@ -40,17 +39,16 @@ public class OnTaskCreate implements TaskListener {
     public void notify(DelegateTask delegateTask) {
         TaskFormData taskFormData = formService.getTaskFormData(delegateTask.getId());
         List<FormField> properties = taskFormData.getFormFields();
-
         List<Genre> genres = genreService.getAll();
 
         for(FormField field : properties){
-            if(field.getId().equals("genres")){
-                MultiselectFormFieldType multiselectType = (MultiselectFormFieldType) field.getType();
-                multiselectType.setValues(listToMap(genres));
+            if(field.getId().equals("genre")){
+                Map<String, String> enumType = ((EnumFormType) field.getType()).getValues();
+                enumType.clear();
+                enumType.putAll(listToMap(genres));
                 break;
             }
         }
-
     }
 
     private Map<String, String> listToMap(List<Genre> genres) {

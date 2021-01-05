@@ -1,14 +1,27 @@
 package upp.team5.literaryassociation.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Book implements Serializable {
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String title;
+
+    private String synopsis;
 
     @ManyToMany(mappedBy = "authorBooks")
     private Set<User> authors;
@@ -23,7 +36,7 @@ public class Book implements Serializable {
     @JoinColumn(name = "chief_editor_id", referencedColumnName = "id")
     private User chiefEditor;
 
-    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
     private Set<PublishingRequest> publishingRequests;
 
     @ManyToMany
@@ -31,4 +44,5 @@ public class Book implements Serializable {
         joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
         inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id"))
     private Set<Genre> genres;
+
 }

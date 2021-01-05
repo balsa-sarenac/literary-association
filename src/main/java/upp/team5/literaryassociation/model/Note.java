@@ -17,6 +17,8 @@ public class Note implements Serializable {
       @GeneratedValue(strategy = GenerationType.IDENTITY)
       private Long id;
 
+      private String content;
+
       @Enumerated(value = EnumType.STRING)
       private NoteType type;
 
