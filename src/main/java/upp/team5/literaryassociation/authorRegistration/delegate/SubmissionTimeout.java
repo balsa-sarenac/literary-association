@@ -36,12 +36,12 @@ public class SubmissionTimeout implements JavaDelegate {
 
         user.setRoles(new HashSet<>());
 
-        membershipRequestService.deleteMembershipRequest(membershipRequest);
-        userRepository.delete(user);
+        membershipRequest.setActive(false);
+        user.setEnabled(false);
 
         String to = user.getEmail();
         String subject = "Submission timeout";
-        String body = "I am sorry but your time to upload more documents has expired. Please register again!";
+        String body = "We are sorry to inform you that your time to upload more documents has expired. Please register again!";
 
         this.emailService.Send(to, body, subject);
     }
