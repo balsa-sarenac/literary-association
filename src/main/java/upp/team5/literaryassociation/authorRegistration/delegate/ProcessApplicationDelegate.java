@@ -1,4 +1,4 @@
-package upp.team5.literaryassociation.authorRegistration.service;
+package upp.team5.literaryassociation.authorRegistration.delegate;
 
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.IdentityService;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class ProcessApplicationService implements JavaDelegate {
+public class ProcessApplicationDelegate implements JavaDelegate {
 
 //    @Autowired
 //    private MembershipRequestService membershipRequestService;
