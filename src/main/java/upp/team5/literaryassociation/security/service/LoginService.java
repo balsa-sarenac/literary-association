@@ -44,9 +44,10 @@ public class LoginService {
         String email = user.getUsername();
         String role = user.getRoles().iterator().next().getName();
         Long id = user.getId();
+        String status = user.getStatus();
 
         log.info("Sending user his token");
-        UserTokenState userTokenState = new UserTokenState(id, jwt, expiresIn, refresh, email, role);
+        UserTokenState userTokenState = new UserTokenState(id, jwt, expiresIn, refresh, email, role, status);
         return new ResponseEntity<>(userTokenState, HttpStatus.OK);
     }
 }
