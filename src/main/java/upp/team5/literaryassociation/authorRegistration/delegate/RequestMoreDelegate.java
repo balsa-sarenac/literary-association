@@ -30,10 +30,6 @@ public class RequestMoreDelegate implements JavaDelegate {
         MembershipRequest membershipRequest = this.membershipRequestService.getMembershipRequest(membershipId);
         User user = this.userRepository.findByMembershipRequest(membershipRequest);
 
-        log.info("Updating voting round number");
-        membershipRequest.setVoteRound(membershipRequest.getVoteRound() + 1);
-        membershipRequestService.save(membershipRequest);
-
         String to = user.getEmail();
         String subject = "We need more manuscripts";
         String body = "Hello!\n\n";
