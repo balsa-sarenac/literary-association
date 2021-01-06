@@ -41,7 +41,7 @@ public class SubmissionTimeout implements JavaDelegate {
 
         String to = user.getEmail();
         String subject = "Submission timeout";
-        String body = "We are sorry to inform you that your time to upload more documents has expired. Please register again!";
+        String body = "We are sorry to inform you that your time to upload more documents has expired.";
 
         this.emailService.Send(to, body, subject);
     }
