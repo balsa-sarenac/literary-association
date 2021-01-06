@@ -79,6 +79,11 @@
     <bpmn:sequenceFlow id="Flow_0nh8hw1" sourceRef="Event_0dn6roz" targetRef="Activity_1b3a6a9" />
     <bpmn:sequenceFlow id="Flow_04dasq2" sourceRef="Event_00nur5h" targetRef="basic-information" />
     <bpmn:userTask id="Activity_0hcajpf" name="Submit more documents">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="files" label="Documents:" type="file" defaultValue="null" />
+        </camunda:formData>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_11vskta</bpmn:incoming>
       <bpmn:outgoing>Flow_1xh3edb</bpmn:outgoing>
     </bpmn:userTask>
