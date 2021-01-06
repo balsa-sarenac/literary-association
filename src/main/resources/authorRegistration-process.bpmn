@@ -87,7 +87,7 @@
       <bpmn:incoming>Flow_11vskta</bpmn:incoming>
       <bpmn:outgoing>Flow_1xh3edb</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:serviceTask id="Activity_1x9vl8u" name="Procees application" camunda:class="upp.team5.literaryassociation.authorRegistration.service.ProcessApplicationService">
+    <bpmn:serviceTask id="Activity_1x9vl8u" name="Procees application" camunda:class="upp.team5.literaryassociation.authorRegistration.delegate.ProcessApplicationDelegate">
       <bpmn:incoming>Flow_17lmb52</bpmn:incoming>
       <bpmn:outgoing>Flow_13ct1k1</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -95,7 +95,7 @@
       <bpmn:incoming>Flow_1fvpvil</bpmn:incoming>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0sznadi" messageRef="Message_1s8vrjk" camunda:class="upp.team5.literaryassociation.authorRegistration.delegate.SubmissionTimeout" />
     </bpmn:endEvent>
-    <bpmn:sendTask id="Activity_19t9fyt" name="Notify about approval" camunda:class="upp.team5.literaryassociation.authorRegistration.delegate.ApproveAuthor">
+    <bpmn:sendTask id="Activity_19t9fyt" name="Notify about approval" camunda:class="upp.team5.literaryassociation.authorRegistration.delegate.ApproveAuthorDelegate">
       <bpmn:incoming>Flow_1hcza5r</bpmn:incoming>
       <bpmn:outgoing>Flow_19vrpvl</bpmn:outgoing>
     </bpmn:sendTask>
@@ -111,7 +111,7 @@
     </bpmn:userTask>
     <bpmn:endEvent id="Event_0lnsiiz" name="Notify about rejection">
       <bpmn:incoming>Flow_1clhld9</bpmn:incoming>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_1cn1pfu" messageRef="Message_0pn9x8r" camunda:class="upp.team5.literaryassociation.authorRegistration.delegate.RejectAuthor" />
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1cn1pfu" messageRef="Message_0pn9x8r" camunda:class="upp.team5.literaryassociation.authorRegistration.delegate.RejectAuthorDelegate" />
     </bpmn:endEvent>
     <bpmn:sendTask id="Activity_00gu06j" name="Notify author" camunda:class="upp.team5.literaryassociation.authorRegistration.delegate.RequestMoreDelegate">
       <bpmn:incoming>Flow_09h63bw</bpmn:incoming>
@@ -160,7 +160,7 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${decision == 'moreDocuments'}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1f5ytk5" sourceRef="Activity_1b3a6a9" targetRef="Activity_1vj4fv2" />
-    <bpmn:serviceTask id="Activity_1vj4fv2" name="Create membership request" camunda:class="upp.team5.literaryassociation.authorRegistration.service.CreateMembershipRequest">
+    <bpmn:serviceTask id="Activity_1vj4fv2" name="Create membership request" camunda:class="upp.team5.literaryassociation.authorRegistration.delegate.CreateMembershipRequestDelegate">
       <bpmn:incoming>Flow_1f5ytk5</bpmn:incoming>
       <bpmn:outgoing>Flow_1i0tn81</bpmn:outgoing>
     </bpmn:serviceTask>
