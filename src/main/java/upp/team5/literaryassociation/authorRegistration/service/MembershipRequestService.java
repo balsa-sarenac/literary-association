@@ -161,4 +161,8 @@ public class MembershipRequestService {
         User author = userRepository.findById(Long.parseLong(userId)).orElseThrow(()-> new UserNotFoundException());
         return membershipRequestRepository.findByAuthor(author).getId();
     }
+
+    public void deleteMembershipRequest(MembershipRequest membershipRequest) {
+        membershipRequestRepository.delete(membershipRequest);
+    }
 }
