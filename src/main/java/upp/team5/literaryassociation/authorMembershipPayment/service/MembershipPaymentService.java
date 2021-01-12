@@ -1,6 +1,7 @@
 package upp.team5.literaryassociation.authorMembershipPayment.service;
 
 import org.camunda.bpm.engine.FormService;
+import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.task.Task;
@@ -16,25 +17,27 @@ import java.util.HashMap;
 
 @Service
 public class MembershipPaymentService {
-    @Autowired
-    private FormService formService;
 
     @Autowired
     private TaskService taskService;
 
     @Autowired
-    private RuntimeService runtimeService;
+    private IdentityService identityService;
 
     @Autowired
     private UserRepository userRepository;
 
     public void payFee(String processId) {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put(getLoggedInUser().getId().toString(), runtimeService.getVariable(processId, "membershipRequestId") );
+        //HashMap<String, Object> map = new HashMap<>();
+        //map.put(getLoggedInUser().getId().toString(), runtimeService.getVariable(processId, "membershipRequestId") );
 
         Task task = taskService.createTaskQuery().processInstanceId(processId).active().singleResult();
 
-        formService.submitTaskForm(task.getId(), map);
+        //formService.submitTaskForm(task.getId(), map);//complete task
+        User dbUser = getLoggedInUser();
+        var cUser = identityService.createUserQuery().userEmail(dbUser.getEmail()).singleResult();
+        taskService.claim(task.getId(), cUser.getId());
+        taskService.complete(task.getId());
     }
 
     private User getLoggedInUser() {
