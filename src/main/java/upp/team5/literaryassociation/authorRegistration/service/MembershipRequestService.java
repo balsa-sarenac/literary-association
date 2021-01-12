@@ -165,4 +165,8 @@ public class MembershipRequestService {
     public void deleteMembershipRequest(MembershipRequest membershipRequest) {
         membershipRequestRepository.delete(membershipRequest);
     }
+
+    public void updateRequest(MembershipRequest membershipRequest) {
+        membershipRequestRepository.save(membershipRequest);
+    }
 }

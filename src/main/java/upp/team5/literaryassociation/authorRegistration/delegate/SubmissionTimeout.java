@@ -40,6 +40,7 @@ public class SubmissionTimeout implements JavaDelegate {
         user.setEnabled(false);
         
         userRepository.save(user);
+        membershipRequestService.updateRequest(membershipRequest);
 
         String to = user.getEmail();
         String subject = "Submission timeout";
