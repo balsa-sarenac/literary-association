@@ -6,23 +6,34 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.camunda.bpm.engine.runtime.MessageCorrelationResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import upp.team5.literaryassociation.authorMembershipPayment.controller.MembershipPaymentController;
+import upp.team5.literaryassociation.model.User;
+import upp.team5.literaryassociation.security.repository.RoleRepository;
+import upp.team5.literaryassociation.security.repository.UserRepository;
 
 @Service
 @Slf4j
 public class SendPaymentService implements JavaDelegate {
 
     @Autowired
-    private RuntimeService runtimeService;
+    private MembershipPaymentController membershipPaymentController;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        log.info("payment done");
+        String businessKey = execution.getBusinessKey();
 
-        String processId = execution.getProcessInstanceId();
-        MessageCorrelationResult result = runtimeService.createMessageCorrelation("PaymentReceived")
-                .processInstanceId(processId)
+        execution.getProcessEngineServices()
+                .getRuntimeService()
+                .createMessageCorrelation("PaymentReceived")
+                .setVariable("paid",true)
                 .correlateWithResult();
-        result.getExecution();
+
     }
+
 }
