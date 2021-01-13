@@ -18,12 +18,6 @@ import upp.team5.literaryassociation.security.repository.UserRepository;
 @Slf4j
 public class SendPaymentService implements JavaDelegate {
 
-    @Autowired
-    private MembershipPaymentController membershipPaymentController;
-
-    @Autowired
-    private UserRepository userRepository;
-
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         String businessKey = execution.getBusinessKey();
@@ -31,9 +25,9 @@ public class SendPaymentService implements JavaDelegate {
         execution.getProcessEngineServices()
                 .getRuntimeService()
                 .createMessageCorrelation("PaymentReceived")
+                .processInstanceBusinessKey(businessKey)
                 .setVariable("paid",true)
                 .correlateWithResult();
-
     }
 
 }
