@@ -64,6 +64,7 @@ public class VoteService implements JavaDelegate {
             }
             case "request_more" -> {
                 vote.setVoteOption(VoteOption.REQUEST_MORE_MATERIAL);
+                membershipRequest.getAuthor().setStatus("moreDocuments");
             }
         }
 

@@ -54,6 +54,7 @@ public class FileService {
 
         User dbUser = userRepository.getUserByEmail(username);
 
+        dbUser.setStatus("reviewExpected");
 
         HashSet<FileDB> toMap = new HashSet<>();
         for (MultipartFile file: files) {
