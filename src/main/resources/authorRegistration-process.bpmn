@@ -79,6 +79,11 @@
     <bpmn:sequenceFlow id="Flow_0nh8hw1" sourceRef="Event_0dn6roz" targetRef="Activity_1b3a6a9" />
     <bpmn:sequenceFlow id="Flow_04dasq2" sourceRef="Event_00nur5h" targetRef="basic-information" />
     <bpmn:userTask id="Activity_0hcajpf" name="Submit more documents">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="files" label="Documents:" type="file" defaultValue="null" />
+        </camunda:formData>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_11vskta</bpmn:incoming>
       <bpmn:outgoing>Flow_1xh3edb</bpmn:outgoing>
     </bpmn:userTask>
@@ -88,7 +93,7 @@
     </bpmn:serviceTask>
     <bpmn:endEvent id="Event_1flwsnu" name="Notify about submission timeout ">
       <bpmn:incoming>Flow_1fvpvil</bpmn:incoming>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_0sznadi" messageRef="Message_1s8vrjk" camunda:class="upp.team5.literaryassociation.authorMembershipApplication.NotifyAuthorService" />
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0sznadi" messageRef="Message_1s8vrjk" camunda:class="upp.team5.literaryassociation.authorRegistration.delegate.SubmissionTimeout" />
     </bpmn:endEvent>
     <bpmn:sendTask id="Activity_19t9fyt" name="Notify about approval" camunda:class="upp.team5.literaryassociation.authorRegistration.delegate.ApproveAuthor">
       <bpmn:incoming>Flow_1hcza5r</bpmn:incoming>
@@ -137,7 +142,7 @@
     <bpmn:boundaryEvent id="Event_1ogdcb2" attachedToRef="Activity_0hcajpf">
       <bpmn:outgoing>Flow_1fvpvil</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_0tt0mw7">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P7D</bpmn:timeDuration>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P14D</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_11vskta" sourceRef="Activity_00gu06j" targetRef="Activity_0hcajpf" />

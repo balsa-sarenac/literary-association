@@ -156,4 +156,17 @@ public class MembershipRequestService {
     public void save(MembershipRequest membershipRequest) {
         this.membershipRequestRepository.save(membershipRequest);
     }
+
+    public Long getAuthorMembershipRequest(String userId) {
+        User author = userRepository.findById(Long.parseLong(userId)).orElseThrow(()-> new UserNotFoundException());
+        return membershipRequestRepository.findByAuthor(author).getId();
+    }
+
+    public void deleteMembershipRequest(MembershipRequest membershipRequest) {
+        membershipRequestRepository.delete(membershipRequest);
+    }
+
+    public void updateRequest(MembershipRequest membershipRequest) {
+        membershipRequestRepository.save(membershipRequest);
+    }
 }

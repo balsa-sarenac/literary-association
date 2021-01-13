@@ -12,6 +12,7 @@ public interface MembershipRequestRepository extends JpaRepository<MembershipReq
 
     List<MembershipRequest> findAllByActive(boolean active);
 
+    MembershipRequest findByAuthor(User user);
 
     List<MembershipRequest> findAllByActiveAndVotesCommitteeMemberNot(boolean active, User voter);
 }
