@@ -1,3 +1,5 @@
+delete from act_id_user where id_ != 'demo';
+
 -- ROLES
 insert into role (id, name) values (1, 'ROLE_ADMIN');
 insert into role (id, name) values (2, 'ROLE_READER');

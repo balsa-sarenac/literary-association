@@ -25,7 +25,6 @@ import upp.team5.literaryassociation.security.repository.UserRepository;
 
 import javax.ws.rs.NotFoundException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 

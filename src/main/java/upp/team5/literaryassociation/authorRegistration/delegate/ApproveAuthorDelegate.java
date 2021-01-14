@@ -11,7 +11,7 @@ import upp.team5.literaryassociation.model.User;
 import upp.team5.literaryassociation.security.repository.UserRepository;
 
 @Service
-public class ApproveAuthor implements JavaDelegate {
+public class ApproveAuthorDelegate implements JavaDelegate {
 
     @Autowired
     private EmailService emailService;
