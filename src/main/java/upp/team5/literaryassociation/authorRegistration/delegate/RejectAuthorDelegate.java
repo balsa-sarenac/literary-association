@@ -12,7 +12,7 @@ import upp.team5.literaryassociation.model.User;
 import upp.team5.literaryassociation.security.repository.UserRepository;
 
 @Service @Slf4j
-public class RejectAuthor implements JavaDelegate {
+public class RejectAuthorDelegate implements JavaDelegate {
 
     @Autowired
     private EmailService emailService;
