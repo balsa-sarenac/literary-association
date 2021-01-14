@@ -125,9 +125,9 @@ insert into users_roles (user_id, role_id) values (8, 6);
 
 -- COMMITTEE MEMBERS
 insert into users_roles (user_id, role_id) values (9, 8);
-insert into users_roles (user_id, role_id) values (10, 8);
-insert into users_roles (user_id, role_id) values (11, 8);
-insert into users_roles (user_id, role_id) values (12, 8);
+--insert into users_roles (user_id, role_id) values (10, 8);
+--insert into users_roles (user_id, role_id) values (11, 8);
+--insert into users_roles (user_id, role_id) values (12, 8);
 
 -- HEAD OF COMMITTEE
 insert into users_roles (user_id, role_id) values (13, 9);
