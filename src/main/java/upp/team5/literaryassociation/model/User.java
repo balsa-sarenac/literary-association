@@ -90,6 +90,12 @@ public class User implements UserDetails, Serializable { //, org.camunda.bpm.eng
     @OneToMany(mappedBy = "committeeMember")
     private Set<Vote> votes;
 
+    @ManyToMany
+    @JoinTable(name = "beta_reader_unpublished_books",
+            joinColumns = @JoinColumn(name = "beta_user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "publishing_request_id", referencedColumnName = "id"))
+    private Set<PublishingRequest> earlyAccessBooks;
+
     @Column
     private boolean enabled;
 
