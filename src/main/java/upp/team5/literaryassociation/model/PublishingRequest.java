@@ -29,4 +29,6 @@ public class PublishingRequest implements Serializable {
     @OneToMany(mappedBy = "publishingRequest", fetch = FetchType.LAZY)
     private Set<Note> notes;
 
+    @OneToMany(mappedBy = "publishingRequest")
+    private Set<FileDB> potentialPlagiarismSet;
 }
