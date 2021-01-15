@@ -60,9 +60,7 @@ public class ChooseEditorService implements JavaDelegate {
         book.setTitle(bookInfoSubmission.get("title").toString());
         book.setSynopsis(bookInfoSubmission.get("synopsis").toString());
         book.setChiefEditor(chief);
-        Set<User> authors = new HashSet<>();
-        authors.add(currentUser);
-        book.setAuthors(authors);
+
         Genre genre = genreService.getGenreByName(bookInfoSubmission.get("genre").toString());
         Set<Genre> genres = new HashSet<>();
         genres.add(genre);
@@ -78,6 +76,15 @@ public class ChooseEditorService implements JavaDelegate {
         requests.add(req);
         book.setPublishingRequests(requests);
         bookService.saveBook(book);
+
+        var books = currentUser.getAuthorBooks();
+        if(books != null) {
+            books = new HashSet<>();
+        }
+        books.add(book);
+        currentUser.setAuthorBooks(books);
+
+        userService.saveUser(currentUser);
 
         delegateExecution.setVariable("publishing-request-id", req.getId());
 

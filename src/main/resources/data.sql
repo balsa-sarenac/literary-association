@@ -1,4 +1,8 @@
-delete from act_id_user where id_ != 'demo';
+DELETE FROM act_id_user WHERE first_ != 'Demo';
+DELETE FROM act_ru_variable;
+DELETE FROM act_ru_job;
+DELETE FROM act_ge_bytearray;
+DELETE FROM act_re_deployment;
 
 -- ROLES
 insert into role (id, name) values (1, 'ROLE_ADMIN');
@@ -36,22 +40,22 @@ insert into user_table (first_name, last_name, city, country, email, password, e
 
 insert into user_table (first_name, last_name, city, country, email, password, enabled,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
-('Ana', 'Antic', 'Kragujevac', 'Serbia', 'nina.sarenac@hotmail.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
+('Ana', 'Antic', 'Kragujevac', 'Serbia', 'nina.sarenac444@gmail.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  false, true, true, true, null);
 
 insert into user_table (first_name, last_name, city, country, email, password, enabled,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
-('Stefan', 'Stefanovic', 'Kragujevac', 'Serbia', 'nina.sarenac@hotmail.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
+('Stefan', 'Stefanovic', 'Kragujevac', 'Serbia', 'nina.sarenac444@gmail.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  false, true, true, true, null);
 
 insert into user_table (first_name, last_name, city, country, email, password, enabled,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
-('Filip', 'Filipovic', 'Novi Sad', 'Serbia', 'nina.sarenac@hotmail.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
+('Filip', 'Filipovic', 'Novi Sad', 'Serbia', 'nina.sarenac444@gmail.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  false, true, true, true, null);
 
 insert into user_table (first_name, last_name, city, country, email, password, enabled,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
-('Stanko', 'Stankovic', 'Novi Sad', 'Serbia', 'nina.sarenac@hotmail.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
+('Stanko', 'Stankovic', 'Novi Sad', 'Serbia', 'nina.sarenac444@gmail.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  false, true, true, true, null);
  -- 9
 insert into user_table (first_name, last_name, city, country, email, password, enabled,
@@ -99,6 +103,11 @@ insert into user_table (first_name, last_name, city, country, email, password, e
 ('Milan', 'Milanovic', 'Novi Sad', 'Serbia', 'nina.sarenac444@gmail.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  true, true, true, true, null);
 
+insert into user_table (first_name, last_name, city, country, email, password, enabled,
+                        account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
+('Milan', 'Milanovic', 'Novi Sad', 'Serbia', 'nina.sarenac444@gmail.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
+ true, true, true, true, null);
+
 
 -- USERS_ROLES
 insert into users_roles (user_id, role_id) values (1, 1);
@@ -116,9 +125,9 @@ insert into users_roles (user_id, role_id) values (8, 6);
 
 -- COMMITTEE MEMBERS
 insert into users_roles (user_id, role_id) values (9, 8);
-insert into users_roles (user_id, role_id) values (10, 8);
-insert into users_roles (user_id, role_id) values (11, 8);
-insert into users_roles (user_id, role_id) values (12, 8);
+--insert into users_roles (user_id, role_id) values (10, 8);
+--insert into users_roles (user_id, role_id) values (11, 8);
+--insert into users_roles (user_id, role_id) values (12, 8);
 
 -- HEAD OF COMMITTEE
 insert into users_roles (user_id, role_id) values (13, 9);

@@ -58,6 +58,7 @@ public class VoteService implements JavaDelegate {
         switch (voteDTO.getOption()) {
             case "approve" -> {
                 vote.setVoteOption(VoteOption.APPROVE);
+                membershipRequest.getAuthor().setStatus("paymentRequired");
             }
             case "refuse" -> {
                 vote.setVoteOption(VoteOption.REFUSE);
