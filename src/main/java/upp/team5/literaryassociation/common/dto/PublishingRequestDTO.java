@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class PublishingRequestDTO {
     private Long id;
-    private BookDTO bookDTO;
-    private List<Note> notes;
+    private BookDTO book;
+    private List<NoteDTO> notes;
     private List<FileDTO> potentialPlagiarismList;
 }
