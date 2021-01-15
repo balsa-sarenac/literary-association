@@ -45,4 +45,7 @@ public class Book implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id"))
     private Set<Genre> genres;
 
+    @OneToOne
+    private FileDB bookFile;
+
 }
