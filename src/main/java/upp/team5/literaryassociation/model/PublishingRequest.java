@@ -32,4 +32,7 @@ public class PublishingRequest implements Serializable {
     @ManyToMany(mappedBy = "earlyAccessBooks")
     private Set<User> betaReaders;
 
+    @OneToMany(mappedBy = "publishingRequest")
+    private Set<FileDB> potentialPlagiarismSet;
+
 }
