@@ -165,8 +165,6 @@
     <bpmn:sequenceFlow id="Flow_1rxm7tf" sourceRef="Activity_13wydz1" targetRef="Event_1q05n46" />
     <bpmn:sequenceFlow id="Flow_19vrpvl" sourceRef="Activity_19t9fyt" targetRef="Activity_1aeuhyz" />
     <bpmn:sequenceFlow id="Flow_1wwqaki" sourceRef="Event_1timofv" targetRef="Event_1vimwpl" />
-    <bpmn:sequenceFlow id="Flow_0kpzb2q" />
-    <bpmn:sequenceFlow id="Flow_0lryu2x" />
     <bpmn:sequenceFlow id="Flow_0q66xj7" sourceRef="Activity_0n77etj" targetRef="Gateway_0q504la" />
     <bpmn:sequenceFlow id="Flow_17lmb52" sourceRef="Gateway_0q504la" targetRef="Activity_1x9vl8u" />
     <bpmn:sequenceFlow id="Flow_1i0tn81" sourceRef="Activity_1vj4fv2" targetRef="Activity_0p31vz3" />
