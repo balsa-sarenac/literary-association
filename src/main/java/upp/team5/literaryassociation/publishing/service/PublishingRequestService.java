@@ -79,4 +79,8 @@ public class PublishingRequestService {
         return retVal;
 
     }
+
+    public PublishingRequest getPublishingRequest(long requestId) {
+        return publishingRequestRepository.findById(requestId).orElseThrow(NotFoundException::new);
+    }
 }
