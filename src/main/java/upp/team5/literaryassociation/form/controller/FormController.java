@@ -7,12 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import upp.team5.literaryassociation.common.dto.ProcessDTO;
 import upp.team5.literaryassociation.form.service.GenericFormService;
-import upp.team5.literaryassociation.form.dto.FormFieldsDTO;
-import upp.team5.literaryassociation.form.dto.FormSubmissionDTO;
+import upp.team5.literaryassociation.common.dto.FormFieldsDTO;
+import upp.team5.literaryassociation.common.dto.FormSubmissionDTO;
 
 @CrossOrigin()
 @RestController

@@ -11,7 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import upp.team5.literaryassociation.authorRegistration.dto.MembershipRequestDTO;
+import upp.team5.literaryassociation.common.dto.MembershipRequestDTO;
 import upp.team5.literaryassociation.authorRegistration.repository.MembershipRequestRepository;
 import upp.team5.literaryassociation.common.dto.FileDTO;
 import upp.team5.literaryassociation.common.dto.UserDTO;

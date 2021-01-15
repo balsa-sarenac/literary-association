@@ -1,19 +1,24 @@
-package upp.team5.literaryassociation.register.dto;
+package upp.team5.literaryassociation.common.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter @Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RequestDTO {
-    private Long id;
+public class RegistrationDTO {
     private String firstName;
+
     private String lastName;
-    private String email;
+
     private String city;
+
     private String country;
+
+    private String email;
+
+    private String password;
+
     private String role;
 }

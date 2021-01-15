@@ -11,8 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.model.User;
-import upp.team5.literaryassociation.security.dto.LoginRequestDTO;
-import upp.team5.literaryassociation.security.dto.UserTokenState;
+import upp.team5.literaryassociation.common.dto.LoginRequestDTO;
+import upp.team5.literaryassociation.common.dto.UserTokenState;
 import upp.team5.literaryassociation.security.token.TokenUtils;
 
 @Service @Slf4j

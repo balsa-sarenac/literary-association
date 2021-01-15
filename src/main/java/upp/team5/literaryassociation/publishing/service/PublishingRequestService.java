@@ -4,11 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import upp.team5.literaryassociation.common.dto.PublishingRequestBetaDTO;
+import upp.team5.literaryassociation.common.dto.PublishingRequestDTO;
 import upp.team5.literaryassociation.common.service.AuthUserService;
 import upp.team5.literaryassociation.model.PublishingRequest;
 import upp.team5.literaryassociation.model.User;
-import upp.team5.literaryassociation.publishing.dto.PublishingRequestDTO;
 import upp.team5.literaryassociation.publishing.repository.PublishingRequestRepository;
 import upp.team5.literaryassociation.security.repository.UserRepository;
 
@@ -40,17 +39,17 @@ public class PublishingRequestService {
 
     public Optional<PublishingRequest> getById(Long id) { return publishingRequestRepository.findById(id); }
 
-    public List<PublishingRequestBetaDTO> getBetaRequests() {
+    public List<PublishingRequestDTO> getBetaRequests() {
         User user = this.authUserService.getLoggedInUser();
 
         log.info("Finding user assigned books");
         List<PublishingRequest> publishingRequests = this.publishingRequestRepository.findAllByBetaReaders(user);
-        List<PublishingRequestBetaDTO> publishingRequestBetaDTOS = new ArrayList<>();
+        List<PublishingRequestDTO> publishingRequestBetaDTOS = new ArrayList<>();
 
         log.info("Creating publishing book dtos");
         ModelMapper modelMapper = new ModelMapper();
         for (PublishingRequest pr : publishingRequests) {
-            PublishingRequestBetaDTO prDTO = modelMapper.map(pr, PublishingRequestBetaDTO.class);
+            PublishingRequestDTO prDTO = modelMapper.map(pr, PublishingRequestDTO.class);
             publishingRequestBetaDTOS.add(prDTO);
         }
 

@@ -1,5 +1,4 @@
-
-package upp.team5.literaryassociation.publishing.dto;
+package upp.team5.literaryassociation.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,17 +7,13 @@ import lombok.Setter;
 import upp.team5.literaryassociation.common.dto.FileDTO;
 import upp.team5.literaryassociation.common.dto.UserDTO;
 
-import java.io.Serializable;
 import java.util.List;
 
-@Getter
-@Setter
+@Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookDTO{
+public class MembershipRequestDTO {
     private Long id;
-    private String title;
-    private String synopsis;
-    private List<UserDTO> authors;
-    private FileDTO bookFile;
+    private UserDTO user;
+    private List<FileDTO> files;
 }

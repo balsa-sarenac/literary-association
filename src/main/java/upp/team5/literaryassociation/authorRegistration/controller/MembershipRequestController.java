@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import upp.team5.literaryassociation.authorRegistration.dto.MembershipRequestDTO;
+import upp.team5.literaryassociation.common.dto.MembershipRequestDTO;
 import upp.team5.literaryassociation.authorRegistration.service.MembershipRequestService;
 
 import java.util.List;
