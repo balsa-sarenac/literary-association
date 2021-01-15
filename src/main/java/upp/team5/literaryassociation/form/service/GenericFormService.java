@@ -11,10 +11,12 @@ import org.camunda.bpm.engine.impl.form.type.SimpleFormFieldType;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import upp.team5.literaryassociation.authorRegistration.service.MembershipRequestService;
 import upp.team5.literaryassociation.common.dto.ProcessDTO;
 import upp.team5.literaryassociation.form.dto.FormFieldsDTO;
 import upp.team5.literaryassociation.form.dto.FormSubmissionDTO;
 import upp.team5.literaryassociation.form.dto.FormSubmissionFieldDTO;
+import upp.team5.literaryassociation.model.MembershipRequest;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +30,9 @@ public class GenericFormService {
     private FormService formService;
     @Autowired
     private RuntimeService runtimeService;
+
+    @Autowired
+    private MembershipRequestService membershipRequestService;
 
     public FormFieldsDTO getForm(String processInstanceId) {
 
@@ -60,5 +65,15 @@ public class GenericFormService {
         return map;
     }
 
-    
+
+    public String getProcessId(String userId) {
+        Long membershipRequestId = membershipRequestService.getAuthorMembershipRequest(userId);
+
+        ProcessInstance pi = this.runtimeService.createProcessInstanceQuery()
+                .processInstanceBusinessKey(userId)
+                .variableValueEquals("membershipRequestId", membershipRequestId)
+                .singleResult();
+
+        return pi.getId();
+    }
 }

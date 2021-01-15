@@ -37,6 +37,7 @@ public class VerificationService implements JavaDelegate {
         this.createCamundaUser(user, "asdf");
 
         delegateExecution.setProcessBusinessKey(user.getId().toString());
+        delegateExecution.setVariable("userId", user.getId());
         
         log.info("Account verified");
     }
