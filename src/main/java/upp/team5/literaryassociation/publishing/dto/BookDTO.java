@@ -15,4 +15,5 @@ import java.io.Serializable;
 public class BookDTO{
     Long id;
     String title;
+    String synopsis;
 }
