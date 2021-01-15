@@ -157,7 +157,9 @@ insert into genre (id, name) values (10,'Thriller');
 
 --insert into users_roles (user_id, role_id) values (1, 7);
 
---insert into book(id, title, chief_editor_id) values (1, 'book1', 1);
---insert into authors_books(author_id, book_id) values (14, 1);
+insert into book(id, title, chief_editor_id) values (1, 'book1', 1);
+insert into authors_books(author_id, book_id) values (14, 1);
 
---insert into publishing_request(approved, book_id) values (false, 1);
+insert into publishing_request(approved, book_id) values (false, 1);
+
+insert into beta_reader_unpublished_books(beta_user_id, publishing_request_id) values (3, 1);
