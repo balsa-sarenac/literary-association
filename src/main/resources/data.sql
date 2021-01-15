@@ -21,25 +21,26 @@ insert into user_table (first_name, last_name, city, country, email, password, e
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
 ('Admin', 'Admin', 'Novi Sad', 'Serbia', 'admin@admin.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  true, true, true, true, null);
--- example of disabled user
+-- READER
 insert into user_table (first_name, last_name, city, country, email, password, enabled,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
 ('Marko', 'Markovic', 'Novi Sad', 'Serbia', 'marko@example.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
- false, true, true, true, null);
-
+ true, true, true, true, null);
+-- BETA READER
 insert into user_table (first_name, last_name, city, country, email, password, enabled,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
 ('Pera', 'Peric', 'Novi Sad', 'Serbia', 'pera@example.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
- false, true, true, true, null);
+ true, true, true, true, null);
 
 insert into user_table (first_name, last_name, city, country, email, password, enabled,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
 ('Jovan', 'Jovanovic', 'Beograd', 'Serbia', 'jovan@example.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
- false, true, true, true, null);
+ true, true, true, true, null);
 
 
 insert into user_table (first_name, last_name, city, country, email, password, enabled,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
+
 ('Ana', 'Antic', 'Kragujevac', 'Serbia', 'nina.sarenac444@gmail.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  false, true, true, true, null);
 
@@ -57,6 +58,7 @@ insert into user_table (first_name, last_name, city, country, email, password, e
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
 ('Stanko', 'Stankovic', 'Novi Sad', 'Serbia', 'nina.sarenac444@gmail.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  false, true, true, true, null);
+
  -- 9
 insert into user_table (first_name, last_name, city, country, email, password, enabled,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
@@ -113,8 +115,8 @@ insert into user_table (first_name, last_name, city, country, email, password, e
 insert into users_roles (user_id, role_id) values (1, 1);
 
 -- LECTORS
-insert into users_roles (user_id, role_id) values (2, 5);
-insert into users_roles (user_id, role_id) values (3, 5);
+insert into users_roles (user_id, role_id) values (2, 2);
+insert into users_roles (user_id, role_id) values (3, 3);
 insert into users_roles (user_id, role_id) values (4, 5);
 
 -- EDITORS
