@@ -41,17 +41,17 @@ public class ChooseEditorService implements JavaDelegate {
         }
 
         Role role = roleService.getByName("ROLE_EDITOR");
-        Role newRole = roleService.getByName("ROLE_CHIEF_EDITOR");
+        //Role newRole = roleService.getByName("ROLE_CHIEF_EDITOR");
 
         List<User> editors = userService.getUsersByRole(role.getId());
         int rand = getRandomNumber(0, editors.size()-1);
         User chief = editors.get(rand);
 
-        Set<Role> currentRoles = chief.getRoles();
-        currentRoles.add(newRole);
-        chief.setRoles(currentRoles);
+        //Set<Role> currentRoles = chief.getRoles();
+        //currentRoles.add(newRole);
+        //chief.setRoles(currentRoles);
 
-        userService.saveUser(chief);
+        //userService.saveUser(chief);
 
         HashMap<String, Object> bookInfoSubmission;
         bookInfoSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data-fill-book-info");
