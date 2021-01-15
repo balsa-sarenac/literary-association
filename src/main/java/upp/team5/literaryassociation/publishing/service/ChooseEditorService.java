@@ -91,6 +91,7 @@ public class ChooseEditorService implements JavaDelegate {
     }
 
     private int getRandomNumber(int min, int max) {
+        if (max == 0) return 0;
         Random random = new Random();
         return  random.nextInt(max - min) + min;
     }
