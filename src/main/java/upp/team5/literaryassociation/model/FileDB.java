@@ -33,6 +33,8 @@ public class FileDB implements Serializable {
     @JoinColumn(name = "publishing_request_id", referencedColumnName = "id")
     private PublishingRequest publishingRequest;
 
+    @OneToOne
+    private Book book;
 
     public FileDB(String name, String type, byte[] data) {
         this.name = name;

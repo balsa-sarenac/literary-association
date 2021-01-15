@@ -13,6 +13,9 @@ import java.util.List;
 public interface PublishingRequestRepository extends JpaRepository<PublishingRequest, Long> {
     PublishingRequest findByBook(Book book);
     HashSet<PublishingRequest> findByBookAuthors(User book_authors);
+
+    List<PublishingRequest> findAllByBetaReaders(User beatReader);
+
     HashSet<PublishingRequest> findByBookChiefEditorAndApproved(User chiefEditor, Boolean approved);
 
 }
