@@ -2,15 +2,8 @@ package upp.team5.literaryassociation.publishing.controller;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.util.DefaultIndenter;
-import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.extern.slf4j.Slf4j;
-import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import upp.team5.literaryassociation.common.dto.ProcessDTO;
-import upp.team5.literaryassociation.model.Book;
+import upp.team5.literaryassociation.common.dto.PublishingRequestBetaDTO;
 import upp.team5.literaryassociation.model.PublishingRequest;
-import upp.team5.literaryassociation.publishing.dto.BookDTO;
 import upp.team5.literaryassociation.publishing.dto.PublishingRequestDTO;
-import upp.team5.literaryassociation.publishing.service.PublishingService;
+import upp.team5.literaryassociation.publishing.service.PublishingRequestService;
 
 import java.util.HashSet;
 import java.util.List;
@@ -36,11 +28,11 @@ public class PublishingController {
     @Autowired
     private RuntimeService runtimeService;
 
-    private final PublishingService publishingService;
+    private final PublishingRequestService publishingRequestService;
 
     @Autowired
-    PublishingController(PublishingService publishingService){
-        this.publishingService = publishingService;
+    PublishingController(PublishingRequestService publishingRequestService){
+        this.publishingRequestService = publishingRequestService;
     }
 
     @PreAuthorize("hasAuthority('ROLE_AUTHOR')")
@@ -54,15 +46,23 @@ public class PublishingController {
 
     @PreAuthorize("hasAuthority('ROLE_AUTHOR')")
     @GetMapping(name = "getAuthorRequests", path="/author-requests/{authorId}")
-    public ResponseEntity<HashSet<PublishingRequestDTO>> getAuthorRequests(@PathVariable String authorId) throws JsonProcessingException {
+    public ResponseEntity<HashSet<PublishingRequestBetaDTO>> getAuthorRequests(@PathVariable String authorId) throws JsonProcessingException {
         ModelMapper modelMapper = new ModelMapper();
-        HashSet<PublishingRequestDTO> retVal = new HashSet<>();
+        HashSet<PublishingRequestBetaDTO> retVal = new HashSet<>();
 
-        List<PublishingRequest> requests = publishingService.getRequests(Long.parseLong(authorId));
+        List<PublishingRequest> requests = publishingRequestService.getRequests(Long.parseLong(authorId));
         for(PublishingRequest req : requests){
-            PublishingRequestDTO pubReq = modelMapper.map(req, PublishingRequestDTO.class);
+            PublishingRequestBetaDTO pubReq = modelMapper.map(req, PublishingRequestBetaDTO.class);
             retVal.add(pubReq);
         }
         return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
+
+    //@PreAuthorize("hasAuthority('ROLE_CHIEF_EDITOR')")
+    @GetMapping(name = "getChiefEditorRequests", path="/chiefEditor-requests/{editorId}")
+    public ResponseEntity<HashSet<PublishingRequestDTO>> getChiefEditorRequests(@PathVariable String editorId) throws JsonProcessingException {
+        HashSet<PublishingRequestDTO> retVal = publishingRequestService.getEditorRequests(Long.parseLong(editorId));
+        return new ResponseEntity<>(retVal, HttpStatus.OK);
+    }
+
 }

@@ -12,7 +12,7 @@ import java.util.List;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PublishingRequestDTO {
+public class PublishingRequestBetaDTO {
     private Long id;
     private BookDTO book;
     private List<NoteDTO> notes;
