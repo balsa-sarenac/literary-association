@@ -26,7 +26,13 @@ public class PublishingRequest implements Serializable {
     private boolean reviewed;
 
     @Column
-    private boolean originalCheck;
+    private boolean synopsisAccepted;
+
+    @Column
+    private boolean originalChecked;
+
+    @Column
+    private boolean original;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "book_id", referencedColumnName = "id")
