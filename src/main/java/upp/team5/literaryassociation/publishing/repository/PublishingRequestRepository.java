@@ -18,4 +18,6 @@ public interface PublishingRequestRepository extends JpaRepository<PublishingReq
 
     HashSet<PublishingRequest> findByBookChiefEditorAndReviewed(User chiefEditor, Boolean reviewed);
 
+    HashSet<PublishingRequest> findByBookChiefEditorAndSynopsisAcceptedAndOriginalChecked(User chiefEditor, Boolean synopsisAccepted, Boolean originalChecked);
+
 }
