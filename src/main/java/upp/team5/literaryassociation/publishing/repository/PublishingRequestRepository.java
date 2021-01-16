@@ -16,6 +16,6 @@ public interface PublishingRequestRepository extends JpaRepository<PublishingReq
 
     List<PublishingRequest> findAllByBetaReaders(User beatReader);
 
-    HashSet<PublishingRequest> findByBookChiefEditorAndApproved(User chiefEditor, Boolean approved);
+    HashSet<PublishingRequest> findByBookChiefEditorAndReviewed(User chiefEditor, Boolean reviewed);
 
 }
