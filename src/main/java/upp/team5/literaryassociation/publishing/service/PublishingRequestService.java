@@ -92,6 +92,20 @@ public class PublishingRequestService {
 
     }
 
+    public HashSet<PublishingRequestDTO> getEditorRequestsPlagiarismCheck(Long editorId) {
+        User chiefEditor = userRepository.findById(editorId).orElseThrow(NotFoundException::new);
+        List<PublishingRequest> requests = new ArrayList<>(publishingRequestRepository.findByBookChiefEditorAndSynopsisAcceptedAndOriginalChecked(chiefEditor, true, false));
+
+        ModelMapper modelMapper = new ModelMapper();
+        HashSet<PublishingRequestDTO> retRequests = new HashSet<>();
+
+        for(PublishingRequest req : requests){
+            PublishingRequestDTO request = modelMapper.map(req, PublishingRequestDTO.class);
+            retRequests.add(request);
+        }
+        return retRequests;
+    }
+
     public PublishingRequest getPublishingRequest(long requestId) {
         return publishingRequestRepository.findById(requestId).orElseThrow(NotFoundException::new);
     }
@@ -99,6 +113,7 @@ public class PublishingRequestService {
     public void readBook(ChiefEditorResponse response) {
         PublishingRequest publishingRequest = publishingRequestRepository.findById(response.getPublishingRequestId()).orElseThrow(NotFoundException::new);
         publishingRequest.setReviewed(true);
+        publishingRequest.setSynopsisAccepted(true);
         publishingRequestRepository.save(publishingRequest);
 
         ProcessInstance pi = this.runtimeService.createProcessInstanceQuery()
