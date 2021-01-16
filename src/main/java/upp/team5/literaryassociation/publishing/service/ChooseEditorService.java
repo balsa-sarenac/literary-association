@@ -95,7 +95,11 @@ public class ChooseEditorService implements JavaDelegate {
 
         userService.saveUser(currentUser);
 
-        createCamundaUser(chief, "asdf");
+        org.camunda.bpm.engine.identity.User cUser = identityService.createUserQuery().userId(String.valueOf(chief.getId())).singleResult();
+        if(cUser == null){
+            createCamundaUser(chief, "asdf");
+        }
+
 
         delegateExecution.setVariable("publishing-request-id", req.getId());
 
