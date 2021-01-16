@@ -1,12 +1,14 @@
 package upp.team5.literaryassociation.publishing.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import upp.team5.literaryassociation.common.service.AuthUserService;
 import upp.team5.literaryassociation.model.*;
 import upp.team5.literaryassociation.register.service.GenreService;
 import upp.team5.literaryassociation.security.service.CustomUserDetailsService;
@@ -28,8 +30,15 @@ public class ChooseEditorService implements JavaDelegate {
     @Autowired
     private  PublishingRequestService publishingRequestService;
 
+    @Autowired
+    private IdentityService identityService;
+
+    @Autowired
+    private AuthUserService authUserService;
+
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
+
         User currentUser = null;
         var context = SecurityContextHolder.getContext();
         if(context.getAuthentication() != null) {
@@ -86,6 +95,8 @@ public class ChooseEditorService implements JavaDelegate {
 
         userService.saveUser(currentUser);
 
+        createCamundaUser(chief, "asdf");
+
         delegateExecution.setVariable("publishing-request-id", req.getId());
 
     }
@@ -94,5 +105,14 @@ public class ChooseEditorService implements JavaDelegate {
         if (max == 0) return 0;
         Random random = new Random();
         return  random.nextInt(max - min) + min;
+    }
+
+    public void createCamundaUser(upp.team5.literaryassociation.model.User user, String password) {
+        org.camunda.bpm.engine.identity.User cUser = identityService.newUser(user.getId().toString());
+        cUser.setEmail(user.getEmail());
+        cUser.setFirstName(user.getFirstName());
+        cUser.setLastName(user.getLastName());
+        cUser.setPassword(password);
+        identityService.saveUser(cUser);
     }
 }
