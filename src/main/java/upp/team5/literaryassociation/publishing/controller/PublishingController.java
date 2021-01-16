@@ -81,4 +81,11 @@ public class PublishingController {
         publishingRequestService.readBook(response);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_EDITOR')")
+    @GetMapping(name = "getRequestsPlagiarismCheck", path="/get-requests-plagiarism-check/{editorId}")
+    public ResponseEntity<HashSet<PublishingRequestDTO>> GetRequestsPlagiarismCheck(@PathVariable String editorId) throws JsonProcessingException {
+        HashSet<PublishingRequestDTO> retRequests = publishingRequestService.getEditorRequestsPlagiarismCheck(Long.parseLong(editorId));
+        return new ResponseEntity<>(retRequests, HttpStatus.OK);
+    }
+
 }
