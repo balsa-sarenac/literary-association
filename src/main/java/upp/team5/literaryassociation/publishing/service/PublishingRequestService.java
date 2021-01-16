@@ -4,8 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import upp.team5.literaryassociation.common.dto.NoteDTO;
 import upp.team5.literaryassociation.common.dto.PublishingRequestBetaDTO;
 import upp.team5.literaryassociation.common.service.AuthUserService;
+import upp.team5.literaryassociation.common.service.NoteService;
+import upp.team5.literaryassociation.model.Note;
+import upp.team5.literaryassociation.model.NoteType;
 import upp.team5.literaryassociation.model.PublishingRequest;
 import upp.team5.literaryassociation.model.User;
 import upp.team5.literaryassociation.publishing.dto.PublishingRequestDTO;
@@ -28,10 +32,14 @@ public class PublishingRequestService {
     private UserRepository userRepository;
 
     private final AuthUserService authUserService;
+    private final ModelMapper modelMapper;
+    private final NoteService noteService;
 
     @Autowired
-    public PublishingRequestService(AuthUserService authUserService) {
+    public PublishingRequestService(AuthUserService authUserService, ModelMapper modelMapper, NoteService noteService) {
         this.authUserService = authUserService;
+        this.modelMapper = modelMapper;
+        this.noteService = noteService;
     }
 
     public void savePublishingRequest(PublishingRequest request) { publishingRequestRepository.save(request); }
@@ -45,10 +53,13 @@ public class PublishingRequestService {
 
         log.info("Finding user assigned books");
         List<PublishingRequest> publishingRequests = this.publishingRequestRepository.findAllByBetaReaders(user);
-        List<PublishingRequestBetaDTO> publishingRequestBetaDTOS = new ArrayList<>();
+        List<Note> betaReaderNotes = this.noteService.getUserNotes(user, NoteType.COMMENT);
+        List<PublishingRequest> commentedRequests = betaReaderNotes.stream().map(Note::getPublishingRequest).collect(Collectors.toList());
+        log.info("Removing books user already read and commented");
+        publishingRequests.removeIf(commentedRequests::contains);
 
+        List<PublishingRequestBetaDTO> publishingRequestBetaDTOS = new ArrayList<>();
         log.info("Creating publishing book dtos");
-        ModelMapper modelMapper = new ModelMapper();
         for (PublishingRequest pr : publishingRequests) {
             PublishingRequestBetaDTO prDTO = modelMapper.map(pr, PublishingRequestBetaDTO.class);
             publishingRequestBetaDTOS.add(prDTO);
@@ -79,5 +90,25 @@ public class PublishingRequestService {
 
         return retVal;
 
+    }
+
+    public PublishingRequestBetaDTO getBetaRequest(Long id) {
+        PublishingRequest publishingRequest = getPublishingRequest(id);
+        return modelMapper.map(publishingRequest, PublishingRequestBetaDTO.class);
+    }
+
+    private PublishingRequest getPublishingRequest(Long id) {
+        return this.publishingRequestRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Request with given id doesn't exist"));
+    }
+
+    public void saveNotes(Long id, NoteDTO notes) {
+        User betaReader = this.authUserService.getLoggedInUser();
+        PublishingRequest publishingRequest = getPublishingRequest(id);
+        Note note = modelMapper.map(notes, Note.class);
+        note.setPublishingRequest(publishingRequest);
+        note.setUser(betaReader);
+
+        this.noteService.saveNote(note);
     }
 }
