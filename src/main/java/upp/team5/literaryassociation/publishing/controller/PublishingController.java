@@ -11,10 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import upp.team5.literaryassociation.common.dto.ChiefEditorResponse;
 import upp.team5.literaryassociation.common.dto.ProcessDTO;
-import upp.team5.literaryassociation.common.dto.PublishingRequestBetaDTO;
+import upp.team5.literaryassociation.common.dto.PublishingRequestDTO;
 import upp.team5.literaryassociation.model.PublishingRequest;
-import upp.team5.literaryassociation.publishing.dto.PublishingRequestDTO;
 import upp.team5.literaryassociation.publishing.service.PublishingRequestService;
 
 import java.util.HashSet;
@@ -38,7 +38,8 @@ public class PublishingController {
     @PreAuthorize("hasAuthority('ROLE_AUTHOR')")
     @GetMapping(name = "bookPublishing", path="/start-book-publishing")
     public ResponseEntity<ProcessDTO> startBookPublishingProcess() {
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("Process_1iaa6uo");
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("book-publishing");
+
         ProcessDTO processDTO = new ProcessDTO(processInstance.getId());
 
         return new ResponseEntity<>(processDTO, HttpStatus.OK);
@@ -46,23 +47,38 @@ public class PublishingController {
 
     @PreAuthorize("hasAuthority('ROLE_AUTHOR')")
     @GetMapping(name = "getAuthorRequests", path="/author-requests/{authorId}")
-    public ResponseEntity<HashSet<PublishingRequestBetaDTO>> getAuthorRequests(@PathVariable String authorId) throws JsonProcessingException {
+    public ResponseEntity<HashSet<PublishingRequestDTO>> getAuthorRequests(@PathVariable String authorId) throws JsonProcessingException {
         ModelMapper modelMapper = new ModelMapper();
-        HashSet<PublishingRequestBetaDTO> retVal = new HashSet<>();
+        HashSet<PublishingRequestDTO> retVal = new HashSet<>();
 
         List<PublishingRequest> requests = publishingRequestService.getRequests(Long.parseLong(authorId));
         for(PublishingRequest req : requests){
-            PublishingRequestBetaDTO pubReq = modelMapper.map(req, PublishingRequestBetaDTO.class);
+            PublishingRequestDTO pubReq = modelMapper.map(req, PublishingRequestDTO.class);
             retVal.add(pubReq);
         }
         return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 
-    //@PreAuthorize("hasAuthority('ROLE_CHIEF_EDITOR')")
+    @PreAuthorize("hasAuthority('ROLE_EDITOR')")
     @GetMapping(name = "getChiefEditorRequests", path="/chiefEditor-requests/{editorId}")
     public ResponseEntity<HashSet<PublishingRequestDTO>> getChiefEditorRequests(@PathVariable String editorId) throws JsonProcessingException {
         HashSet<PublishingRequestDTO> retVal = publishingRequestService.getEditorRequests(Long.parseLong(editorId));
         return new ResponseEntity<>(retVal, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_EDITOR')")
+    @GetMapping(name = "getRequest", path="/get-request/{requestId}")
+    public ResponseEntity<PublishingRequestDTO> getRequest(@PathVariable String requestId) throws JsonProcessingException {
+        ModelMapper modelMapper = new ModelMapper();
+        PublishingRequest publishingRequest = publishingRequestService.getPublishingRequest(Long.parseLong(requestId));
+        PublishingRequestDTO dto = modelMapper.map(publishingRequest, PublishingRequestDTO.class);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_EDITOR')")
+    @PostMapping(name = "read", path="/read")
+    public void readBook(@RequestBody ChiefEditorResponse response){
+        publishingRequestService.readBook(response);
     }
 
 }

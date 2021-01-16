@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import upp.team5.literaryassociation.common.dto.PublishingRequestBetaDTO;
+import upp.team5.literaryassociation.common.dto.PublishingRequestDTO;
 import upp.team5.literaryassociation.publishing.service.PublishingRequestService;
 
 import java.util.List;
@@ -25,8 +25,8 @@ public class BetaReaderController {
     }
 
     @GetMapping(path = "/requests", name = "all requests that this beta reader can read")
-    public ResponseEntity<List<PublishingRequestBetaDTO>> getBetaBooks() {
-        List<PublishingRequestBetaDTO> requestDTOS = this.publishingRequestService.getBetaRequests();
+    public ResponseEntity<List<PublishingRequestDTO>> getBetaBooks() {
+        List<PublishingRequestDTO> requestDTOS = this.publishingRequestService.getBetaRequests();
         return new ResponseEntity<>(requestDTOS, HttpStatus.OK);
     }
 }
