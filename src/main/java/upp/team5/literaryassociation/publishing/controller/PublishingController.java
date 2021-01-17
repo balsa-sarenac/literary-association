@@ -88,4 +88,10 @@ public class PublishingController {
         return new ResponseEntity<>(retRequests, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_EDITOR')")
+    @PostMapping(name = "originalBook", path="/original-book")
+    public void originalBook(@RequestBody ChiefEditorResponse response){
+        publishingRequestService.originalBook(response);
+    }
+
 }

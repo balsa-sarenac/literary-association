@@ -100,6 +100,10 @@ public class PublishingRequestService {
         HashSet<PublishingRequestDTO> retRequests = new HashSet<>();
 
         for(PublishingRequest req : requests){
+            /*if(req.getBook() != null) {
+                PublishingRequestDTO request = modelMapper.map(req, PublishingRequestDTO.class);
+                retRequests.add(request);
+            }*/
             PublishingRequestDTO request = modelMapper.map(req, PublishingRequestDTO.class);
             retRequests.add(request);
         }
@@ -113,7 +117,7 @@ public class PublishingRequestService {
     public void readBook(ChiefEditorResponse response) {
         PublishingRequest publishingRequest = publishingRequestRepository.findById(response.getPublishingRequestId()).orElseThrow(NotFoundException::new);
         publishingRequest.setReviewed(true);
-        publishingRequest.setSynopsisAccepted(true);
+        publishingRequest.setSynopsisAccepted(response.getResponse());
         publishingRequestRepository.save(publishingRequest);
 
         ProcessInstance pi = this.runtimeService.createProcessInstanceQuery()
@@ -131,5 +135,28 @@ public class PublishingRequestService {
         log.info("Completing task");
         taskService.complete(task.getId());
     }
+
+    public void originalBook(ChiefEditorResponse response) {
+        PublishingRequest publishingRequest = publishingRequestRepository.findById(response.getPublishingRequestId()).orElseThrow(NotFoundException::new);
+        publishingRequest.setOriginalChecked(true);
+        publishingRequest.setOriginal(response.getResponse());
+        publishingRequestRepository.save(publishingRequest);
+
+        ProcessInstance pi = this.runtimeService.createProcessInstanceQuery()
+                .processDefinitionKey("book-publishing")
+                .variableValueEquals("publishing-request-id", response.getPublishingRequestId())
+                .singleResult();
+
+        User loggedUser = authUserService.getLoggedInUser();
+        org.camunda.bpm.engine.identity.User camundaUser = identityService.createUserQuery().userId(String.valueOf(loggedUser.getId())).singleResult();
+        Task task = this.taskService.createTaskQuery().processInstanceId(pi.getId()).active().singleResult();
+        taskService.claim(task.getId(), camundaUser.getId());
+
+        runtimeService.setVariable(pi.getProcessInstanceId(), "original", response.getResponse());
+
+        log.info("Completing task");
+        taskService.complete(task.getId());
+    }
+
 
 }
