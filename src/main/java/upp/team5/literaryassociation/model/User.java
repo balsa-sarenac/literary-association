@@ -41,6 +41,9 @@ public class User implements UserDetails, Serializable { //, org.camunda.bpm.eng
     @Column(nullable = true)
     private String status="unknown";
 
+    @Column
+    private int penaltyPoints;
+
     @ManyToMany
     @JoinTable(name = "authors_books",
             joinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"),
