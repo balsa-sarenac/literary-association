@@ -130,10 +130,14 @@ public class PublishingRequestService {
         Task task = this.taskService.createTaskQuery().processInstanceId(pi.getId()).active().singleResult();
         taskService.claim(task.getId(), camundaUser.getId());
 
-        runtimeService.setVariable(pi.getProcessInstanceId(), "readApproved", response.getResponse());
+        var u = task.getAssignee();
 
-        log.info("Completing task");
-        taskService.complete(task.getId());
+        if(u.equals(camundaUser.getId())){
+            runtimeService.setVariable(pi.getProcessInstanceId(), "readApproved", response.getResponse());
+
+            log.info("Completing task");
+            taskService.complete(task.getId());
+        }
     }
 
     public void originalBook(ChiefEditorResponse response) {
@@ -150,13 +154,14 @@ public class PublishingRequestService {
         User loggedUser = authUserService.getLoggedInUser();
         org.camunda.bpm.engine.identity.User camundaUser = identityService.createUserQuery().userId(String.valueOf(loggedUser.getId())).singleResult();
         Task task = this.taskService.createTaskQuery().processInstanceId(pi.getId()).active().singleResult();
-        taskService.claim(task.getId(), camundaUser.getId());
 
-        runtimeService.setVariable(pi.getProcessInstanceId(), "original", response.getResponse());
+        var u = task.getAssignee();
 
-        log.info("Completing task");
-        taskService.complete(task.getId());
+        if(u.equals(camundaUser.getId())){
+            runtimeService.setVariable(pi.getProcessInstanceId(), "original", response.getResponse());
+
+            log.info("Completing task");
+            taskService.complete(task.getId());
+        }
     }
-
-
 }

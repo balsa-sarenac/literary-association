@@ -102,7 +102,7 @@ public class ChooseEditorService implements JavaDelegate {
 
 
         delegateExecution.setVariable("publishing-request-id", req.getId());
-
+        delegateExecution.setVariable("editor", chief.getId().toString());
     }
 
     private int getRandomNumber(int min, int max) {
