@@ -121,7 +121,7 @@
     </bpmn:userTask>
     <bpmn:endEvent id="Event_01nyb44" name="Notify author of upload timeout">
       <bpmn:incoming>Flow_1chh4t4</bpmn:incoming>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_0bjtmyn" messageRef="Message_11oy83f" camunda:class="upp.team5.literaryassociation.publishing.service.NotificationService" />
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0bjtmyn" messageRef="Message_11oy83f" camunda:class="upp.team5.literaryassociation.publishing.delegate.UploadTimeoutDelegate" />
     </bpmn:endEvent>
     <bpmn:userTask id="Activity_0cwot2c" name="Decide if the manuscript is a plagiarism">
       <bpmn:incoming>Flow_14ha8gb</bpmn:incoming>
