@@ -10,9 +10,8 @@
         <bpmn:flowNodeRef>fill-book-info</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0f7jq51</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_14orjt1</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Activity_0nmil9s</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>UploadBook</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_01nyb44</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Activity_1by13au</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_116dpgd</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0783vvp</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0b4xh5t</bpmn:flowNodeRef>
@@ -111,7 +110,7 @@
       <bpmn:incoming>Flow_1akaf2o</bpmn:incoming>
       <bpmn:outgoing>Flow_1fbpr1i</bpmn:outgoing>
     </bpmn:sendTask>
-    <bpmn:userTask id="Activity_0nmil9s" name="Upload book for review">
+    <bpmn:userTask id="UploadBook" name="Upload book for review">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="files" label="Book:" type="file" defaultValue="null" />
@@ -124,10 +123,6 @@
       <bpmn:incoming>Flow_1chh4t4</bpmn:incoming>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0bjtmyn" messageRef="Message_11oy83f" camunda:class="upp.team5.literaryassociation.publishing.service.NotificationService" />
     </bpmn:endEvent>
-    <bpmn:serviceTask id="Activity_1by13au" name="Persist the book" camunda:class="upp.team5.literaryassociation.publishing.service.NotifyEditorService">
-      <bpmn:incoming>Flow_1dpu26n</bpmn:incoming>
-      <bpmn:outgoing>Flow_1mq268f</bpmn:outgoing>
-    </bpmn:serviceTask>
     <bpmn:userTask id="Activity_0cwot2c" name="Decide if the manuscript is a plagiarism">
       <bpmn:incoming>Flow_14ha8gb</bpmn:incoming>
       <bpmn:outgoing>Flow_16hfzl0</bpmn:outgoing>
@@ -276,7 +271,7 @@
     <bpmn:endEvent id="Event_0wu72mk">
       <bpmn:incoming>Flow_0mv0aui</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:boundaryEvent id="Event_0r8he79" attachedToRef="Activity_0nmil9s">
+    <bpmn:boundaryEvent id="Event_0r8he79" attachedToRef="UploadBook">
       <bpmn:outgoing>Flow_1chh4t4</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_1swlnd9">
         <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P14D</bpmn:timeDuration>
@@ -292,8 +287,7 @@
     <bpmn:sequenceFlow id="Flow_0f10ijm" sourceRef="fill-book-info" targetRef="Activity_0f7jq51" />
     <bpmn:sequenceFlow id="Flow_1akaf2o" sourceRef="Activity_0f7jq51" targetRef="Activity_14orjt1" />
     <bpmn:sequenceFlow id="Flow_1chh4t4" sourceRef="Event_0r8he79" targetRef="Event_01nyb44" />
-    <bpmn:sequenceFlow id="Flow_1dpu26n" sourceRef="Activity_0nmil9s" targetRef="Activity_1by13au" />
-    <bpmn:sequenceFlow id="Flow_1mq268f" sourceRef="Activity_1by13au" targetRef="Activity_067rz54" />
+    <bpmn:sequenceFlow id="Flow_1dpu26n" sourceRef="UploadBook" targetRef="Activity_067rz54" />
     <bpmn:sequenceFlow id="Flow_1fbpr1i" sourceRef="Activity_14orjt1" targetRef="Activity_11hmhyy" />
     <bpmn:sequenceFlow id="Flow_1b24o4w" name="Refuse" sourceRef="Gateway_0cwgwd2" targetRef="explanation">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!readApproved}</bpmn:conditionExpression>
@@ -302,7 +296,7 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${readApproved}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0apipwy" sourceRef="explanation" targetRef="Event_1gfueir" />
-    <bpmn:sequenceFlow id="Flow_0gm6pw6" sourceRef="Activity_199i4ge" targetRef="Activity_0nmil9s" />
+    <bpmn:sequenceFlow id="Flow_0gm6pw6" sourceRef="Activity_199i4ge" targetRef="UploadBook" />
     <bpmn:sequenceFlow id="Flow_0ra4k9r" sourceRef="Gateway_0qbj0u0" targetRef="Event_1lbvqfi" />
     <bpmn:sequenceFlow id="Flow_16hfzl0" sourceRef="Activity_0cwot2c" targetRef="Gateway_1qmhnug" />
     <bpmn:sequenceFlow id="Flow_0t4a7r9" name="Yes" sourceRef="Gateway_1qmhnug" targetRef="Activity_1cqxjsm">
@@ -463,7 +457,7 @@
     <bpmn:sequenceFlow id="Flow_14ddaxn" sourceRef="Activity_04r67or" targetRef="Gateway_0ansvgt" />
     <bpmn:sequenceFlow id="Flow_14ha8gb" sourceRef="Event_1lbvqfi" targetRef="Activity_0cwot2c" />
     <bpmn:sendTask id="Activity_067rz54" name="Find similar manuscripts" camunda:expression="upp.team5.literaryassociation.publishing.delegate.InitiatePlagiarismCheck">
-      <bpmn:incoming>Flow_1mq268f</bpmn:incoming>
+      <bpmn:incoming>Flow_1dpu26n</bpmn:incoming>
       <bpmn:outgoing>Flow_0hhpnrz</bpmn:outgoing>
     </bpmn:sendTask>
     <bpmn:sequenceFlow id="Flow_0hhpnrz" sourceRef="Activity_067rz54" targetRef="Gateway_0qbj0u0" />
@@ -820,13 +814,9 @@
         <di:waypoint x="700" y="300" />
         <di:waypoint x="700" y="500" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1mq268f_di" bpmnElement="Flow_1mq268f">
-        <di:waypoint x="1370" y="267" />
-        <di:waypoint x="1450" y="267" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1dpu26n_di" bpmnElement="Flow_1dpu26n">
         <di:waypoint x="1200" y="267" />
-        <di:waypoint x="1270" y="267" />
+        <di:waypoint x="1450" y="267" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1chh4t4_di" bpmnElement="Flow_1chh4t4">
         <di:waypoint x="1170" y="209" />
@@ -857,7 +847,7 @@
       <bpmndi:BPMNShape id="Activity_0gphz0u_di" bpmnElement="Activity_14orjt1">
         <dc:Bounds x="650" y="220" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1mtc1ub_di" bpmnElement="Activity_0nmil9s">
+      <bpmndi:BPMNShape id="Activity_1mtc1ub_di" bpmnElement="UploadBook">
         <dc:Bounds x="1100" y="227" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0wvyom9_di" bpmnElement="Event_01nyb44">
@@ -865,9 +855,6 @@
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1242" y="145" width="76" height="27" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0q9e6pv_di" bpmnElement="Activity_1by13au">
-        <dc:Bounds x="1270" y="227" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1qaqkbn_di" bpmnElement="Activity_0cwot2c">
         <dc:Bounds x="1320" y="500" width="100" height="80" />
