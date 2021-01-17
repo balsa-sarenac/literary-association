@@ -14,6 +14,7 @@ public class PublishingRequestDTO {
     private Long id;
     private BookDTO book;
     private Boolean approved;
+    private String status;
     private List<NoteDTO> notes;
     private List<FileDTO> potentialPlagiarismList;
 }
