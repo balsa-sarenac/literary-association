@@ -112,6 +112,11 @@
       <bpmn:outgoing>Flow_1fbpr1i</bpmn:outgoing>
     </bpmn:sendTask>
     <bpmn:userTask id="Activity_0nmil9s" name="Upload book for review">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="files" label="Book:" type="file" defaultValue="null" />
+        </camunda:formData>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0gm6pw6</bpmn:incoming>
       <bpmn:outgoing>Flow_1dpu26n</bpmn:outgoing>
     </bpmn:userTask>
@@ -514,6 +519,10 @@
       <bpmndi:BPMNShape id="Lane_1cy7hrj_di" bpmnElement="Lane_1cy7hrj" isHorizontal="true">
         <dc:Bounds x="189" y="80" width="4419" height="320" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1wznd8b_di" bpmnElement="Flow_1wznd8b">
+        <di:waypoint x="750" y="540" />
+        <di:waypoint x="835" y="540" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1rs4sfv_di" bpmnElement="Flow_1rs4sfv">
         <di:waypoint x="1618" y="360" />
         <di:waypoint x="1682" y="360" />
@@ -835,10 +844,6 @@
       <bpmndi:BPMNEdge id="Flow_1m521c3_di" bpmnElement="Flow_1m521c3">
         <di:waypoint x="275" y="260" />
         <di:waypoint x="340" y="260" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1wznd8b_di" bpmnElement="Flow_1wznd8b">
-        <di:waypoint x="750" y="540" />
-        <di:waypoint x="835" y="540" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="239" y="242" width="36" height="36" />
