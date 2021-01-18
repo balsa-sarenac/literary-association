@@ -78,7 +78,7 @@ public class PublishingController {
     @PreAuthorize("hasAuthority('ROLE_EDITOR')")
     @PostMapping(name = "read", path="/read")
     public void readBook(@RequestBody ChiefEditorResponse response){
-        publishingRequestService.readBook(response);
+        publishingRequestService.reviewRequest(response);
     }
 
 }
