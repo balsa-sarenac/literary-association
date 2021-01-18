@@ -112,4 +112,8 @@ public class FileService {
     public List<FileDB> findAllByMembershipRequest(MembershipRequest membershipRequest) {
         return this.fileDBRepository.findAllByMembershipRequest(membershipRequest);
     }
+
+    public void saveFile(FileDB fileDB) {
+        this.fileDBRepository.save(fileDB);
+    }
 }
