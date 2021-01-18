@@ -114,9 +114,17 @@ public class PublishingRequestService {
         return publishingRequestRepository.findById(requestId).orElseThrow(NotFoundException::new);
     }
 
-    public void readBook(ChiefEditorResponse response) {
+    public void reviewRequest(ChiefEditorResponse response) {
         PublishingRequest publishingRequest = publishingRequestRepository.findById(response.getPublishingRequestId()).orElseThrow(NotFoundException::new);
         publishingRequest.setReviewed(true);
+
+        if(response.getResponse()){
+            publishingRequest.setStatus("Book upload requested");
+        }
+        else{
+            publishingRequest.setStatus("Reading rejected");
+        }
+
         publishingRequest.setSynopsisAccepted(response.getResponse());
         publishingRequestRepository.save(publishingRequest);
 

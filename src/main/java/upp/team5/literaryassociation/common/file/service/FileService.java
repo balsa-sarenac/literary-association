@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,7 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 import upp.team5.literaryassociation.model.FileDB;
 import upp.team5.literaryassociation.common.file.repository.FileDBRepository;
 import upp.team5.literaryassociation.model.MembershipRequest;
+import upp.team5.literaryassociation.model.PublishingRequest;
 import upp.team5.literaryassociation.model.User;
+import upp.team5.literaryassociation.publishing.service.PublishingRequestService;
 import upp.team5.literaryassociation.security.repository.UserRepository;
 
 import javax.ws.rs.NotFoundException;
@@ -42,6 +45,9 @@ public class FileService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PublishingRequestService publishingRequestService;
+
     public void store(MultipartFile[] files, String processId) throws IOException {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username;
@@ -54,19 +60,30 @@ public class FileService {
 
         User dbUser = userRepository.getUserByEmail(username);
 
-        dbUser.setStatus("reviewExpected");
+        Task task = taskService.createTaskQuery().processInstanceId(processId).active().singleResult();
+
+        if(task.getTaskDefinitionKey()=="SubmitDocuments"){
+            dbUser.setStatus("reviewExpected");
+        }
 
         HashSet<FileDB> toMap = new HashSet<>();
         for (MultipartFile file: files) {
             String fileName = StringUtils.cleanPath(file.getOriginalFilename());
             FileDB fileDB = new FileDB(fileName, file.getContentType(), file.getBytes());
-            fileDB.setMembershipRequest(dbUser.getMembershipRequest());
+
+            if(task.getTaskDefinitionKey()=="SubmitDocuments")
+                fileDB.setMembershipRequest(dbUser.getMembershipRequest());
+            else if(task.getTaskDefinitionKey() == "UploadBook"){
+                PublishingRequest publishingRequest = (PublishingRequest) runtimeService.getVariable(processId, "publishing-request-id");
+                publishingRequest.getBook().setBookFile(fileDB);
+                fileDB.setPublishingRequest(publishingRequest);
+                publishingRequest.setStatus("BookUploaded");
+                publishingRequestService.savePublishingRequest(publishingRequest);
+            }
             toMap.add(fileDB);
         }
 
         fileDBRepository.saveAll(toMap);
-
-        Task task = taskService.createTaskQuery().processInstanceId(processId).active().singleResult();
 
 //        runtimeService.setVariable(processId, "files", toMap);
 
