@@ -72,6 +72,12 @@ public class User implements UserDetails, Serializable { //, org.camunda.bpm.eng
     @OneToOne
     private MembershipRequest membershipRequest;
 
+    @OneToMany(
+        cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<PlagiarismComplaint> complaints = new ArrayList<>();
+
     @ManyToMany
     @JoinTable(name = "user_genre",
         joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),

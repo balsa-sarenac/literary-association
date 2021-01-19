@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -38,6 +40,18 @@ public class Book implements Serializable {
 
     @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
     private Set<PublishingRequest> publishingRequests;
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<PlagiarismComplaint> accusedOfPlagiarism = new ArrayList<>();
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<PlagiarismComplaint> plagiated = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "books_genres",
