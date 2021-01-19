@@ -2,6 +2,8 @@ package upp.team5.literaryassociation.plagiarism.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,8 @@ import upp.team5.literaryassociation.model.User;
 import upp.team5.literaryassociation.plagiarism.repository.PlagiarismComplaintRepository;
 import upp.team5.literaryassociation.publishing.service.BookService;
 import upp.team5.literaryassociation.security.service.CustomUserDetailsService;
+
+import javax.ws.rs.NotFoundException;
 
 @Service
 @Slf4j
@@ -27,6 +31,9 @@ public class PlagiarismComplaintService {
 
     @Autowired
     private RuntimeService runtimeService;
+
+    @Autowired
+    private TaskService taskService;
 
     public void processComplaint(PlagiarismComplaintDTO plagiarismComplaintDTO, Long authorId, String processId) {
         User complainant = userService.getUserById(authorId);
@@ -50,5 +57,13 @@ public class PlagiarismComplaintService {
 
         runtimeService.setVariable(processId, "plagiarism-complaint-id", plagiarismComplaint.getId());
 
+        Task task = taskService.createTaskQuery().processInstanceId(processId).singleResult();
+        taskService.complete(task.getId());
+
+    }
+
+    public PlagiarismComplaint getPlagiarismComplaint(Long id){
+        return plagiarismComplaintRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Plagiarism complaint with given id doesn't exist"));
     }
 }
