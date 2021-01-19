@@ -272,4 +272,32 @@ public class PublishingRequestService {
             taskService.complete(task.getId());
         }
     }
+
+    public void acceptBook(ChiefEditorResponse response) {
+        PublishingRequest publishingRequest = publishingRequestRepository.findById(response.getPublishingRequestId()).orElseThrow(NotFoundException::new);
+
+        ProcessInstance pi = this.runtimeService.createProcessInstanceQuery()
+                .processDefinitionKey("book-publishing")
+                .variableValueEquals("publishing-request-id", response.getPublishingRequestId())
+                .singleResult();
+
+        User loggedUser = authUserService.getLoggedInUser();
+        org.camunda.bpm.engine.identity.User camundaUser = identityService.createUserQuery().userId(String.valueOf(loggedUser.getId())).singleResult();
+        Task task = this.taskService.createTaskQuery().processInstanceId(pi.getId()).active().singleResult();
+
+        var u = task.getAssignee();
+
+        if(u.equals(camundaUser.getId())){
+            runtimeService.setVariable(pi.getProcessInstanceId(), "approved", response.getResponse());
+            if(response.getResponse())
+                publishingRequest.setStatus("Approved");
+            else
+                publishingRequest.setStatus("NotApproved");
+
+            publishingRequestRepository.save(publishingRequest);
+
+            log.info("Completing task");
+            taskService.complete(task.getId());
+        }
+    }
 }

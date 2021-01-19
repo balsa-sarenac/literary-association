@@ -95,6 +95,12 @@ public class PublishingController {
         publishingRequestService.originalBook(response);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_EDITOR')")
+    @PostMapping(name = "acceptBook", path="/accept-book")
+    public void acceptBook(@RequestBody ChiefEditorResponse response){
+        publishingRequestService.acceptBook(response);
+    }
+
     @GetMapping(path = "/documents/{id}")
     public ResponseEntity<byte[]> getDocument(@PathVariable Long id) {
         return this.publishingRequestService.getDocument(id);
