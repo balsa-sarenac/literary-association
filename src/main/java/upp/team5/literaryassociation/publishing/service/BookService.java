@@ -28,12 +28,27 @@ public class BookService {
         ModelMapper modelMapper = new ModelMapper();
         HashSet<BookDTO> retVal = new HashSet<>();
 
-        User author = userService.getUser(Long.parseLong(authorId));
+        User author = userService.getUserById(Long.parseLong(authorId));
         HashSet<Book> books = bookRepository.findByAuthors(author);
 
         for(Book book:books){
             BookDTO bookDTO = modelMapper.map(book, BookDTO.class);
             retVal.add(bookDTO);
+        }
+        return retVal;
+    }
+
+    public HashSet<BookDTO> getOtherAuthorBooks(String authorId) {
+        ModelMapper modelMapper = new ModelMapper();
+        HashSet<BookDTO> retVal = new HashSet<>();
+
+        User author = userService.getUserById(Long.parseLong(authorId));
+        HashSet<Book> books = (HashSet<Book>) bookRepository.findAll();
+
+        for(Book book:books){
+            BookDTO bookDTO = modelMapper.map(book, BookDTO.class);
+            if(!bookDTO.getAuthors().contains(author))
+                retVal.add(bookDTO);
         }
         return retVal;
     }

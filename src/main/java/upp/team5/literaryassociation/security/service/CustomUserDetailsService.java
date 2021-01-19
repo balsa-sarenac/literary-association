@@ -43,6 +43,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         return user;
     }
 
+    public User getUserById(Long id){
+        return this.getUser(id);
+    }
+
     public ResponseEntity<Void> enable(Long userId) {
         User user = getUser(userId);
 

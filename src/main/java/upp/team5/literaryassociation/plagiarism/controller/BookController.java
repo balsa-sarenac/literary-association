@@ -32,4 +32,13 @@ public class BookController {
 
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
+
+    @PreAuthorize("hasAuthority('ROLE_AUTHOR')")
+    @GetMapping(name = "getOtherAuthorBooks", path="/get-others/{authorId}")
+    public ResponseEntity<HashSet<BookDTO>> getOtherAuthorBooks(@PathVariable String authorId) {
+
+        HashSet<BookDTO> books = bookService.getOtherAuthorBooks(authorId);
+
+        return new ResponseEntity<>(books, HttpStatus.OK);
+    }
 }
