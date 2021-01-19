@@ -163,6 +163,20 @@ public class PublishingRequestService {
         return publishingRequestRepository.findById(requestId).orElseThrow(NotFoundException::new);
     }
 
+    public HashSet<PublishingRequestDTO> getEditorRequestsReadBooks(Long editorId) {
+        User chiefEditor = userRepository.findById(editorId).orElseThrow(NotFoundException::new);
+        List<PublishingRequest> requests = new ArrayList<>(publishingRequestRepository.findByBookChiefEditorAndStatus(chiefEditor, "Original"));
+
+        ModelMapper modelMapper = new ModelMapper();
+        HashSet<PublishingRequestDTO> retRequests = new HashSet<>();
+
+        for(PublishingRequest req : requests){
+            PublishingRequestDTO request = modelMapper.map(req, PublishingRequestDTO.class);
+            retRequests.add(request);
+        }
+        return retRequests;
+    }
+
     private List<FileDTO> generateFileDTOList(List<FileDB> files) {
         ModelMapper modelMapper = new ModelMapper();
         List<FileDTO> newFiles = new LinkedList<>();
