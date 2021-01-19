@@ -10,6 +10,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import upp.team5.literaryassociation.common.dto.PlagiarismComplaintDTO;
 import upp.team5.literaryassociation.common.dto.ProcessDTO;
+import upp.team5.literaryassociation.model.PlagiarismComplaint;
+import upp.team5.literaryassociation.plagiarism.service.PlagiarismComplaintService;
 
 @CrossOrigin
 @RestController
@@ -19,7 +21,11 @@ public class PlagiarismController {
     @Autowired
     private RuntimeService runtimeService;
 
-    PlagiarismController(){}
+    private final PlagiarismComplaintService plagiarismComplaintService;
+
+    PlagiarismController(PlagiarismComplaintService plagiarismComplaintService){
+        this.plagiarismComplaintService = plagiarismComplaintService;
+    }
 
     @PreAuthorize("hasAuthority('ROLE_AUTHOR')")
     @GetMapping(name = "plagiarismStart", path="/start-plagiarism")
@@ -32,8 +38,8 @@ public class PlagiarismController {
     }
 
     @PreAuthorize("hasAuthority('ROLE_AUTHOR')")
-    @PostMapping(name = "fileComplaint", path="/file-a-complaint/{authorId}")
-    public ResponseEntity<> fileComplaint(@RequestBody PlagiarismComplaintDTO plagiarismComplaintDTO) {
-
+    @PostMapping(name = "fileComplaint", path="/file-a-complaint/{authorId}/{processId}")
+    public void fileComplaint(@RequestBody PlagiarismComplaintDTO plagiarismComplaintDTO, @PathVariable String authorId, @PathVariable String processId) {
+        plagiarismComplaintService.processComplaint(plagiarismComplaintDTO, Long.parseLong(authorId), processId);
     }
 }
