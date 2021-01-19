@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import upp.team5.literaryassociation.common.dto.BookDTO;
 import upp.team5.literaryassociation.common.dto.ProcessDTO;
@@ -23,6 +24,7 @@ public class BookController {
         this.bookService = bookService;
     }
 
+    @PreAuthorize("hasAuthority('ROLE_AUTHOR')")
     @GetMapping(name = "getAuthorBooks", path="/get/{authorId}")
     public ResponseEntity<HashSet<BookDTO>> getAuthorBooks(@PathVariable String authorId) {
 
