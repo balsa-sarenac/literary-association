@@ -39,7 +39,7 @@ public class User implements UserDetails, Serializable { //, org.camunda.bpm.eng
     private String password;
 
     @Column(nullable = true)
-    private String status="unknown";
+    private String status;
 
     @Column
     private int penaltyPoints;
