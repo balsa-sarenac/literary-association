@@ -12,21 +12,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import upp.team5.literaryassociation.common.dto.ChiefEditorResponse;
-import upp.team5.literaryassociation.common.dto.FileDTO;
-import upp.team5.literaryassociation.common.dto.PublishingRequestDTO;
-import upp.team5.literaryassociation.common.dto.UserDTO;
+import upp.team5.literaryassociation.common.dto.*;
 import upp.team5.literaryassociation.common.file.service.FileService;
-import upp.team5.literaryassociation.common.dto.NoteDTO;
-import upp.team5.literaryassociation.common.dto.PublishingRequestBetaDTO;
 import upp.team5.literaryassociation.common.service.AuthUserService;
-import upp.team5.literaryassociation.model.FileDB;
-import upp.team5.literaryassociation.model.Genre;
 import upp.team5.literaryassociation.common.service.NoteService;
-import upp.team5.literaryassociation.model.Note;
-import upp.team5.literaryassociation.model.NoteType;
-import upp.team5.literaryassociation.model.PublishingRequest;
-import upp.team5.literaryassociation.model.User;
+import upp.team5.literaryassociation.model.*;
 import upp.team5.literaryassociation.publishing.repository.PublishingRequestRepository;
 import upp.team5.literaryassociation.security.repository.UserRepository;
 
@@ -77,7 +67,7 @@ public class PublishingRequestService {
         log.info("Removing books user already read and commented");
         publishingRequests.removeIf(commentedRequests::contains);
 
-        List<PublishingRequestBetaDTO> publishingRequestBetaDTOS = new ArrayList<>();
+        List<PublishingRequestDTO> publishingRequestBetaDTOS = new ArrayList<>();
         log.info("Creating publishing book dtos");
         for (PublishingRequest pr : publishingRequests) {
             PublishingRequestDTO prDTO = modelMapper.map(pr, PublishingRequestDTO.class);
@@ -100,7 +90,6 @@ public class PublishingRequestService {
         User chiefEditor = userRepository.findById(editorId).orElseThrow(NotFoundException::new);
         List<PublishingRequest> requests = publishingRequestRepository.findByBookChiefEditorAndReviewed(chiefEditor, false).stream().collect(Collectors.toList());
 
-        ModelMapper modelMapper = new ModelMapper();
         HashSet<PublishingRequestDTO> retVal = new HashSet<>();
 
         for(PublishingRequest req : requests){
@@ -117,7 +106,6 @@ public class PublishingRequestService {
         List<PublishingRequest> allRequests = new ArrayList<>(publishingRequestRepository.findAll());
         List<PublishingRequest> requests = new ArrayList<>(publishingRequestRepository.findByBookChiefEditorAndStatus(chiefEditor, "BookUploaded"));
 
-        ModelMapper modelMapper = new ModelMapper();
         HashSet<PublishingRequestDTO> retRequests = new HashSet<>();
 
         for(PublishingRequest req : requests){
@@ -166,7 +154,6 @@ public class PublishingRequestService {
             exception.printStackTrace();
         }
 
-        ModelMapper modelMapper = new ModelMapper();
         PublishingRequestDTO dto = modelMapper.map(req, PublishingRequestDTO.class);
         dto.setPotentialPlagiarismList(files);
 
@@ -208,7 +195,7 @@ public class PublishingRequestService {
         requests.addAll(publishingRequestRepository.findByBookChiefEditorAndStatus(chiefEditor, "Approved"));
         requests.addAll(publishingRequestRepository.findByBookChiefEditorAndStatus(chiefEditor, "EditorReview"));
         requests.addAll(publishingRequestRepository.findByBookChiefEditorAndStatus(chiefEditor, "SentToBeta"));
-        ModelMapper modelMapper = new ModelMapper();
+
         HashSet<PublishingRequestDTO> retRequests = new HashSet<>();
 
         for(PublishingRequest req : requests){
@@ -219,7 +206,6 @@ public class PublishingRequestService {
     }
 
     private List<FileDTO> generateFileDTOList(List<FileDB> files) {
-        ModelMapper modelMapper = new ModelMapper();
         List<FileDTO> newFiles = new LinkedList<>();
         for(FileDB file : files){
             newFiles.add(modelMapper.map(file, FileDTO.class));
@@ -354,9 +340,8 @@ public class PublishingRequestService {
             var g = genres.iterator().next();
 
             var users = userRepository.findAllByBetaGenres(g);
-            ModelMapper mapper = new ModelMapper();
             for(User u : users){
-                UserDTO userDto = mapper.map(u, UserDTO.class);
+                UserDTO userDto = modelMapper.map(u, UserDTO.class);
                 ret.add(userDto);
             }
         }
@@ -365,9 +350,23 @@ public class PublishingRequestService {
         return ret;
     }
 
-    public PublishingRequestBetaDTO getBetaRequest(Long id) {
+    public PublishingRequestDTO getBetaRequest(Long id) {
         PublishingRequest publishingRequest = getPublishingRequest(id);
-        return modelMapper.map(publishingRequest, PublishingRequestBetaDTO.class);
+        PublishingRequestDTO publishingRequestDTO = modelMapper.map(publishingRequest, PublishingRequestDTO.class);
+        FileDB bookFile = fileService.getByBookId(publishingRequest.getBook().getId());
+        String fileDownloadUri = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path("/membership-requests/documents/")
+                .path(String.valueOf(bookFile.getId()))
+                .toUriString();
+
+        FileDTO fileDTO = new FileDTO(bookFile.getName(),
+                fileDownloadUri,
+                bookFile.getType(),
+                bookFile.getData().length);
+
+        publishingRequestDTO.getBook().setBookFile(fileDTO);
+        return publishingRequestDTO;
     }
 
     private PublishingRequest getPublishingRequest(Long id) {
