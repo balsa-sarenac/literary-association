@@ -8,20 +8,23 @@ import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import upp.team5.literaryassociation.common.dto.ChiefEditorResponse;
+import upp.team5.literaryassociation.common.dto.FileDTO;
 import upp.team5.literaryassociation.common.dto.PublishingRequestDTO;
+import upp.team5.literaryassociation.common.file.service.FileService;
 import upp.team5.literaryassociation.common.service.AuthUserService;
+import upp.team5.literaryassociation.model.FileDB;
 import upp.team5.literaryassociation.model.PublishingRequest;
 import upp.team5.literaryassociation.model.User;
 import upp.team5.literaryassociation.publishing.repository.PublishingRequestRepository;
 import upp.team5.literaryassociation.security.repository.UserRepository;
 
 import javax.ws.rs.NotFoundException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,6 +40,8 @@ public class PublishingRequestService {
     private RuntimeService runtimeService;
     @Autowired
     private IdentityService identityService;
+    @Autowired
+    private FileService fileService;
 
     private final AuthUserService authUserService;
 
@@ -77,6 +82,7 @@ public class PublishingRequestService {
     }
 
     public HashSet<PublishingRequestDTO> getEditorRequests(Long editorId) {
+        // dobavljanje novih zahteva
         User chiefEditor = userRepository.findById(editorId).orElseThrow(NotFoundException::new);
         List<PublishingRequest> requests = publishingRequestRepository.findByBookChiefEditorAndReviewed(chiefEditor, false).stream().collect(Collectors.toList());
 
@@ -92,8 +98,78 @@ public class PublishingRequestService {
 
     }
 
+    public HashSet<PublishingRequestDTO> getEditorRequestsPlagiarismCheck(Long editorId) {
+        User chiefEditor = userRepository.findById(editorId).orElseThrow(NotFoundException::new);
+        List<PublishingRequest> allRequests = new ArrayList<>(publishingRequestRepository.findAll());
+        List<PublishingRequest> requests = new ArrayList<>(publishingRequestRepository.findByBookChiefEditorAndStatus(chiefEditor, "BookUploaded"));
+
+        ModelMapper modelMapper = new ModelMapper();
+        HashSet<PublishingRequestDTO> retRequests = new HashSet<>();
+
+        for(PublishingRequest req : requests){
+            /*if(req.getBook() != null) {
+                PublishingRequestDTO request = modelMapper.map(req, PublishingRequestDTO.class);
+                retRequests.add(request);
+            }*/
+
+            PublishingRequestDTO request = modelMapper.map(req, PublishingRequestDTO.class);
+            request.setPotentialPlagiarismList(fileService.getAllDTOByPublishingRequest(req));
+            retRequests.add(request);
+        }
+        return retRequests;
+    }
+
+    public PublishingRequestDTO getPublishingRequestDTO(long requestId) {
+        var req = publishingRequestRepository.findById(requestId).orElseThrow(NotFoundException::new);
+
+        List<FileDB> sources = null;
+        try {
+            sources = this.fileService.findAllByPublishingRequest(req);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+        assert sources != null;
+        List<FileDTO> files = sources.stream().map(file -> {
+            String fileDownloadUri = ServletUriComponentsBuilder
+                    .fromCurrentContextPath()
+                    .path("/publish/documents/")
+                    .path(String.valueOf(file.getId()))
+                    .toUriString();
+
+            return new FileDTO(
+                    file.getName(),
+                    fileDownloadUri,
+                    file.getType(),
+                    file.getData().length);
+        }).collect(Collectors.toList());
+
+        ModelMapper modelMapper = new ModelMapper();
+        PublishingRequestDTO dto = modelMapper.map(req, PublishingRequestDTO.class);
+        dto.setPotentialPlagiarismList(files);
+
+        return dto;
+    }
+
+    public ResponseEntity<byte[]> getDocument(Long id) {
+        FileDB fileDB = this.fileService.findById(id);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDB.getName() + "\"")
+                .body(fileDB.getData());
+    }
+
     public PublishingRequest getPublishingRequest(long requestId) {
         return publishingRequestRepository.findById(requestId).orElseThrow(NotFoundException::new);
+    }
+
+    private List<FileDTO> generateFileDTOList(List<FileDB> files) {
+        ModelMapper modelMapper = new ModelMapper();
+        List<FileDTO> newFiles = new LinkedList<>();
+        for(FileDB file : files){
+            newFiles.add(modelMapper.map(file, FileDTO.class));
+        }
+        return newFiles;
     }
 
     public void reviewRequest(ChiefEditorResponse response) {
@@ -106,6 +182,8 @@ public class PublishingRequestService {
         else{
             publishingRequest.setStatus("Reading rejected");
         }
+
+        publishingRequest.setSynopsisAccepted(response.getResponse());
         publishingRequestRepository.save(publishingRequest);
 
         ProcessInstance pi = this.runtimeService.createProcessInstanceQuery()
@@ -118,10 +196,41 @@ public class PublishingRequestService {
         Task task = this.taskService.createTaskQuery().processInstanceId(pi.getId()).active().singleResult();
         taskService.claim(task.getId(), camundaUser.getId());
 
-        runtimeService.setVariable(pi.getProcessInstanceId(), "readApproved", response.getResponse());
+        var u = task.getAssignee();
 
-        log.info("Completing task");
-        taskService.complete(task.getId());
+        if(u.equals(camundaUser.getId())){
+            runtimeService.setVariable(pi.getProcessInstanceId(), "readApproved", response.getResponse());
+
+            log.info("Completing task");
+            taskService.complete(task.getId());
+        }
     }
 
+    public void originalBook(ChiefEditorResponse response) {
+        PublishingRequest publishingRequest = publishingRequestRepository.findById(response.getPublishingRequestId()).orElseThrow(NotFoundException::new);
+
+        ProcessInstance pi = this.runtimeService.createProcessInstanceQuery()
+                .processDefinitionKey("book-publishing")
+                .variableValueEquals("publishing-request-id", response.getPublishingRequestId())
+                .singleResult();
+
+        User loggedUser = authUserService.getLoggedInUser();
+        org.camunda.bpm.engine.identity.User camundaUser = identityService.createUserQuery().userId(String.valueOf(loggedUser.getId())).singleResult();
+        Task task = this.taskService.createTaskQuery().processInstanceId(pi.getId()).active().singleResult();
+
+        var u = task.getAssignee();
+
+        if(u.equals(camundaUser.getId())){
+            runtimeService.setVariable(pi.getProcessInstanceId(), "original", response.getResponse());
+            if(response.getResponse())
+                publishingRequest.setStatus("Original");
+            else
+                publishingRequest.setStatus("NotOriginal");
+
+            publishingRequestRepository.save(publishingRequest);
+
+            log.info("Completing task");
+            taskService.complete(task.getId());
+        }
+    }
 }

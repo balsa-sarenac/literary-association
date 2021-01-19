@@ -26,6 +26,15 @@ public class PublishingRequest implements Serializable {
     private boolean reviewed;
 
     @Column
+    private boolean synopsisAccepted;
+
+    @Column
+    private boolean originalChecked;
+
+    @Column
+    private boolean original;
+
+    @Column
     private String status="Review expected";
 
     @ManyToOne(fetch = FetchType.EAGER)

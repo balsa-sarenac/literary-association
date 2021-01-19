@@ -12,12 +12,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import upp.team5.literaryassociation.common.dto.ChiefEditorResponse;
+import upp.team5.literaryassociation.common.dto.FileDTO;
 import upp.team5.literaryassociation.common.dto.ProcessDTO;
 import upp.team5.literaryassociation.common.dto.PublishingRequestDTO;
+import upp.team5.literaryassociation.model.FileDB;
 import upp.team5.literaryassociation.model.PublishingRequest;
 import upp.team5.literaryassociation.publishing.service.PublishingRequestService;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 @CrossOrigin
@@ -69,9 +72,7 @@ public class PublishingController {
     @PreAuthorize("hasAuthority('ROLE_EDITOR')")
     @GetMapping(name = "getRequest", path="/get-request/{requestId}")
     public ResponseEntity<PublishingRequestDTO> getRequest(@PathVariable String requestId) throws JsonProcessingException {
-        ModelMapper modelMapper = new ModelMapper();
-        PublishingRequest publishingRequest = publishingRequestService.getPublishingRequest(Long.parseLong(requestId));
-        PublishingRequestDTO dto = modelMapper.map(publishingRequest, PublishingRequestDTO.class);
+        var dto = publishingRequestService.getPublishingRequestDTO(Long.parseLong(requestId));
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
@@ -79,6 +80,33 @@ public class PublishingController {
     @PostMapping(name = "read", path="/read")
     public void readBook(@RequestBody ChiefEditorResponse response){
         publishingRequestService.reviewRequest(response);
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_EDITOR')")
+    @GetMapping(name = "getRequestsPlagiarismCheck", path="/get-requests-plagiarism-check/{editorId}")
+    public ResponseEntity<HashSet<PublishingRequestDTO>> GetRequestsPlagiarismCheck(@PathVariable String editorId) throws JsonProcessingException {
+        HashSet<PublishingRequestDTO> retRequests = publishingRequestService.getEditorRequestsPlagiarismCheck(Long.parseLong(editorId));
+        return new ResponseEntity<>(retRequests, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_EDITOR')")
+    @PostMapping(name = "originalBook", path="/original-book")
+    public void originalBook(@RequestBody ChiefEditorResponse response){
+        publishingRequestService.originalBook(response);
+    }
+
+    @GetMapping(path = "/documents/{id}")
+    public ResponseEntity<byte[]> getDocument(@PathVariable Long id) {
+        return this.publishingRequestService.getDocument(id);
+    }
+
+    private List<FileDTO> generateFileDTOList(List<FileDB> files) {
+        ModelMapper modelMapper = new ModelMapper();
+        List<FileDTO> newFiles = new LinkedList<>();
+        for(FileDB file : files){
+            newFiles.add(modelMapper.map(file, FileDTO.class));
+        }
+        return newFiles;
     }
 
 }

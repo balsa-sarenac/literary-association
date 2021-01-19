@@ -78,6 +78,7 @@ public class ChooseEditorService implements JavaDelegate {
         bookService.saveBook(book);
 
         PublishingRequest req = new PublishingRequest();
+        req.setStatus("Created");
         req.setBook(book);
         publishingRequestService.savePublishingRequest(req);
 
@@ -87,7 +88,7 @@ public class ChooseEditorService implements JavaDelegate {
         bookService.saveBook(book);
 
         var books = currentUser.getAuthorBooks();
-        if(books != null) {
+        if(books == null) {
             books = new HashSet<>();
         }
         books.add(book);
@@ -102,7 +103,7 @@ public class ChooseEditorService implements JavaDelegate {
 
 
         delegateExecution.setVariable("publishing-request-id", req.getId());
-
+        delegateExecution.setVariable("editor", chief.getId().toString());
     }
 
     private int getRandomNumber(int min, int max) {
