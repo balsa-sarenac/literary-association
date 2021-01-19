@@ -101,6 +101,12 @@ public class PublishingController {
         publishingRequestService.acceptBook(response);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_EDITOR')")
+    @PostMapping(name = "sendToBeta", path="/sent-to-beta")
+    public void sendToBeta(@RequestBody ChiefEditorResponse response){
+        publishingRequestService.sendToBeta(response);
+    }
+
     @GetMapping(path = "/documents/{id}")
     public ResponseEntity<byte[]> getDocument(@PathVariable Long id) {
         return this.publishingRequestService.getDocument(id);
