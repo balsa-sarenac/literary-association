@@ -15,9 +15,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import upp.team5.literaryassociation.common.dto.ChiefEditorResponse;
 import upp.team5.literaryassociation.common.dto.FileDTO;
 import upp.team5.literaryassociation.common.dto.PublishingRequestDTO;
+import upp.team5.literaryassociation.common.dto.UserDTO;
 import upp.team5.literaryassociation.common.file.service.FileService;
 import upp.team5.literaryassociation.common.service.AuthUserService;
 import upp.team5.literaryassociation.model.FileDB;
+import upp.team5.literaryassociation.model.Genre;
 import upp.team5.literaryassociation.model.PublishingRequest;
 import upp.team5.literaryassociation.model.User;
 import upp.team5.literaryassociation.publishing.repository.PublishingRequestRepository;
@@ -144,9 +146,34 @@ public class PublishingRequestService {
                     file.getData().length);
         }).collect(Collectors.toList());
 
+        FileDB bookFile = null;
+
+        try {
+            bookFile = fileService.getByBookId(req.getBook().getId());
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
         ModelMapper modelMapper = new ModelMapper();
         PublishingRequestDTO dto = modelMapper.map(req, PublishingRequestDTO.class);
         dto.setPotentialPlagiarismList(files);
+
+        if(req.getStatus().equals("Original")) {
+            assert bookFile != null;
+            String fileDownloadUri = ServletUriComponentsBuilder
+                    .fromCurrentContextPath()
+                    .path("/publish/documents/")
+                    .path(String.valueOf(bookFile.getId()))
+                    .toUriString();
+
+            FileDTO bookFileDto = new FileDTO();
+            bookFileDto.setName(bookFile.getName());
+            bookFileDto.setUrl(fileDownloadUri);
+            bookFileDto.setType(bookFile.getType());
+            bookFileDto.setSize(bookFile.getData().length);
+
+            dto.getBook().setBookFile(bookFileDto);
+        }
 
         return dto;
     }
@@ -161,6 +188,22 @@ public class PublishingRequestService {
 
     public PublishingRequest getPublishingRequest(long requestId) {
         return publishingRequestRepository.findById(requestId).orElseThrow(NotFoundException::new);
+    }
+
+    public HashSet<PublishingRequestDTO> getEditorRequestsReadBooks(Long editorId) {
+        User chiefEditor = userRepository.findById(editorId).orElseThrow(NotFoundException::new);
+        List<PublishingRequest> requests = new ArrayList<>(publishingRequestRepository.findByBookChiefEditorAndStatus(chiefEditor, "Original"));
+        requests.addAll(publishingRequestRepository.findByBookChiefEditorAndStatus(chiefEditor, "Approved"));
+        requests.addAll(publishingRequestRepository.findByBookChiefEditorAndStatus(chiefEditor, "EditorReview"));
+        requests.addAll(publishingRequestRepository.findByBookChiefEditorAndStatus(chiefEditor, "SentToBeta"));
+        ModelMapper modelMapper = new ModelMapper();
+        HashSet<PublishingRequestDTO> retRequests = new HashSet<>();
+
+        for(PublishingRequest req : requests){
+            PublishingRequestDTO request = modelMapper.map(req, PublishingRequestDTO.class);
+            retRequests.add(request);
+        }
+        return retRequests;
     }
 
     private List<FileDTO> generateFileDTOList(List<FileDB> files) {
@@ -232,5 +275,81 @@ public class PublishingRequestService {
             log.info("Completing task");
             taskService.complete(task.getId());
         }
+    }
+
+    public void acceptBook(ChiefEditorResponse response) {
+        PublishingRequest publishingRequest = publishingRequestRepository.findById(response.getPublishingRequestId()).orElseThrow(NotFoundException::new);
+
+        ProcessInstance pi = this.runtimeService.createProcessInstanceQuery()
+                .processDefinitionKey("book-publishing")
+                .variableValueEquals("publishing-request-id", response.getPublishingRequestId())
+                .singleResult();
+
+        User loggedUser = authUserService.getLoggedInUser();
+        org.camunda.bpm.engine.identity.User camundaUser = identityService.createUserQuery().userId(String.valueOf(loggedUser.getId())).singleResult();
+        Task task = this.taskService.createTaskQuery().processInstanceId(pi.getId()).active().singleResult();
+
+        var u = task.getAssignee();
+
+        if(u.equals(camundaUser.getId())){
+            runtimeService.setVariable(pi.getProcessInstanceId(), "approved", response.getResponse());
+            if(response.getResponse())
+                publishingRequest.setStatus("Approved");
+            else
+                publishingRequest.setStatus("NotApproved");
+
+            publishingRequestRepository.save(publishingRequest);
+
+            log.info("Completing task");
+            taskService.complete(task.getId());
+        }
+    }
+
+    public void sendToBeta(ChiefEditorResponse response) {
+        PublishingRequest publishingRequest = publishingRequestRepository.findById(response.getPublishingRequestId()).orElseThrow(NotFoundException::new);
+
+        ProcessInstance pi = this.runtimeService.createProcessInstanceQuery()
+                .processDefinitionKey("book-publishing")
+                .variableValueEquals("publishing-request-id", response.getPublishingRequestId())
+                .singleResult();
+
+        User loggedUser = authUserService.getLoggedInUser();
+        org.camunda.bpm.engine.identity.User camundaUser = identityService.createUserQuery().userId(String.valueOf(loggedUser.getId())).singleResult();
+        Task task = this.taskService.createTaskQuery().processInstanceId(pi.getId()).active().singleResult();
+
+        var u = task.getAssignee();
+
+        if(u.equals(camundaUser.getId())){
+            runtimeService.setVariable(pi.getProcessInstanceId(), "beta", response.getResponse());
+            if(response.getResponse())
+                publishingRequest.setStatus("SentToBeta");
+            else
+                publishingRequest.setStatus("EditorReview");
+
+            publishingRequestRepository.save(publishingRequest);
+
+            log.info("Completing task");
+            taskService.complete(task.getId());
+        }
+    }
+
+    public List<UserDTO> getAllBetaReadersForRequest(String requestId) {
+        List<UserDTO> ret = new LinkedList<>();
+        var request = publishingRequestRepository.findById(Long.parseLong(requestId)).orElseThrow(NotFoundException::new);
+        var genres = request.getBook().getGenres();
+
+        if(!genres.isEmpty()){
+            var g = genres.iterator().next();
+
+            var users = userRepository.findAllByBetaGenres(g);
+            ModelMapper mapper = new ModelMapper();
+            for(User u : users){
+                UserDTO userDto = mapper.map(u, UserDTO.class);
+                ret.add(userDto);
+            }
+        }
+
+
+        return ret;
     }
 }

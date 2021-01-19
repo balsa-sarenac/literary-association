@@ -95,7 +95,7 @@ public class RegistrationService implements JavaDelegate {
             var isBeta = Boolean.parseBoolean(formSubmission.get("isBetaReader").toString());
             if(isBeta) {
                 rolesSet.add(roleRepository.findByName("ROLE_BETA_READER"));
-                SetGenres(additionalGenres, user);
+                SetBetaGenres(additionalGenres, user);
             }
             else
                 rolesSet.add(roleRepository.findByName("ROLE_READER"));
@@ -114,5 +114,16 @@ public class RegistrationService implements JavaDelegate {
                 myGenres.add(g);
         }
         user.setGenres(myGenres);
+    }
+
+    private void SetBetaGenres(HashMap<String, Object> formSubmission, User user) {
+        Set<Genre> myGenres = new HashSet<>();
+        var selected = (List<String>)formSubmission.get("genres");
+        for (String genre : selected) {
+            Genre g = genreService.getGenreByName(genre);
+            if(g!= null)
+                myGenres.add(g);
+        }
+        user.setBetaGenres(myGenres);
     }
 }

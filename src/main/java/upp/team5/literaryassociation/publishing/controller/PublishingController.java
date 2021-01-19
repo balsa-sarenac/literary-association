@@ -95,9 +95,28 @@ public class PublishingController {
         publishingRequestService.originalBook(response);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_EDITOR')")
+    @PostMapping(name = "acceptBook", path="/accept-book")
+    public void acceptBook(@RequestBody ChiefEditorResponse response){
+        publishingRequestService.acceptBook(response);
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_EDITOR')")
+    @PostMapping(name = "sendToBeta", path="/sent-to-beta")
+    public void sendToBeta(@RequestBody ChiefEditorResponse response){
+        publishingRequestService.sendToBeta(response);
+    }
+
     @GetMapping(path = "/documents/{id}")
     public ResponseEntity<byte[]> getDocument(@PathVariable Long id) {
         return this.publishingRequestService.getDocument(id);
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_EDITOR')")
+    @GetMapping(name = "getRequestsReadBooks", path="/get-requests-read-books/{editorId}")
+    public ResponseEntity<HashSet<PublishingRequestDTO>> GetRequestsReadBooks(@PathVariable String editorId) throws JsonProcessingException {
+        HashSet<PublishingRequestDTO> retRequests = publishingRequestService.getEditorRequestsReadBooks(Long.parseLong(editorId));
+        return new ResponseEntity<>(retRequests, HttpStatus.OK);
     }
 
     private List<FileDTO> generateFileDTOList(List<FileDB> files) {
