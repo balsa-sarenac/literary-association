@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.camunda.bpm.engine.task.Task;
@@ -38,13 +39,18 @@ public class AuthorRegistrationService implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
+<<<<<<< Updated upstream:src/main/java/upp/team5/literaryassociation/security/AuthorRegistrationService.java
         HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("author-register-data");
+=======
+        log.info("saving author");
+        HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data-basic-information");
+>>>>>>> Stashed changes:src/main/java/upp/team5/literaryassociation/register/service/AuthorRegistrationService.java
 
         boolean userExists;
         var u = userRepository.getUserByEmail(formSubmission.get("email").toString());
         if(u != null) {
             userExists = true;
-
+            throw new BpmnError("FakeRequest");
         }
         else{
             userExists = false;
