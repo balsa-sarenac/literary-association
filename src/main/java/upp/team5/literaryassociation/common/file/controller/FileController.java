@@ -18,7 +18,7 @@ public class FileController {
     @Autowired
     private FileService storageService;
 
-    @PreAuthorize("hasAuthority('ROLE_PENDING_AUTHOR')")
+    @PreAuthorize("hasAnyAuthority('ROLE_PENDING_AUTHOR', 'ROLE_AUTHOR')")
     @PostMapping(name="upload", path = "/upload/{processId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> upload(@RequestParam("file") MultipartFile[] files, @PathVariable String processId){
         log.info("Uploading files");

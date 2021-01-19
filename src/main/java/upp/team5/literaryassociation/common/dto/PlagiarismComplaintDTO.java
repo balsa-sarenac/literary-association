@@ -1,18 +1,15 @@
-
-package upp.team5.literaryassociation.publishing.dto;
+package upp.team5.literaryassociation.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.Serializable;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookDTO{
-    Long id;
-    String title;
+public class PlagiarismComplaintDTO {
+    private BookDTO plagiated;
+    private BookDTO plagiarism;
 }

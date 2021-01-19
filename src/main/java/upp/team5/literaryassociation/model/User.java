@@ -39,7 +39,10 @@ public class User implements UserDetails, Serializable { //, org.camunda.bpm.eng
     private String password;
 
     @Column(nullable = true)
-    private String status="unknown";
+    private String status;
+
+    @Column
+    private int penaltyPoints;
 
     @ManyToMany
     @JoinTable(name = "authors_books",
@@ -72,6 +75,12 @@ public class User implements UserDetails, Serializable { //, org.camunda.bpm.eng
     @OneToOne
     private MembershipRequest membershipRequest;
 
+    @OneToMany(
+        cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<PlagiarismComplaint> complaints = new ArrayList<>();
+
     @ManyToMany
     @JoinTable(name = "user_genre",
         joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -89,6 +98,12 @@ public class User implements UserDetails, Serializable { //, org.camunda.bpm.eng
 
     @OneToMany(mappedBy = "committeeMember")
     private Set<Vote> votes;
+
+    @ManyToMany
+    @JoinTable(name = "beta_reader_unpublished_books",
+            joinColumns = @JoinColumn(name = "beta_user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "publishing_request_id", referencedColumnName = "id"))
+    private Set<PublishingRequest> earlyAccessBooks;
 
     @Column
     private boolean enabled;

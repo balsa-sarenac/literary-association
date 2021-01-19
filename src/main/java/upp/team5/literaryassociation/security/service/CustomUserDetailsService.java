@@ -1,5 +1,6 @@
 package upp.team5.literaryassociation.security.service;
 
+import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import upp.team5.literaryassociation.exception.BadRequestException;
 import upp.team5.literaryassociation.exception.UserNotFoundException;
 import upp.team5.literaryassociation.model.Role;
 import upp.team5.literaryassociation.model.User;
-import upp.team5.literaryassociation.register.dto.RequestDTO;
+import upp.team5.literaryassociation.common.dto.RequestDTO;
 import upp.team5.literaryassociation.security.repository.RoleRepository;
 import upp.team5.literaryassociation.security.repository.UserRepository;
 
@@ -42,6 +43,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         return user;
     }
 
+    public User getUserById(Long id){
+        return this.getUser(id);
+    }
+
     public ResponseEntity<Void> enable(Long userId) {
         User user = getUser(userId);
 
@@ -64,7 +69,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    private User getUser(Long userId) {
+    public User getUser(Long userId) {
         return this.userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
     }
 

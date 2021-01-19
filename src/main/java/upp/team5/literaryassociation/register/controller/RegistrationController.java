@@ -1,36 +1,23 @@
 package upp.team5.literaryassociation.register.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.form.FormField;
-import org.camunda.bpm.engine.form.TaskFormData;
 import org.camunda.bpm.engine.runtime.MessageCorrelationResult;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upp.team5.literaryassociation.common.dto.ProcessDTO;
 import upp.team5.literaryassociation.exception.UserAlreadyExistsException;
-import upp.team5.literaryassociation.model.Role;
-import upp.team5.literaryassociation.model.User;
 import upp.team5.literaryassociation.register.repository.VerificationInformationRepository;
-import upp.team5.literaryassociation.form.dto.FormFieldsDTO;
-import upp.team5.literaryassociation.form.dto.FormSubmissionDTO;
-import upp.team5.literaryassociation.form.dto.FormSubmissionFieldDTO;
-import upp.team5.literaryassociation.register.dto.RegistrationDTO;
+import upp.team5.literaryassociation.common.dto.FormSubmissionFieldDTO;
+import upp.team5.literaryassociation.common.dto.RegistrationDTO;
 import upp.team5.literaryassociation.register.service.RegistrationService;
-import upp.team5.literaryassociation.security.repository.RoleRepository;
-import upp.team5.literaryassociation.security.repository.UserRepository;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.http.HttpClient;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
