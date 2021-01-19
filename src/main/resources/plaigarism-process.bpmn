@@ -134,7 +134,7 @@
       <bpmn:incoming>Flow_148m5qb</bpmn:incoming>
       <bpmn:outgoing>Flow_1t9056i</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Activity_0n9j36j" name="Process complaint " camunda:class="upp.team5.literaryassociation.plagiarism.service.PlagiarismService">
+    <bpmn:serviceTask id="Activity_0n9j36j" name="Process complaint " camunda:class="upp.team5.literaryassociation.plagiarism.service.ProcessPlagiarismComplaintService">
       <bpmn:incoming>Flow_0v1xio6</bpmn:incoming>
       <bpmn:outgoing>Flow_1x3n9w1</bpmn:outgoing>
     </bpmn:serviceTask>
