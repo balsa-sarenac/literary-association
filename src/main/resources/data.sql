@@ -1,9 +1,10 @@
-DELETE FROM act_id_user WHERE first_ != 'Demo';
--- DELETE FROM act_ru_variable;
--- DELETE FROM act_ru_job;
--- DELETE FROM act_ge_bytearray;
--- DELETE FROM act_re_deployment;
 
+
+DELETE FROM act_id_user WHERE first_ != 'Demo';
+DELETE FROM act_ru_variable;
+DELETE FROM act_ru_job;
+DELETE FROM act_ge_bytearray;
+DELETE FROM act_re_deployment;
 -- ROLES
 insert into role (id, name) values (1, 'ROLE_ADMIN');
 insert into role (id, name) values (2, 'ROLE_READER');
@@ -66,11 +67,13 @@ insert into user_table (first_name, last_name, city, country, email, password, e
  -- 9
 insert into user_table (first_name, last_name, city, country, email, password, enabled, penalty_points,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
+
 ('Milica', 'Milic', 'Novi Sad', 'Serbia', 'milica@a.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  true, 0, true, true, true, null);
 
--- insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values ('9','2', 'Milica', 'Milic', 'milica@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
---         'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
+insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values ('9','2', 'Milica', 'Milic', 'milica@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
+        'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
+
 
 insert into user_table (first_name, last_name, city, country, email, password, enabled, penalty_points,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
