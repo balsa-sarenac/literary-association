@@ -15,6 +15,6 @@ public interface FileDBRepository extends JpaRepository<FileDB, Long> {
 
     List<FileDB> findAllByPublishingRequest(PublishingRequest request);
 
-    FileDB findByBookId(Long bookID);
+    FileDB findByUploadedBookId(Long bookID);
 
 }

@@ -37,7 +37,7 @@ public class FileDB implements Serializable {
     private Book book;
 
     @Column
-    private Long bookId;
+    private Long uploadedBookId;
 
     public FileDB(String name, String type, byte[] data) {
         this.name = name;
