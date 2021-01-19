@@ -14,7 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import upp.team5.literaryassociation.security.CustomUserDetailsService;
+import upp.team5.literaryassociation.security.service.CustomUserDetailsService;
 import upp.team5.literaryassociation.security.auth.RestAuthenticationEntryPoint;
 import upp.team5.literaryassociation.security.token.TokenAuthenticationFilter;
 import upp.team5.literaryassociation.security.token.TokenUtils;
@@ -53,22 +53,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .csrf().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 
-                .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
+                .exceptionHandling().and() //.authenticationEntryPoint(restAuthenticationEntryPoint).and()
 
                 .authorizeRequests()
-//                .antMatchers("/").hasAnyAuthority("ADMIN", "...")
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers("/auth/**").permitAll()
-                .antMatchers("/reg/**").permitAll()
+                .antMatchers("/form/**").permitAll()
+
+                .antMatchers("/membership-requests/documents/**").permitAll()
+
+                .antMatchers("/publish/**").permitAll()
+
                 .antMatchers("/camunda/**").permitAll()
                 .antMatchers("/camunda*").permitAll()
                 .anyRequest().authenticated()
                 .and()
 
                 .cors().and()
-
                 .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, customUserDetailsService),
                         BasicAuthenticationFilter.class);
 
@@ -79,7 +83,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         // TokenAuthenticationFilter ce ignorisati sve ispod navedene putanje
         web.ignoring().antMatchers(HttpMethod.POST, "/auth/**");
-        web.ignoring().antMatchers(HttpMethod.POST, "/reg/**");
+        //web.ignoring().antMatchers(HttpMethod.POST, "/form/**");
+
+        web.ignoring().antMatchers(HttpMethod.GET, "/membership-requests/documents/**");
 
         web.ignoring().antMatchers(HttpMethod.GET, "/camunda-welcome");
         web.ignoring().antMatchers(HttpMethod.GET, "/camunda/**");

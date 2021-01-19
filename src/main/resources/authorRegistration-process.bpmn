@@ -40,8 +40,8 @@
         <bpmn:flowNodeRef>Event_1vimwpl</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_1vj4fv2</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_1b3a6a9</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Event_1doc4ob</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Event_03hipo6</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_0uwepfp</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_0rxzuij</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Lane_0bd0z93" name="Committee memebre">
         <bpmn:flowNodeRef>Activity_1x9vl8u</bpmn:flowNodeRef>
@@ -272,13 +272,13 @@
       <bpmn:incoming>Flow_0nh8hw1</bpmn:incoming>
       <bpmn:outgoing>Flow_1f5ytk5</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:boundaryEvent id="Event_1doc4ob" attachedToRef="data-basic-information">
-      <bpmn:outgoing>Flow_1id5aqb</bpmn:outgoing>
-      <bpmn:errorEventDefinition id="ErrorEventDefinition_1fknb95" errorRef="Error_0kgpvh1" />
+    <bpmn:sequenceFlow id="Flow_1e6tk9b" sourceRef="Event_0uwepfp" targetRef="Event_0rxzuij" />
+    <bpmn:boundaryEvent id="Event_0uwepfp" attachedToRef="data-basic-information">
+      <bpmn:outgoing>Flow_1e6tk9b</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_07j9mgq" errorRef="Error_04s35tb" />
     </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="Flow_1id5aqb" sourceRef="Event_1doc4ob" targetRef="Event_03hipo6" />
-    <bpmn:endEvent id="Event_03hipo6">
-      <bpmn:incoming>Flow_1id5aqb</bpmn:incoming>
+    <bpmn:endEvent id="Event_0rxzuij">
+      <bpmn:incoming>Flow_1e6tk9b</bpmn:incoming>
     </bpmn:endEvent>
   </bpmn:process>
   <bpmn:process id="payment_process" isExecutable="true">
@@ -299,7 +299,7 @@
   <bpmn:message id="Message_1s4xh1j" name="request" />
   <bpmn:message id="Message_1nnqioy" name="request" />
   <bpmn:message id="Message_12vn9rn" name="response" />
-  <bpmn:error id="Error_0kgpvh1" name="FakeRequest" errorCode="FakeRequest" />
+  <bpmn:error id="Error_04s35tb" name="FakeRequest" errorCode="FakeRequest" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0xk0dqy">
       <bpmndi:BPMNShape id="Participant_0jnuo8h_di" bpmnElement="Participant_0jnuo8h" isHorizontal="true">
@@ -428,9 +428,9 @@
         <di:waypoint x="1190" y="460" />
         <di:waypoint x="1100" y="460" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1id5aqb_di" bpmnElement="Flow_1id5aqb">
-        <di:waypoint x="560" y="208" />
-        <di:waypoint x="560" y="252" />
+      <bpmndi:BPMNEdge id="Flow_1e6tk9b_di" bpmnElement="Flow_1e6tk9b">
+        <di:waypoint x="550" y="208" />
+        <di:waypoint x="550" y="252" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Activity_1x9vl8u_di" bpmnElement="Activity_1x9vl8u">
         <dc:Bounds x="830" y="660" width="100" height="80" />
@@ -519,8 +519,8 @@
           <dc:Bounds x="1659" y="357.5" width="82" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_03hipo6_di" bpmnElement="Event_03hipo6">
-        <dc:Bounds x="542" y="252" width="36" height="36" />
+      <bpmndi:BPMNShape id="Event_0rxzuij_di" bpmnElement="Event_0rxzuij">
+        <dc:Bounds x="532" y="252" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_03htm8p_di" bpmnElement="Activity_16ar1h7" isExpanded="true">
         <dc:Bounds x="1740" y="560" width="350" height="200" />
@@ -554,8 +554,8 @@
       <bpmndi:BPMNShape id="Event_1ogdcb2_di" bpmnElement="Event_1ogdcb2">
         <dc:Bounds x="1042" y="402" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_11jcnfu_di" bpmnElement="Event_1doc4ob">
-        <dc:Bounds x="542" y="172" width="36" height="36" />
+      <bpmndi:BPMNShape id="Event_0axckyp_di" bpmnElement="Event_0uwepfp">
+        <dc:Bounds x="532" y="172" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Participant_1q942tv_di" bpmnElement="Participant_1q942tv" isHorizontal="true">
         <dc:Bounds x="2260" y="170" width="330" height="320" />

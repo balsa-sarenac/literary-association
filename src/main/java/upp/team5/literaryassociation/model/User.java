@@ -6,6 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -14,7 +15,7 @@ import java.util.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "user_table")
-public class User implements UserDetails { //, org.camunda.bpm.engine.identity.User {
+public class User implements UserDetails, Serializable { //, org.camunda.bpm.engine.identity.User {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,11 +32,78 @@ public class User implements UserDetails { //, org.camunda.bpm.engine.identity.U
     @Column(nullable = false)
     private String country;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String email;
 
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = true)
+    private String status;
+
+    @Column
+    private int penaltyPoints;
+
+    @ManyToMany
+    @JoinTable(name = "authors_books",
+            joinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id")
+    )
+    private Set<Book> authorBooks;
+
+    @ManyToMany
+    @JoinTable(name = "lector_books",
+            joinColumns = @JoinColumn(name = "lector_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id")
+    )
+    private Set<Book> lectorBooks;
+
+    @ManyToMany
+    @JoinTable(name = "editor_books",
+            joinColumns = @JoinColumn(name = "editor_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id")
+    )
+    private Set<Book> editorBooks;
+
+    @OneToMany(mappedBy = "chiefEditor", fetch = FetchType.LAZY)
+    private Set<Book> chiefEditorOfBooks;
+
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinTable(name = "author_membership_request",
+//        joinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"),
+//        inverseJoinColumns = @JoinColumn(name = "request_id", referencedColumnName = "id"))
+    @OneToOne
+    private MembershipRequest membershipRequest;
+
+    @OneToMany(
+        cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<PlagiarismComplaint> complaints = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "user_genre",
+        joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id"))
+    private Set<Genre> genres;
+
+    @ManyToMany
+    @JoinTable(name = "beta_reader_genres",
+        joinColumns = @JoinColumn(name = "beta_user_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id"))
+    private Set<Genre> betaGenres;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<Note> notes;
+
+    @OneToMany(mappedBy = "committeeMember")
+    private Set<Vote> votes;
+
+    @ManyToMany
+    @JoinTable(name = "beta_reader_unpublished_books",
+            joinColumns = @JoinColumn(name = "beta_user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "publishing_request_id", referencedColumnName = "id"))
+    private Set<PublishingRequest> earlyAccessBooks;
 
     @Column
     private boolean enabled;
