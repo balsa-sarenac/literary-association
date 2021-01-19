@@ -13,7 +13,8 @@ public class InitiatePlagiarismCheck implements JavaDelegate {
         delegateExecution.getProcessEngineServices()
                 .getRuntimeService()
                 .createMessageCorrelation("StartPlagiarismCheck")
-                .setVariable("correlationId", delegateExecution.getProcessInstance().getProcessBusinessKey())
+                .setVariable("correlationId", delegateExecution.getProcessInstanceId())
+                .setVariable("publishing-request-id", delegateExecution.getVariable("publishing-request-id"))
                 .correlateWithResult();
     }
 }

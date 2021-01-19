@@ -65,16 +65,16 @@ insert into user_table (first_name, last_name, city, country, email, password, e
 ('Milica', 'Milic', 'Novi Sad', 'Serbia', 'milica@a.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  true, true, true, true, null);
 
-insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values ('9','2', 'Milica', 'Milic', 'milica@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
-        'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
+-- insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values ('9','2', 'Milica', 'Milic', 'milica@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
+--         'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
 
 insert into user_table (first_name, last_name, city, country, email, password, enabled,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
 ('Ivan', 'Ivanovic', 'Novi Sad', 'Serbia', 'ivan@a.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  true, true, true, true, null);
 
-insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values ('10','3', 'Ivan', 'Ivanovic', 'ivan@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
-        'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
+-- insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values ('10','3', 'Ivan', 'Ivanovic', 'ivan@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
+--         'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
 
 insert into user_table (first_name, last_name, city, country, email, password, enabled,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
@@ -102,7 +102,7 @@ insert into user_table (first_name, last_name, city, country, email, password, e
 
 insert into user_table (first_name, last_name, city, country, email, password, enabled,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
-('Milan', 'Milanovic', 'Novi Sad', 'Serbia', 'milan@a.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
+('Milan', 'Milanovic', 'Novi Sad', 'Serbia', 't@a.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  true, true, true, true, null);
 
 insert into user_table (first_name, last_name, city, country, email, password, enabled,
@@ -121,9 +121,9 @@ insert into users_roles (user_id, role_id) values (4, 5);
 
 -- EDITORS
 insert into users_roles (user_id, role_id) values (5, 6);
-insert into users_roles (user_id, role_id) values (6, 6);
-insert into users_roles (user_id, role_id) values (7, 6);
-insert into users_roles (user_id, role_id) values (8, 6);
+-- insert into users_roles (user_id, role_id) values (6, 6);
+-- insert into users_roles (user_id, role_id) values (7, 6);
+-- insert into users_roles (user_id, role_id) values (8, 6);
 
 -- COMMITTEE MEMBERS
 insert into users_roles (user_id, role_id) values (9, 8);
@@ -157,9 +157,12 @@ insert into genre (id, name) values (10,'Thriller');
 
 --insert into users_roles (user_id, role_id) values (1, 7);
 
-insert into book(id, title, synopsis, chief_editor_id) values (1, 'book1', 'This is example synopsis', 1);
-insert into authors_books(author_id, book_id) values (14, 1);
+ insert into book(id, title, synopsis, chief_editor_id) values (1, 'book1', 'sin1', 5);
+insert into book(id, title, synopsis, chief_editor_id) values (2, 'book2', 'sin2', 5);
 
-insert into publishing_request(approved, book_id) values (false, 1);
-
-insert into beta_reader_unpublished_books(beta_user_id, publishing_request_id) values (3, 1);
+ insert into authors_books(author_id, book_id) values (14, 1);
+insert into authors_books(author_id, book_id) values (12, 2);
+--
+-- insert into publishing_request(approved, book_id) values (false, 1);
+--
+-- insert into beta_reader_unpublished_books(beta_user_id, publishing_request_id) values (3, 1);

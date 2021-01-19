@@ -1,7 +1,6 @@
 package upp.team5.literaryassociation.register.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
@@ -11,11 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.exception.UserAlreadyExistsException;
-import upp.team5.literaryassociation.form.dto.FormSubmissionFieldDTO;
 import upp.team5.literaryassociation.model.Genre;
 import upp.team5.literaryassociation.model.Role;
 import upp.team5.literaryassociation.model.User;
-import upp.team5.literaryassociation.register.dto.RegistrationDTO;
+import upp.team5.literaryassociation.common.dto.RegistrationDTO;
 import upp.team5.literaryassociation.security.repository.RoleRepository;
 import upp.team5.literaryassociation.security.repository.UserRepository;
 
@@ -97,7 +95,7 @@ public class RegistrationService implements JavaDelegate {
             var isBeta = Boolean.parseBoolean(formSubmission.get("isBetaReader").toString());
             if(isBeta) {
                 rolesSet.add(roleRepository.findByName("ROLE_BETA_READER"));
-                SetGenres(additionalGenres, user);
+                SetBetaGenres(additionalGenres, user);
             }
             else
                 rolesSet.add(roleRepository.findByName("ROLE_READER"));
@@ -116,5 +114,16 @@ public class RegistrationService implements JavaDelegate {
                 myGenres.add(g);
         }
         user.setGenres(myGenres);
+    }
+
+    private void SetBetaGenres(HashMap<String, Object> formSubmission, User user) {
+        Set<Genre> myGenres = new HashSet<>();
+        var selected = (List<String>)formSubmission.get("genres");
+        for (String genre : selected) {
+            Genre g = genreService.getGenreByName(genre);
+            if(g!= null)
+                myGenres.add(g);
+        }
+        user.setBetaGenres(myGenres);
     }
 }

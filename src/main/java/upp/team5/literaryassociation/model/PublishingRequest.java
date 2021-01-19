@@ -22,6 +22,21 @@ public class PublishingRequest implements Serializable {
     @Column
     private boolean approved;
 
+    @Column
+    private boolean reviewed;
+
+    @Column
+    private boolean synopsisAccepted;
+
+    @Column
+    private boolean originalChecked;
+
+    @Column
+    private boolean original;
+
+    @Column
+    private String status="Review expected";
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "book_id", referencedColumnName = "id")
     private Book book;
@@ -34,5 +49,7 @@ public class PublishingRequest implements Serializable {
 
     @OneToMany(mappedBy = "publishingRequest")
     private Set<FileDB> potentialPlagiarismSet;
+
+
 
 }

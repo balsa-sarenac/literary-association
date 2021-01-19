@@ -1,4 +1,4 @@
-package upp.team5.literaryassociation.security.dto;
+package upp.team5.literaryassociation.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserTypeDTO {
-    private String type;
+public class PlagiarismComplaintDTO {
+    private BookDTO plagiated;
+    private BookDTO plagiarism;
 }

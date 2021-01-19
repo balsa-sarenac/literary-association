@@ -7,12 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import upp.team5.literaryassociation.common.dto.ProcessDTO;
 import upp.team5.literaryassociation.form.service.GenericFormService;
-import upp.team5.literaryassociation.form.dto.FormFieldsDTO;
-import upp.team5.literaryassociation.form.dto.FormSubmissionDTO;
+import upp.team5.literaryassociation.common.dto.FormFieldsDTO;
+import upp.team5.literaryassociation.common.dto.FormSubmissionDTO;
 
 @CrossOrigin()
 @RestController
@@ -41,9 +40,14 @@ public class FormController {
         genericFormService.submitForm(processInstanceId, formSubmissionDTO);
     }
 
-    @GetMapping(name = "getForm", path="/get-process-id/{userId}")
+    @GetMapping(name = "getProcessId", path="/get-process-id/{userId}")
     public ResponseEntity<?> getProcessId(@PathVariable String userId){
         return new ResponseEntity<>(new ProcessDTO(genericFormService.getProcessId(userId)), HttpStatus.OK);
+    }
+
+    @GetMapping(name = "getPubProcessId", path="/get-pub-process-id/{publishingRequestId}")
+    public ResponseEntity<?> getPubProcessId(@PathVariable String publishingRequestId){
+        return new ResponseEntity<>(new ProcessDTO(genericFormService.getPubProcessId(publishingRequestId)), HttpStatus.OK);
     }
 }
 
