@@ -144,9 +144,34 @@ public class PublishingRequestService {
                     file.getData().length);
         }).collect(Collectors.toList());
 
+        FileDB bookFile = null;
+
+        try {
+            bookFile = fileService.getByBookId(req.getBook().getId());
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
         ModelMapper modelMapper = new ModelMapper();
         PublishingRequestDTO dto = modelMapper.map(req, PublishingRequestDTO.class);
         dto.setPotentialPlagiarismList(files);
+
+        if(req.getStatus().equals("Original")) {
+            assert bookFile != null;
+            String fileDownloadUri = ServletUriComponentsBuilder
+                    .fromCurrentContextPath()
+                    .path("/publish/documents/")
+                    .path(String.valueOf(bookFile.getId()))
+                    .toUriString();
+
+            FileDTO bookFileDto = new FileDTO();
+            bookFileDto.setName(bookFile.getName());
+            bookFileDto.setUrl(fileDownloadUri);
+            bookFileDto.setType(bookFile.getType());
+            bookFileDto.setSize(bookFile.getData().length);
+
+            dto.getBook().setBookFile(bookFileDto);
+        }
 
         return dto;
     }

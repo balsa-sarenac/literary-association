@@ -94,6 +94,7 @@ public class FileService {
                 //bookService.saveBook(book);
 
                 fileDB.setPublishingRequest(publishingRequest);
+                fileDB.setBookId(publishingRequest.getBook().getId());
             }
             toMap.add(fileDB);
         }
@@ -105,6 +106,11 @@ public class FileService {
         HashMap<String, Object> map = listToMap(toMap);
 
         formService.submitTaskForm(task.getId(), map );
+    }
+
+    @Transactional
+    public FileDB getByBookId(Long id){
+        return fileDBRepository.findByBookId(id);
     }
 
     private HashMap<String, Object> listToMap(HashSet<FileDB> files) {
