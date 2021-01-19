@@ -26,8 +26,8 @@ public class NotifyStatusLossDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
         log.info("Getting beta user");
-        Long betaUserId = (Long) delegateExecution.getVariable("betaReader");
-        User betaUser = this.userRepository.findById(betaUserId)
+        org.camunda.bpm.engine.identity.User betaUserCamunda = (org.camunda.bpm.engine.identity.User) delegateExecution.getVariable("betaReader");
+        User betaUser = this.userRepository.findById(Long.valueOf(betaUserCamunda.getId()))
                 .orElseThrow(() -> new NotFoundException("User with given id doesn't exist"));
 
         log.info("Sending mail to beta reader");
