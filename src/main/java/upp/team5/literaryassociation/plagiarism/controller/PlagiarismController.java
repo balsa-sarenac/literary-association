@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import upp.team5.literaryassociation.common.dto.PlagiarismComplaintDTO;
 import upp.team5.literaryassociation.common.dto.ProcessDTO;
+import upp.team5.literaryassociation.common.service.AuthUserService;
 import upp.team5.literaryassociation.model.PlagiarismComplaint;
 import upp.team5.literaryassociation.plagiarism.service.PlagiarismComplaintService;
 
@@ -21,6 +22,9 @@ public class PlagiarismController {
     @Autowired
     private RuntimeService runtimeService;
 
+    @Autowired
+    private AuthUserService authUserService;
+
     private final PlagiarismComplaintService plagiarismComplaintService;
 
     PlagiarismController(PlagiarismComplaintService plagiarismComplaintService){
@@ -31,6 +35,8 @@ public class PlagiarismController {
     @GetMapping(name = "plagiarismStart", path="/start-plagiarism")
     public ResponseEntity<ProcessDTO> startBookPublishingProcess() {
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("plagiarism-process");
+
+        runtimeService.setVariable(processInstance.getId(), "assignee", authUserService.getLoggedInUser().getId());
 
         ProcessDTO processDTO = new ProcessDTO(processInstance.getId());
 
