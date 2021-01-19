@@ -102,7 +102,7 @@ insert into user_table (first_name, last_name, city, country, email, password, e
 
 insert into user_table (first_name, last_name, city, country, email, password, enabled,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
-('Milan', 'Milanovic', 'Novi Sad', 'Serbia', 'milan@a.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
+('Milan', 'Milanovic', 'Novi Sad', 'Serbia', 'tanja.vukmirovic8@gmail.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  true, true, true, true, null);
 
 insert into user_table (first_name, last_name, city, country, email, password, enabled,
