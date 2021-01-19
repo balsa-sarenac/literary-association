@@ -1,5 +1,6 @@
 package upp.team5.literaryassociation.security.service;
 
+import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +65,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    private User getUser(Long userId) {
+    public User getUser(Long userId) {
         return this.userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
     }
 
