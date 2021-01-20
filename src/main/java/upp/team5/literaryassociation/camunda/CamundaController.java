@@ -26,8 +26,8 @@ public class CamundaController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping(path = "/processInstanceId/{publishingRequestId}")
-    public ResponseEntity<?> getProcessInstanceId(@PathVariable Long publishingRequestId) {
-        return new ResponseEntity<>(camundaService.getProcessInstanceId(publishingRequestId), HttpStatus.OK);
+    @GetMapping(path = "/processInstanceId/{requestType}/{publishingRequestId}")
+    public ResponseEntity<?> getProcessInstanceId(@PathVariable String requestType, @PathVariable Long publishingRequestId) {
+        return new ResponseEntity<>(camundaService.getProcessInstanceId(requestType, publishingRequestId), HttpStatus.OK);
     }
 }
