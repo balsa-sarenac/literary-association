@@ -1,23 +1,27 @@
-package upp.team5.literaryassociation.publishing.delegate;
+package upp.team5.literaryassociation.publishing.betaReader.delegate;
 
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import upp.team5.literaryassociation.model.Role;
 import upp.team5.literaryassociation.model.User;
+import upp.team5.literaryassociation.security.repository.RoleRepository;
 import upp.team5.literaryassociation.security.repository.UserRepository;
 
 import javax.ws.rs.NotFoundException;
 
 @Service @Slf4j
-public class GivePenaltyPointDelegate implements JavaDelegate {
+public class RemoveBetaStatusDelegate implements JavaDelegate {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
     @Autowired
-    public GivePenaltyPointDelegate(UserRepository userRepository) {
+    public RemoveBetaStatusDelegate(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -27,10 +31,13 @@ public class GivePenaltyPointDelegate implements JavaDelegate {
         User betaUser = this.userRepository.findById(Long.valueOf(betaUserCamunda.getId()))
                 .orElseThrow(() -> new NotFoundException("User with given id doesn't exist"));
 
-        betaUser.setPenaltyPoints(betaUser.getPenaltyPoints() + 1);
-        userRepository.save(betaUser);
+        Role betaRole = this.roleRepository.findByName("ROLE_BETA_READER");
+        Role readerRole = this.roleRepository.findByName("ROLE_READER");
 
-        log.info("Setting process variable");
-        delegateExecution.setVariable("penaltyPoints", betaUser.getPenaltyPoints());
+        betaUser.getRoles().remove(betaRole);
+        betaUser.getRoles().add(readerRole);
+
+        log.info("Saving user with reader role");
+        this.userRepository.save(betaUser);
     }
 }

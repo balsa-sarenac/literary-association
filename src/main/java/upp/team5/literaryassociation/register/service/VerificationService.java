@@ -3,9 +3,9 @@ package upp.team5.literaryassociation.register.service;
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
-import org.camunda.bpm.engine.identity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.security.repository.UserRepository;
@@ -33,12 +33,17 @@ public class VerificationService implements JavaDelegate {
         upp.team5.literaryassociation.model.User user = userRepository.getUserByEmail(formSubmission.get("email").toString());
         user.setEnabled(true);
 
-        user = userRepository.save(user);
-        this.createCamundaUser(user, "asdf");
+        try {
+            user = userRepository.save(user);
+            this.createCamundaUser(user, "asdf");
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            throw new BpmnError("FailedSavingToDB");
+        }
 
         delegateExecution.setProcessBusinessKey(user.getId().toString());
         delegateExecution.setVariable("userId", user.getId());
-        
+
         log.info("Account verified");
     }
 
@@ -54,6 +59,11 @@ public class VerificationService implements JavaDelegate {
         cUser.setFirstName(user.getFirstName());
         cUser.setLastName(user.getLastName());
         cUser.setPassword(password);
-        identityService.saveUser(cUser);
+        try {
+            identityService.saveUser(cUser);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            throw new BpmnError("FailedSavingToDB");
+        }
     }
 }

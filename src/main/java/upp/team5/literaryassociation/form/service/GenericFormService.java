@@ -71,7 +71,7 @@ public class GenericFormService {
     }
 
 
-    public String getProcessId(String userId) {
+    public String getProcessInstanceId(String userId) {
         Long membershipRequestId = membershipRequestService.getAuthorMembershipRequest(userId);
 
         ProcessInstance pi = this.runtimeService.createProcessInstanceQuery()
@@ -82,7 +82,7 @@ public class GenericFormService {
         return pi.getId();
     }
 
-    public String getPubProcessId(String publishingRequestId) {
+    public String getPubProcessInstanceId(String publishingRequestId) {
 
         ProcessInstance pi = this.runtimeService.createProcessInstanceQuery()
                 .processDefinitionKey("book-publishing")

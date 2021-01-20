@@ -42,12 +42,12 @@ public class FormController {
 
     @GetMapping(name = "getProcessId", path="/get-process-id/{userId}")
     public ResponseEntity<?> getProcessId(@PathVariable String userId){
-        return new ResponseEntity<>(new ProcessDTO(genericFormService.getProcessId(userId)), HttpStatus.OK);
+        return new ResponseEntity<>(new ProcessDTO(genericFormService.getProcessInstanceId(userId)), HttpStatus.OK);
     }
 
     @GetMapping(name = "getPubProcessId", path="/get-pub-process-id/{publishingRequestId}")
     public ResponseEntity<?> getPubProcessId(@PathVariable String publishingRequestId){
-        return new ResponseEntity<>(new ProcessDTO(genericFormService.getPubProcessId(publishingRequestId)), HttpStatus.OK);
+        return new ResponseEntity<>(new ProcessDTO(genericFormService.getPubProcessInstanceId(publishingRequestId)), HttpStatus.OK);
     }
 }
 

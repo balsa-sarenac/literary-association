@@ -2,6 +2,7 @@ package upp.team5.literaryassociation.authorRegistration.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.IdentityService;
+import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,13 +59,23 @@ public class MembershipRequestService {
         membershipRequest.setActive(true);
         membershipRequest.setVoteRound(0);
 
-        membershipRequest = membershipRequestRepository.save(membershipRequest);
+        try {
+            membershipRequest = membershipRequestRepository.save(membershipRequest);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            throw new BpmnError("FailedSavingToDB");
+        }
 
         dbUser.setMembershipRequest(membershipRequest);
 
         delegateExecution.setVariable("membershipRequestId", membershipRequest.getId());
 
-        this.userRepository.save(dbUser);
+        try {
+            this.userRepository.save(dbUser);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            throw new BpmnError("FailedSavingToDB");
+        }
     }
 
     public List<MembershipRequestDTO> getAllRequests() {

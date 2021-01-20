@@ -374,13 +374,4 @@ public class PublishingRequestService {
                 .orElseThrow(() -> new NotFoundException("Request with given id doesn't exist"));
     }
 
-    public void saveNotes(Long id, NoteDTO notes) {
-        User betaReader = this.authUserService.getLoggedInUser();
-        PublishingRequest publishingRequest = getPublishingRequest(id);
-        Note note = modelMapper.map(notes, Note.class);
-        note.setPublishingRequest(publishingRequest);
-        note.setUser(betaReader);
-
-        this.noteService.saveNote(note);
-    }
 }
