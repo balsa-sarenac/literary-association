@@ -30,4 +30,7 @@ public class Note implements Serializable {
       @JoinColumn(name = "user_id", referencedColumnName = "id")
       private User user;
 
+      @ManyToOne
+      @JoinColumn(name = "membership_request_id")
+      private MembershipRequest membershipRequest;
 }
