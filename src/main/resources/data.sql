@@ -174,9 +174,10 @@ insert into book(title, synopsis, chief_editor_id) values ('book2', 'sin2', 5);
  insert into authors_books(author_id, book_id) values (14, 1);
 insert into authors_books(author_id, book_id) values (12, 2);
 --
--- insert into publishing_request(approved, book_id) values (false, 1);
+insert into publishing_request(approved, book_id, original, original_checked, reviewed, status, synopsis_accepted) values
+(false, 1, true, true, true, 'SentToBeta', true);
 --
--- insert into beta_reader_unpublished_books(beta_user_id, publishing_request_id) values (3, 1);
+insert into beta_reader_unpublished_books(beta_user_id, publishing_request_id) values (3, 1);
 
 insert into beta_reader_genres(beta_user_id, genre_id) values (3, 1);
 insert into beta_reader_genres(beta_user_id, genre_id) values (3, 2);
