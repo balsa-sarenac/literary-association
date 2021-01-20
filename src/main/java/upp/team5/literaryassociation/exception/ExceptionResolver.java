@@ -59,7 +59,7 @@ public class ExceptionResolver {
         return new ResponseEntity<>("Bad credentials!", headers, HttpStatus.FORBIDDEN);
     }
 
-    @ExceptionHandler({BpmnError.class, ProcessEngineException.class})
+    @ExceptionHandler(BpmnError.class)
     public ResponseEntity<?> bpmnError(Exception exception) {
         log.info("Creating bpmn error response");
         HttpHeaders headers = new HttpHeaders();
