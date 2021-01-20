@@ -34,9 +34,4 @@ public class BetaReaderController {
         return new ResponseEntity<>(requestDTO, HttpStatus.OK);
     }
 
-    @PostMapping(path = "/requests/{id}/notes")
-    public ResponseEntity<?> sendNotes(@PathVariable Long id, @RequestBody NoteDTO notes) {
-        this.publishingRequestService.saveNotes(id, notes);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 }
