@@ -124,12 +124,6 @@
       <bpmn:incoming>Flow_0v1xio6</bpmn:incoming>
       <bpmn:outgoing>Flow_1t9056i</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:boundaryEvent id="Event_0qk4jiz" attachedToRef="Activity_0l0q5z8">
-      <bpmn:outgoing>Flow_08ex7kk</bpmn:outgoing>
-      <bpmn:timerEventDefinition id="TimerEventDefinition_0syh8je">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P14D</bpmn:timeDuration>
-      </bpmn:timerEventDefinition>
-    </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_08ex7kk" sourceRef="Event_0qk4jiz" targetRef="Gateway_1h42nns" />
     <bpmn:sequenceFlow id="Flow_1mh0u1f" sourceRef="Gateway_1h42nns" targetRef="Activity_0j5yjks" />
     <bpmn:sequenceFlow id="Flow_0fg31uu" sourceRef="Activity_0zqq2ef" targetRef="Gateway_1h42nns" />
@@ -162,10 +156,16 @@
       <bpmn:startEvent id="Event_0m16fhg">
         <bpmn:outgoing>Flow_0k7xf1x</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_0pe2m71">
-          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT15M</bpmn:timeDuration>
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P2M</bpmn:timeDuration>
         </bpmn:timerEventDefinition>
       </bpmn:startEvent>
     </bpmn:subProcess>
+    <bpmn:boundaryEvent id="Event_0qk4jiz" attachedToRef="Activity_0l0q5z8">
+      <bpmn:outgoing>Flow_08ex7kk</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_0syh8je">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P14D</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:boundaryEvent>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_10ofp7w">
@@ -243,9 +243,8 @@
         <di:waypoint x="890" y="420" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08ex7kk_di" bpmnElement="Flow_08ex7kk">
-        <di:waypoint x="1410" y="778" />
-        <di:waypoint x="1410" y="798" />
-        <di:waypoint x="1540" y="798" />
+        <di:waypoint x="1508" y="610" />
+        <di:waypoint x="1540" y="610" />
         <di:waypoint x="1540" y="360" />
         <di:waypoint x="915" y="360" />
       </bpmndi:BPMNEdge>
@@ -339,7 +338,7 @@
         <dc:Bounds x="1202" y="202" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1e9zkc9_di" bpmnElement="Event_0qk4jiz">
-        <dc:Bounds x="1392" y="742" width="36" height="36" />
+        <dc:Bounds x="1472" y="592" width="36" height="36" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
