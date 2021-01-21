@@ -50,28 +50,14 @@ public class ProcessInitialApproval implements JavaDelegate {
             HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data-read-manuscript");
             Boolean read = (Boolean)formSubmission.get("read");
 
-            User loggedUser = authUserService.getLoggedInUser();
-            org.camunda.bpm.engine.identity.User camundaUser = identityService.createUserQuery().userId(String.valueOf(loggedUser.getId())).singleResult();
-            Task task = this.taskService.createTaskQuery().processInstanceId(delegateExecution.getProcessInstanceId()).active().singleResult();
-            taskService.claim(task.getId(), camundaUser.getId());
+            publishingRequest.setReviewed(read);
+            if(read)
+                publishingRequest.setStatus("Book upload requested");
+            else
+                publishingRequest.setStatus("Reading rejected");
 
-            var u = task.getAssignee();
-
-            if(u.equals(camundaUser.getId())){
-                publishingRequest.setReviewed(read);
-
-                if(read)
-                    publishingRequest.setStatus("Book upload requested");
-                else
-                    publishingRequest.setStatus("Reading rejected");
-
-                publishingRequestService.savePublishingRequest(publishingRequest);
-
-                delegateExecution.setVariable("readApproved", read);
-
-                log.info("Completing task");
-                taskService.complete(task.getId());
-            }
+            publishingRequestService.savePublishingRequest(publishingRequest);
+            delegateExecution.setVariable("readApproved", read);
         }
     }
 }

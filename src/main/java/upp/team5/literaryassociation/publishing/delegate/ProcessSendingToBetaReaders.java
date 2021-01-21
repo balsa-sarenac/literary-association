@@ -45,27 +45,14 @@ public class ProcessSendingToBetaReaders implements JavaDelegate {
             HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data-choose-beta");
             Boolean sendToBeta = (Boolean)formSubmission.get("sendToBeta");
 
-            User loggedUser = authUserService.getLoggedInUser();
-            org.camunda.bpm.engine.identity.User camundaUser = identityService.createUserQuery().userId(String.valueOf(loggedUser.getId())).singleResult();
-            Task task = this.taskService.createTaskQuery().processInstanceId(delegateExecution.getProcessInstanceId()).active().singleResult();
-
-            var u = task.getAssignee();
-
-            if(u.equals(camundaUser.getId())) {
-                delegateExecution.setVariable("beta", sendToBeta);
-                if (sendToBeta) {
-                    publishingRequest.setStatus("Sent to beta readers");
-                }
-                else{
-                    publishingRequest.setStatus("Editor review");
-                }
-
-
-                publishingRequestService.savePublishingRequest(publishingRequest);
-
-                log.info("Completing task");
-                taskService.complete(task.getId());
+            delegateExecution.setVariable("beta", sendToBeta);
+            if (sendToBeta) {
+                publishingRequest.setStatus("Sent to beta readers");
             }
+            else{
+                publishingRequest.setStatus("Editor review");
+            }
+            publishingRequestService.savePublishingRequest(publishingRequest);
         }
     }
 }

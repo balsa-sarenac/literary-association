@@ -45,24 +45,13 @@ public class ProcessApproval implements JavaDelegate {
             HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data-approve-book");
             Boolean approve = (Boolean)formSubmission.get("approve");
 
-            User loggedUser = authUserService.getLoggedInUser();
-            org.camunda.bpm.engine.identity.User camundaUser = identityService.createUserQuery().userId(String.valueOf(loggedUser.getId())).singleResult();
-            Task task = this.taskService.createTaskQuery().processInstanceId(delegateExecution.getProcessInstanceId()).active().singleResult();
+            delegateExecution.setVariable("approved", approve);
+            if (approve)
+                publishingRequest.setStatus("Book is approved for publishing");
+            else
+                publishingRequest.setStatus("Book is not approved for publishing");
 
-            var u = task.getAssignee();
-
-            if(u.equals(camundaUser.getId())) {
-                delegateExecution.setVariable("approved", approve);
-                if (approve)
-                    publishingRequest.setStatus("Book is approved for publishing");
-                else
-                    publishingRequest.setStatus("Book is not approved for publishing");
-
-                publishingRequestService.savePublishingRequest(publishingRequest);
-
-                log.info("Completing task");
-                taskService.complete(task.getId());
-            }
+            publishingRequestService.savePublishingRequest(publishingRequest);
         }
     }
 }

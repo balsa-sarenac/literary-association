@@ -48,24 +48,13 @@ public class ProcessIfOriginal implements JavaDelegate {
             HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data-plagiarism");
             Boolean original = (Boolean)formSubmission.get("original");
 
-            User loggedUser = authUserService.getLoggedInUser();
-            org.camunda.bpm.engine.identity.User camundaUser = identityService.createUserQuery().userId(String.valueOf(loggedUser.getId())).singleResult();
-            Task task = this.taskService.createTaskQuery().processInstanceId(delegateExecution.getProcessInstanceId()).active().singleResult();
+            delegateExecution.setVariable("original", original);
+            if (original)
+                publishingRequest.setStatus("Book is original");
+            else
+                publishingRequest.setStatus("Book is not original");
 
-            var u = task.getAssignee();
-
-            if(u.equals(camundaUser.getId())) {
-                delegateExecution.setVariable("original", original);
-                if (original)
-                    publishingRequest.setStatus("Book is original");
-                else
-                    publishingRequest.setStatus("Book is not original");
-
-                publishingRequestService.savePublishingRequest(publishingRequest);
-
-                log.info("Completing task");
-                taskService.complete(task.getId());
-            }
+            publishingRequestService.savePublishingRequest(publishingRequest);
         }
     }
 }

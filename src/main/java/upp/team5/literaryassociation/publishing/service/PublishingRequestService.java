@@ -85,6 +85,20 @@ public class PublishingRequestService {
 
     }
 
+    public HashSet<PublishingRequestDTO> getAllEditorRequests(Long editorId) {
+        HashSet<PublishingRequestDTO> retVal = new HashSet<>();
+        User chiefEditor = userRepository.findById(editorId).orElseThrow(NotFoundException::new);
+
+        List<PublishingRequest> requests = new ArrayList<>(publishingRequestRepository.findByBookChiefEditor(chiefEditor));
+
+        for(PublishingRequest req : requests){
+            PublishingRequestDTO pubReq = modelMapper.map(req, PublishingRequestDTO.class);
+            retVal.add(pubReq);
+        }
+
+        return retVal;
+    }
+
     public HashSet<PublishingRequestDTO> getEditorRequests(Long editorId) {
         // dobavljanje novih zahteva
         User chiefEditor = userRepository.findById(editorId).orElseThrow(NotFoundException::new);
@@ -124,40 +138,43 @@ public class PublishingRequestService {
     public PublishingRequestDTO getPublishingRequestDTO(long requestId) {
         var req = publishingRequestRepository.findById(requestId).orElseThrow(NotFoundException::new);
 
-        List<FileDB> sources = null;
-        try {
-            sources = this.fileService.findAllByPublishingRequest(req);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-
-        assert sources != null;
-        List<FileDTO> files = sources.stream().map(file -> {
-            String fileDownloadUri = ServletUriComponentsBuilder
-                    .fromCurrentContextPath()
-                    .path("/publish/documents/")
-                    .path(String.valueOf(file.getId()))
-                    .toUriString();
-
-            return new FileDTO(
-                    file.getName(),
-                    fileDownloadUri,
-                    file.getType(),
-                    file.getData().length);
-        }).collect(Collectors.toList());
-
-        FileDB bookFile = null;
-
-        try {
-            bookFile = fileService.getByBookId(req.getBook().getId());
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-
         PublishingRequestDTO dto = modelMapper.map(req, PublishingRequestDTO.class);
-        dto.setPotentialPlagiarismList(files);
 
-        if(req.getStatus().equals("Original")) {
+        if(req.getStatus().equals("Book uploaded")) {
+            List<FileDB> sources = null;
+            try {
+                sources = this.fileService.findAllByPublishingRequest(req);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+
+            assert sources != null;
+            List<FileDTO> files = sources.stream().map(file -> {
+                String fileDownloadUri = ServletUriComponentsBuilder
+                        .fromCurrentContextPath()
+                        .path("/publish/documents/")
+                        .path(String.valueOf(file.getId()))
+                        .toUriString();
+
+                return new FileDTO(
+                        file.getName(),
+                        fileDownloadUri,
+                        file.getType(),
+                        file.getData().length);
+            }).collect(Collectors.toList());
+
+            dto.setPotentialPlagiarismList(files);
+        }
+
+        if(req.getStatus().equals("Book is original")) {
+            FileDB bookFile = null;
+
+            try {
+                bookFile = fileService.getByBookId(req.getBook().getId());
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+
             assert bookFile != null;
             String fileDownloadUri = ServletUriComponentsBuilder
                     .fromCurrentContextPath()
