@@ -26,16 +26,19 @@ public class RejectAuthorDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
         long membershipId = (long) delegateExecution.getVariable("membershipRequestId");
-        MembershipRequest membershipRequest = this.membershipRequestService.getMembershipRequest(membershipId);
-        User user = this.userRepository.findByMembershipRequest(membershipRequest);
+        MembershipRequest membershipRequest = membershipRequestService.getMembershipRequest(membershipId);
+        User user = userRepository.findByMembershipRequest(membershipRequest);
 
         membershipRequest.setActive(false);
-        this.membershipRequestService.save(membershipRequest);
+        membershipRequestService.save(membershipRequest);
+
+        user.setEnabled(false);
+        userRepository.save(user);
 
         String to = user.getEmail();
         String subject = "Refusal";
         String body = "Your request to join our site has been refused by committee members!";
 
-        this.emailService.Send(to, body, subject);
+        emailService.Send(to, body, subject);
     }
 }
