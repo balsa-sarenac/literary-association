@@ -67,6 +67,7 @@ public class AuthorRegistrationService implements JavaDelegate {
             user.setRoles(rolesSet);
 
             this.userRepository.save(user);
+            delegateExecution.setVariable("authorId", user.getId());
         }
         delegateExecution.setVariable("userExists", userExists);
     }

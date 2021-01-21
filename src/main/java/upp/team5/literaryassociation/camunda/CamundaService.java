@@ -13,12 +13,15 @@ public class CamundaService {
     @Autowired
     private RuntimeService runtimeService;
 
-    public ProcessDTO getProcessInstanceId(Long publishingRequestId) {
+    public ProcessDTO getProcessInstanceId(String requestType, Long publishingRequestId) {
         log.info("Getting proces instance if for publishing request" + publishingRequestId);
 
+        String type = requestType.equals("membershipRequestId") ? requestType : "publishing-request-id";
+        String definitionKey = requestType.equals("membershipRequestId") ? "author-reg" : "book-publishing";
+
         ProcessInstance processInstance = runtimeService.createProcessInstanceQuery()
-                .processDefinitionKey("book-publishing")
-                .variableValueEquals("publishing-request-id", publishingRequestId)
+                .processDefinitionKey(definitionKey)
+                .variableValueEquals(type, publishingRequestId)
                 .singleResult();
 
         ProcessDTO processDTO = new ProcessDTO();

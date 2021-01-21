@@ -7,6 +7,7 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+import upp.team5.literaryassociation.common.service.AuthUserService;
 import upp.team5.literaryassociation.model.FileDB;
 import upp.team5.literaryassociation.model.MembershipRequest;
 import upp.team5.literaryassociation.model.Role;
@@ -23,8 +24,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ProcessApplicationDelegate implements JavaDelegate {
 
-//    @Autowired
-//    private MembershipRequestService membershipRequestService;
+    @Autowired
+    private AuthUserService authUserService;
 
     @Autowired
     private UserRepository userRepository;
@@ -38,6 +39,9 @@ public class ProcessApplicationDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         log.info("Process Application started");
+        User author = authUserService.getUserById((Long) execution.getVariable("authorId"));
+        author.setStatus("reviewExpected");
+        userRepository.save(author);
 
 //        HashSet<FileDB> files = (HashSet<FileDB>)execution.getVariable("files");
 
