@@ -500,7 +500,7 @@
       <bpmn:incoming>Flow_1p48xxd</bpmn:incoming>
       <bpmn:outgoing>Flow_14mdkne</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_1m8ldtu" name="Process Response">
+    <bpmn:serviceTask id="Activity_1m8ldtu" name="Process Response" camunda:class="upp.team5.literaryassociation.publishing.delegate.ProcessInitialApproval">
       <bpmn:incoming>Flow_1wznd8b</bpmn:incoming>
       <bpmn:outgoing>Flow_0kbs9dz</bpmn:outgoing>
     </bpmn:serviceTask>
