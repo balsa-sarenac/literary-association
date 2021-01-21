@@ -60,6 +60,10 @@ public class AuthorRegistrationService implements JavaDelegate {
             user.setFirstName(formSubmission.get("firstName").toString());
             user.setLastName(formSubmission.get("lastName").toString());
             user.setPassword(passwordEncoder.encode(formSubmission.get("password").toString()));
+            user.setEnabled(true);
+            user.setAccountNonExpired(true);
+            user.setAccountNonLocked(true);
+            user.setCredentialsNonExpired(true);
 
             Set<Role> rolesSet = new HashSet<Role>();
             var role = roleRepository.findByName("ROLE_PENDING_AUTHOR");
