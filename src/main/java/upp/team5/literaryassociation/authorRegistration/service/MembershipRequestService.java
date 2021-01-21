@@ -59,21 +59,15 @@ public class MembershipRequestService {
 
         try {
             membershipRequest = membershipRequestRepository.save(membershipRequest);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            throw new BpmnError("FailedSavingToDB");
-        }
 
-        dbUser.setMembershipRequest(membershipRequest);
-
-        delegateExecution.setVariable("membershipRequestId", membershipRequest.getId());
-
-        try {
+            dbUser.setMembershipRequest(membershipRequest);
             this.userRepository.save(dbUser);
         } catch (Exception exception) {
             exception.printStackTrace();
             throw new BpmnError("FailedSavingToDB");
         }
+
+        delegateExecution.setVariable("membershipRequestId", membershipRequest.getId());
     }
 
     public List<MembershipRequestDTO> getAllRequests() {
@@ -174,10 +168,6 @@ public class MembershipRequestService {
     public Long getAuthorMembershipRequest(String userId) {
         User author = userRepository.findById(Long.parseLong(userId)).orElseThrow(()-> new UserNotFoundException());
         return membershipRequestRepository.findByAuthor(author).getId();
-    }
-
-    public void deleteMembershipRequest(MembershipRequest membershipRequest) {
-        membershipRequestRepository.delete(membershipRequest);
     }
 
     public void updateRequest(MembershipRequest membershipRequest) {

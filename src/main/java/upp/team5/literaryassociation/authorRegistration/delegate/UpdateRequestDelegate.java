@@ -32,7 +32,7 @@ public class UpdateRequestDelegate implements JavaDelegate {
         membershipRequest.setVoteRound(membershipRequest.getVoteRound() + 1);
         membershipRequestService.save(membershipRequest);
 
-        User user = authUserService.getUserById((Long) delegateExecution.getVariable("authorId"));
+        User user = authUserService.getUserById(Long.parseLong((String) delegateExecution.getVariable("authorId")));
         user.setStatus("reviewExpected");
         userRepository.save(user);
     }

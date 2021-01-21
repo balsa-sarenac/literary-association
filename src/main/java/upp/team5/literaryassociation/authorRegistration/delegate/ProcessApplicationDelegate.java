@@ -39,7 +39,7 @@ public class ProcessApplicationDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         log.info("Process Application started");
-        User author = authUserService.getUserById((Long) execution.getVariable("authorId"));
+        User author = authUserService.getUserById(Long.parseLong((String) execution.getVariable("authorId")));
         author.setStatus("reviewExpected");
         userRepository.save(author);
 
