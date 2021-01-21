@@ -71,6 +71,9 @@ public class VoteService implements JavaDelegate {
             delegateExecution.setVariable("decision", "approved");
         }
 
+        User author = userRepository.findByMembershipRequest(membershipRequest);
+        author.setStatus("moreDocuments");
+        userRepository.save(author);
     }
 
     public void saveVote(Vote vote) {
