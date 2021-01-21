@@ -29,9 +29,6 @@ public class ProcessInitialApproval implements JavaDelegate {
     private TaskService taskService;
 
     @Autowired
-    private RuntimeService runtimeService;
-
-    @Autowired
     private IdentityService identityService;
 
     private final AuthUserService authUserService;
@@ -70,7 +67,7 @@ public class ProcessInitialApproval implements JavaDelegate {
 
                 publishingRequestService.savePublishingRequest(publishingRequest);
 
-                runtimeService.setVariable(delegateExecution.getProcessInstanceId(), "readApproved", read);
+                delegateExecution.setVariable("readApproved", read);
 
                 log.info("Completing task");
                 taskService.complete(task.getId());

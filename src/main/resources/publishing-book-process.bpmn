@@ -438,6 +438,11 @@
       <bpmn:outgoing>Flow_12yxve1</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:userTask id="approve-book" name="Read book and approve publishing" camunda:assignee="${editor}">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="approve" label="Check if you want to approve publishing of this book" type="boolean" />
+        </camunda:formData>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0t4a7r9</bpmn:incoming>
       <bpmn:outgoing>Flow_1p48xxd</bpmn:outgoing>
     </bpmn:userTask>

@@ -2,11 +2,9 @@ package upp.team5.literaryassociation.publishing.delegate;
 
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,12 +13,11 @@ import upp.team5.literaryassociation.model.PublishingRequest;
 import upp.team5.literaryassociation.model.User;
 import upp.team5.literaryassociation.publishing.service.PublishingRequestService;
 
-import javax.ws.rs.NotFoundException;
 import java.util.HashMap;
 
 @Service
 @Slf4j
-public class ProcessIfOriginal implements JavaDelegate {
+public class ProcessApproval implements JavaDelegate {
     @Autowired
     private PublishingRequestService publishingRequestService;
 
@@ -33,7 +30,7 @@ public class ProcessIfOriginal implements JavaDelegate {
     private final AuthUserService authUserService;
 
     @Autowired
-    public ProcessIfOriginal(AuthUserService authUserService){
+    public ProcessApproval(AuthUserService authUserService){
         this.authUserService = authUserService;
     }
 
@@ -45,8 +42,8 @@ public class ProcessIfOriginal implements JavaDelegate {
         if(request.isPresent()){
             PublishingRequest publishingRequest = request.get();
 
-            HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data-plagiarism");
-            Boolean original = (Boolean)formSubmission.get("original");
+            HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data-approve-book");
+            Boolean approve = (Boolean)formSubmission.get("approve");
 
             User loggedUser = authUserService.getLoggedInUser();
             org.camunda.bpm.engine.identity.User camundaUser = identityService.createUserQuery().userId(String.valueOf(loggedUser.getId())).singleResult();
@@ -55,11 +52,11 @@ public class ProcessIfOriginal implements JavaDelegate {
             var u = task.getAssignee();
 
             if(u.equals(camundaUser.getId())) {
-                delegateExecution.setVariable("original", original);
-                if (original)
-                    publishingRequest.setStatus("Book is original");
+                delegateExecution.setVariable("approved", approve);
+                if (approve)
+                    publishingRequest.setStatus("Book is approved for publishing");
                 else
-                    publishingRequest.setStatus("Book is not original");
+                    publishingRequest.setStatus("Book is not approved for publishing");
 
                 publishingRequestService.savePublishingRequest(publishingRequest);
 
