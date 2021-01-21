@@ -13,15 +13,14 @@ import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.common.service.AuthUserService;
 import upp.team5.literaryassociation.model.PublishingRequest;
 import upp.team5.literaryassociation.model.User;
-import upp.team5.literaryassociation.publishing.service.BookService;
 import upp.team5.literaryassociation.publishing.service.PublishingRequestService;
-import upp.team5.literaryassociation.register.service.GenreService;
 
+import javax.ws.rs.NotFoundException;
 import java.util.HashMap;
 
 @Service
 @Slf4j
-public class ProcessInitialApproval implements JavaDelegate {
+public class ProcessIfOriginal implements JavaDelegate {
     @Autowired
     private PublishingRequestService publishingRequestService;
 
@@ -37,11 +36,9 @@ public class ProcessInitialApproval implements JavaDelegate {
     private final AuthUserService authUserService;
 
     @Autowired
-    public ProcessInitialApproval(AuthUserService authUserService){
+    public ProcessIfOriginal(AuthUserService authUserService){
         this.authUserService = authUserService;
     }
-
-
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
@@ -50,27 +47,24 @@ public class ProcessInitialApproval implements JavaDelegate {
 
         if(request.isPresent()){
             PublishingRequest publishingRequest = request.get();
-            HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data-read-manuscript");
-            Boolean read = (Boolean)formSubmission.get("read");
+
+            HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data-plagiarism");
+            Boolean original = (Boolean)formSubmission.get("original");
 
             User loggedUser = authUserService.getLoggedInUser();
             org.camunda.bpm.engine.identity.User camundaUser = identityService.createUserQuery().userId(String.valueOf(loggedUser.getId())).singleResult();
             Task task = this.taskService.createTaskQuery().processInstanceId(delegateExecution.getProcessInstanceId()).active().singleResult();
-            taskService.claim(task.getId(), camundaUser.getId());
 
             var u = task.getAssignee();
 
-            if(u.equals(camundaUser.getId())){
-                publishingRequest.setReviewed(read);
-
-                if(read)
-                    publishingRequest.setStatus("Book upload requested");
+            if(u.equals(camundaUser.getId())) {
+                delegateExecution.setVariable("original", original);
+                if (original)
+                    publishingRequest.setStatus("Book is original");
                 else
-                    publishingRequest.setStatus("Reading rejected");
+                    publishingRequest.setStatus("Book is not original");
 
                 publishingRequestService.savePublishingRequest(publishingRequest);
-
-                runtimeService.setVariable(delegateExecution.getProcessInstanceId(), "readApproved", read);
 
                 log.info("Completing task");
                 taskService.complete(task.getId());

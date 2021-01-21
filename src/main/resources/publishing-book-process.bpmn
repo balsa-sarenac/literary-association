@@ -473,7 +473,6 @@
               <camunda:constraint name="required" />
             </camunda:validation>
           </camunda:formField>
-          <camunda:formField id="FormField_0gsqfe5" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_14ha8gb</bpmn:incoming>
@@ -492,11 +491,11 @@
       </bpmn:extensionElements>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="Flow_0kbs9dz" sourceRef="Activity_1m8ldtu" targetRef="Gateway_0cwgwd2" />
-    <bpmn:serviceTask id="Activity_1eexs3k" name="Process response ">
+    <bpmn:serviceTask id="Activity_1eexs3k" name="Process response " camunda:class="upp.team5.literaryassociation.publishing.delegate.ProcessIfOriginal">
       <bpmn:incoming>Flow_16hfzl0</bpmn:incoming>
       <bpmn:outgoing>Flow_1ff2zi8</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0fxmg2g" name="Process response">
+    <bpmn:serviceTask id="Activity_0fxmg2g" name="Process response" camunda:class="upp.team5.literaryassociation.publishing.delegate.ProcessApproval">
       <bpmn:incoming>Flow_1p48xxd</bpmn:incoming>
       <bpmn:outgoing>Flow_14mdkne</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -504,7 +503,7 @@
       <bpmn:incoming>Flow_1wznd8b</bpmn:incoming>
       <bpmn:outgoing>Flow_0kbs9dz</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0021mfq" name="Process response">
+    <bpmn:serviceTask id="Activity_0021mfq" name="Process response" camunda:class="upp.team5.literaryassociation.publishing.delegate.ProcessSendingToBetaReaders">
       <bpmn:incoming>Flow_1hgqazi</bpmn:incoming>
       <bpmn:outgoing>Flow_1g0p6z4</bpmn:outgoing>
     </bpmn:serviceTask>
