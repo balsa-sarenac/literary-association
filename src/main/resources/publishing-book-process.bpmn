@@ -425,8 +425,16 @@
     <bpmn:userTask id="choose-beta" name="Choose whether to send to listed beta readers" camunda:assignee="${editor}">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="sendToBeta" label="Would you like to send the book to beta readers?" type="boolean" />
-          <camunda:formField id="betaReaders" label="Select beta readers who should read the book " type="multiselect" />
+          <camunda:formField id="sendToBeta" label="Would you like to send the book to beta readers?" type="boolean">
+            <camunda:properties>
+              <camunda:property id="controlField" value="true" />
+            </camunda:properties>
+          </camunda:formField>
+          <camunda:formField id="betaReaders" label="Select beta readers who should read the book " type="multiselect">
+            <camunda:properties>
+              <camunda:property id="controlledBy" value="sendToBeta" />
+            </camunda:properties>
+          </camunda:formField>
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1a315tu</bpmn:incoming>
