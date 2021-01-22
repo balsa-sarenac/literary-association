@@ -38,8 +38,6 @@
         <bpmn:flowNodeRef>Gateway_13hgp8x</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>approve-book</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_1qmhnug</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>explanation</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Event_1gfueir</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>plagiarism</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_1eexs3k</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0fxmg2g</bpmn:flowNodeRef>
@@ -47,6 +45,7 @@
         <bpmn:flowNodeRef>Activity_0021mfq</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_0xxkpe6</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_0cwgwd2</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_1gfueir</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Lane_1cy7hrj" name="Author">
         <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
@@ -114,14 +113,14 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${beta==true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1hgqazi" sourceRef="choose-beta" targetRef="Activity_0021mfq" />
-    <bpmn:sequenceFlow id="Flow_12yxve1" name="Refuse" sourceRef="Gateway_13hgp8x" targetRef="explanation">
+    <bpmn:sequenceFlow id="Flow_12yxve1" name="Refuse" sourceRef="Gateway_13hgp8x" targetRef="Event_1gfueir">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved!=true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1a315tu" name="Approve" sourceRef="Gateway_13hgp8x" targetRef="choose-beta">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved==true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1p48xxd" sourceRef="approve-book" targetRef="Activity_0fxmg2g" />
-    <bpmn:sequenceFlow id="Flow_1edn020" name="No" sourceRef="Gateway_1qmhnug" targetRef="explanation">
+    <bpmn:sequenceFlow id="Flow_1edn020" name="No" sourceRef="Gateway_1qmhnug" targetRef="Event_1gfueir">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${original!=true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0t4a7r9" name="Yes" sourceRef="Gateway_1qmhnug" targetRef="approve-book">
@@ -132,7 +131,7 @@
     <bpmn:sequenceFlow id="Flow_0jw3sm5" name="Approve" sourceRef="Gateway_0cwgwd2" targetRef="Activity_199i4ge">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${readApproved}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_1b24o4w" name="Refuse" sourceRef="Gateway_0cwgwd2" targetRef="explanation">
+    <bpmn:sequenceFlow id="Flow_1b24o4w" name="Refuse" sourceRef="Gateway_0cwgwd2" targetRef="Event_1gfueir">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!readApproved}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1fbpr1i" sourceRef="Activity_14orjt1" targetRef="read-manuscript" />
@@ -142,7 +141,6 @@
     <bpmn:sequenceFlow id="Flow_0f10ijm" sourceRef="fill-book-info" targetRef="Activity_0f7jq51" />
     <bpmn:sequenceFlow id="Flow_1m521c3" sourceRef="StartEvent_1" targetRef="fill-book-info" />
     <bpmn:sequenceFlow id="Flow_0qh27d7" sourceRef="Activity_067rz54" targetRef="Event_1lbvqfi" />
-    <bpmn:sequenceFlow id="Flow_0f5rkcw" sourceRef="explanation" targetRef="Event_1gfueir" />
     <bpmn:boundaryEvent id="Event_09d6sqy" attachedToRef="Activity_1fxlsdl">
       <bpmn:outgoing>Flow_1dy9why</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_1tj8d99">
@@ -193,6 +191,11 @@
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="read" label="Check if you want to read the manuscript" type="boolean" />
+          <camunda:formField id="explanation" label="Please write explanation:" type="string">
+            <camunda:properties>
+              <camunda:property id="controlledBy" value="read" />
+            </camunda:properties>
+          </camunda:formField>
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1fbpr1i</bpmn:incoming>
@@ -449,6 +452,11 @@
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="approve" label="Check if you want to approve publishing of this book" type="boolean" />
+          <camunda:formField id="explanation" label="Please write explanation:" type="string">
+            <camunda:properties>
+              <camunda:property id="controlledBy" value="approve" />
+            </camunda:properties>
+          </camunda:formField>
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0t4a7r9</bpmn:incoming>
@@ -459,25 +467,6 @@
       <bpmn:outgoing>Flow_0t4a7r9</bpmn:outgoing>
       <bpmn:outgoing>Flow_1edn020</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:userTask id="explanation" name="Write explanation for refusal" camunda:assignee="${editor}">
-      <bpmn:extensionElements>
-        <camunda:formData>
-          <camunda:formField id="explanation" label="Explanation" type="string">
-            <camunda:validation>
-              <camunda:constraint name="required" />
-            </camunda:validation>
-          </camunda:formField>
-        </camunda:formData>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1b24o4w</bpmn:incoming>
-      <bpmn:incoming>Flow_1edn020</bpmn:incoming>
-      <bpmn:incoming>Flow_12yxve1</bpmn:incoming>
-      <bpmn:outgoing>Flow_0f5rkcw</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:endEvent id="Event_1gfueir" name="Notify author of refusal">
-      <bpmn:incoming>Flow_0f5rkcw</bpmn:incoming>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_178y7tf" messageRef="Message_0qe03hu" camunda:class="upp.team5.literaryassociation.publishing.service.NotificationService" />
-    </bpmn:endEvent>
     <bpmn:userTask id="plagiarism" name="Decide if the manuscript is a plagiarism" camunda:assignee="${editor}">
       <bpmn:extensionElements>
         <camunda:formData>
@@ -485,6 +474,11 @@
             <camunda:validation>
               <camunda:constraint name="required" />
             </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="explanation" label="Please write explanation:" type="string">
+            <camunda:properties>
+              <camunda:property id="controlledBy" value="original" />
+            </camunda:properties>
           </camunda:formField>
         </camunda:formData>
       </bpmn:extensionElements>
@@ -518,6 +512,12 @@
       <bpmn:outgoing>Flow_1b24o4w</bpmn:outgoing>
       <bpmn:outgoing>Flow_0jw3sm5</bpmn:outgoing>
     </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="Event_1gfueir" name="Notify author of refusal">
+      <bpmn:incoming>Flow_1b24o4w</bpmn:incoming>
+      <bpmn:incoming>Flow_12yxve1</bpmn:incoming>
+      <bpmn:incoming>Flow_1edn020</bpmn:incoming>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_178y7tf" messageRef="Message_0qe03hu" camunda:class="upp.team5.literaryassociation.publishing.service.NotificationService" />
+    </bpmn:endEvent>
     <bpmn:textAnnotation id="TextAnnotation_1clwsk3">
       <bpmn:text>Run plagiator software on the book</bpmn:text>
     </bpmn:textAnnotation>
@@ -565,10 +565,6 @@
       <bpmndi:BPMNShape id="Lane_0qc140n_di" bpmnElement="Lane_0qc140n" isHorizontal="true">
         <dc:Bounds x="189" y="1140" width="4419" height="260" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_0f5rkcw_di" bpmnElement="Flow_0f5rkcw">
-        <di:waypoint x="1640" y="990" />
-        <di:waypoint x="1640" y="1042" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0qh27d7_di" bpmnElement="Flow_0qh27d7">
         <di:waypoint x="1380" y="587" />
         <di:waypoint x="1380" y="622" />
@@ -600,10 +596,10 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1b24o4w_di" bpmnElement="Flow_1b24o4w">
         <di:waypoint x="1000" y="845" />
-        <di:waypoint x="1000" y="950" />
-        <di:waypoint x="1590" y="950" />
+        <di:waypoint x="1000" y="940" />
+        <di:waypoint x="1622" y="940" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1011" y="923" width="36" height="14" />
+          <dc:Bounds x="1014" y="913" width="36" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0jw3sm5_di" bpmnElement="Flow_0jw3sm5">
@@ -630,9 +626,9 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1edn020_di" bpmnElement="Flow_1edn020">
         <di:waypoint x="1640" y="845" />
-        <di:waypoint x="1640" y="910" />
+        <di:waypoint x="1640" y="922" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1652" y="851" width="15" height="14" />
+          <dc:Bounds x="1642" y="886" width="15" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1p48xxd_di" bpmnElement="Flow_1p48xxd">
@@ -648,10 +644,10 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_12yxve1_di" bpmnElement="Flow_12yxve1">
         <di:waypoint x="2040" y="845" />
-        <di:waypoint x="2040" y="950" />
-        <di:waypoint x="1690" y="950" />
+        <di:waypoint x="2040" y="940" />
+        <di:waypoint x="1660" y="940" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1992" y="923" width="36" height="14" />
+          <dc:Bounds x="1989" y="913" width="36" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1hgqazi_di" bpmnElement="Flow_1hgqazi">
@@ -845,15 +841,6 @@
           <dc:Bounds x="1609" y="771" width="63" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1fcykih_di" bpmnElement="explanation">
-        <dc:Bounds x="1590" y="910" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0ttdvq6_di" bpmnElement="Event_1gfueir">
-        <dc:Bounds x="1622" y="1042" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1602" y="1086" width="76" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1qaqkbn_di" bpmnElement="plagiarism">
         <dc:Bounds x="1330" y="780" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -877,6 +864,12 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0cwgwd2_di" bpmnElement="Gateway_0cwgwd2" isMarkerVisible="true">
         <dc:Bounds x="975" y="795" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0ttdvq6_di" bpmnElement="Event_1gfueir">
+        <dc:Bounds x="1622" y="922" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1602" y="966" width="76" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_16d22ym_di" bpmnElement="Activity_16d22ym" isExpanded="true">
         <dc:Bounds x="450" y="1610" width="350" height="200" />
