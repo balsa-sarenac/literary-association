@@ -42,10 +42,4 @@ public class PlagiarismController {
 
         return new ResponseEntity<>(processDTO, HttpStatus.OK);
     }
-
-    @PreAuthorize("hasAuthority('ROLE_AUTHOR')")
-    @PostMapping(name = "fileComplaint", path="/file-a-complaint/{authorId}/{processId}")
-    public void fileComplaint(@RequestBody PlagiarismComplaintDTO plagiarismComplaintDTO, @PathVariable String authorId, @PathVariable String processId) {
-        plagiarismComplaintService.processComplaint(plagiarismComplaintDTO, Long.parseLong(authorId), processId);
-    }
 }
