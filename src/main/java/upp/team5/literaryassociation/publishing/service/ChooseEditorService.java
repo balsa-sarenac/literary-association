@@ -78,7 +78,7 @@ public class ChooseEditorService implements JavaDelegate {
         bookService.saveBook(book);
 
         PublishingRequest req = new PublishingRequest();
-        req.setStatus("Created");
+        req.setStatus("New request");
         req.setBook(book);
         publishingRequestService.savePublishingRequest(req);
 
