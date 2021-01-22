@@ -1,4 +1,4 @@
-package upp.team5.literaryassociation.camunda;
+package upp.team5.literaryassociation.camunda.type;
 
 import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.impl.form.type.SimpleFormFieldType;
