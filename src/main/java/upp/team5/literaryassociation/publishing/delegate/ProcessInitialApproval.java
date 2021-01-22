@@ -53,8 +53,10 @@ public class ProcessInitialApproval implements JavaDelegate {
             publishingRequest.setReviewed(read);
             if(read)
                 publishingRequest.setStatus("Book upload requested");
-            else
+            else {
                 publishingRequest.setStatus("Reading rejected");
+                delegateExecution.setVariable("explanation", formSubmission.get("explanation").toString());
+            }
 
             publishingRequestService.savePublishingRequest(publishingRequest);
             delegateExecution.setVariable("readApproved", read);

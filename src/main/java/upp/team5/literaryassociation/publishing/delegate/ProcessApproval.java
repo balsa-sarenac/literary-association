@@ -48,8 +48,10 @@ public class ProcessApproval implements JavaDelegate {
             delegateExecution.setVariable("approved", approve);
             if (approve)
                 publishingRequest.setStatus("Book is approved for publishing");
-            else
+            else {
                 publishingRequest.setStatus("Book is not approved for publishing");
+                delegateExecution.setVariable("explanation", formSubmission.get("explanation").toString());
+            }
 
             publishingRequestService.savePublishingRequest(publishingRequest);
         }

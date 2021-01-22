@@ -51,8 +51,10 @@ public class ProcessIfOriginal implements JavaDelegate {
             delegateExecution.setVariable("original", original);
             if (original)
                 publishingRequest.setStatus("Book is original");
-            else
+            else {
                 publishingRequest.setStatus("Book is not original");
+                delegateExecution.setVariable("explanation", formSubmission.get("explanation").toString());
+            }
 
             publishingRequestService.savePublishingRequest(publishingRequest);
         }
