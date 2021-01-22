@@ -52,9 +52,6 @@ public class FileService {
     @Autowired
     private PublishingRequestService publishingRequestService;
 
-    @Autowired
-    private BookService bookService;
-
     public void store(MultipartFile[] files, String processId) throws IOException {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username;

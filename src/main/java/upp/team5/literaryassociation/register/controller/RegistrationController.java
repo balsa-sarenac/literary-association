@@ -83,22 +83,5 @@ public class RegistrationController {
             }
         }
     }
-
-    private HashMap<String, Object> listToMap(List<FormSubmissionFieldDTO> formSubmissionDTOS) {
-        HashMap<String, Object> map = new HashMap<>();
-        for (FormSubmissionFieldDTO fs : formSubmissionDTOS) {
-            map.put(fs.getId(), fs.getValue());
-        }
-        return map;
-    }
-    public void createCamundaUser(upp.team5.literaryassociation.model.User user, String password) {
-        org.camunda.bpm.engine.identity.User cUser = identityService.newUser(user.getId().toString());
-        cUser.setEmail(user.getEmail());
-        cUser.setFirstName(user.getFirstName());
-        cUser.setLastName(user.getLastName());
-        cUser.setPassword(password);
-        identityService.saveUser(cUser);
-    }
-
 }
 

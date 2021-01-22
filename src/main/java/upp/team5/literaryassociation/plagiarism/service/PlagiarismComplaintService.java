@@ -21,12 +21,6 @@ import javax.ws.rs.NotFoundException;
 @Slf4j
 public class PlagiarismComplaintService {
     @Autowired
-    private CustomUserDetailsService userService;
-
-    @Autowired
-    private BookService bookService;
-
-    @Autowired
     private PlagiarismComplaintRepository plagiarismComplaintRepository;
 
 

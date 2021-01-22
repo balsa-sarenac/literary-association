@@ -24,19 +24,6 @@ public class ProcessIfOriginal implements JavaDelegate {
     @Autowired
     private PublishingRequestService publishingRequestService;
 
-    @Autowired
-    private TaskService taskService;
-
-    @Autowired
-    private IdentityService identityService;
-
-    private final AuthUserService authUserService;
-
-    @Autowired
-    public ProcessIfOriginal(AuthUserService authUserService){
-        this.authUserService = authUserService;
-    }
-
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
         var requestId = delegateExecution.getVariable("publishing-request-id");

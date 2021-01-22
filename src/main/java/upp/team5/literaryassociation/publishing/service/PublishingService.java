@@ -22,11 +22,4 @@ public class PublishingService {
         this.userRepository = userRepository;
     }
 
-    public List<PublishingRequest> getRequests(Long authorId) {
-        User author = userRepository.findById(authorId).orElseThrow(NotFoundException::new);
-        List<PublishingRequest> requests = publishingRequestRepository.findByBookAuthors(author).stream().collect(Collectors.toList());
-        log.info(requests.toString());
-        return requests;
-
-    }
 }

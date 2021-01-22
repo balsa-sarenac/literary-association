@@ -48,6 +48,6 @@ public class MembershipRequestController {
     @GetMapping(path = "/author-request/{id}")
     public ResponseEntity<?> getAuthorMembershipRequest(@PathVariable String id) {
         MembershipRequest membershipRequest = this.membershipRequestService.getAuthorRequest(Long.parseLong(id));
-        return  new ResponseEntity<Long>(membershipRequest.getId(), HttpStatus.OK);
+        return  new ResponseEntity<>(membershipRequest.getId(), HttpStatus.OK);
     }
 }
