@@ -84,7 +84,7 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${edits!=true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1lsyuqx" sourceRef="Activity_0btn9qx" targetRef="Gateway_116dpgd" />
-    <bpmn:sequenceFlow id="Flow_0ke993q" sourceRef="Gateway_116dpgd" targetRef="Activity_0783vvp" />
+    <bpmn:sequenceFlow id="Flow_0ke993q" sourceRef="Gateway_116dpgd" targetRef="change-book" />
     <bpmn:sequenceFlow id="Flow_1bipx7l" sourceRef="Activity_12a0zqe" targetRef="Activity_0ipt0pv" />
     <bpmn:sequenceFlow id="Flow_16zozk9" name="No" sourceRef="Gateway_1djy8sd" targetRef="Activity_12a0zqe">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${suggestions!=true}</bpmn:conditionExpression>
@@ -242,7 +242,7 @@
       <bpmn:incoming>Flow_16zozk9</bpmn:incoming>
       <bpmn:outgoing>Flow_1bipx7l</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:userTask id="Activity_0783vvp" name="Change the book based on comments" camunda:assignee="${ starter }">
+    <bpmn:userTask id="change-book" name="Change the book based on comments" camunda:assignee="${ starter }">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="change" label="Do you want to upload changed book?" type="boolean" />
@@ -494,7 +494,7 @@
       <bpmn:incoming>Flow_1edn020</bpmn:incoming>
       <bpmn:messageEventDefinition id="MessageEventDefinition_178y7tf" messageRef="Message_0qe03hu" camunda:class="upp.team5.literaryassociation.publishing.service.NotificationService" />
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_1083hgi" sourceRef="Activity_0783vvp" targetRef="Gateway_02ot29z" />
+    <bpmn:sequenceFlow id="Flow_1083hgi" sourceRef="change-book" targetRef="Gateway_02ot29z" />
     <bpmn:userTask id="more-suggestions" name="Any more suggestions?">
       <bpmn:extensionElements>
         <camunda:formData>
@@ -914,7 +914,7 @@
       <bpmndi:BPMNShape id="Activity_0v1fx0v_di" bpmnElement="Activity_12a0zqe">
         <dc:Bounds x="3210" y="960" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0dyuba2_di" bpmnElement="Activity_0783vvp">
+      <bpmndi:BPMNShape id="Activity_0dyuba2_di" bpmnElement="change-book">
         <dc:Bounds x="2890" y="490" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_116dpgd_di" bpmnElement="Gateway_116dpgd" isMarkerVisible="true">
