@@ -21,49 +21,15 @@ import javax.ws.rs.NotFoundException;
 @Slf4j
 public class PlagiarismComplaintService {
     @Autowired
-    private CustomUserDetailsService userService;
-
-    @Autowired
-    private BookService bookService;
-
-    @Autowired
     private PlagiarismComplaintRepository plagiarismComplaintRepository;
 
-    @Autowired
-    private RuntimeService runtimeService;
-
-    @Autowired
-    private TaskService taskService;
-
-    public void processComplaint(PlagiarismComplaintDTO plagiarismComplaintDTO, Long authorId, String processId) {
-        User complainant = userService.getUserById(authorId);
-        Book complainantBook = bookService.getBook(plagiarismComplaintDTO.getPlagiated().getId());
-        Book plagiarismBook = bookService.getBook(plagiarismComplaintDTO.getPlagiarism().getId());
-
-        PlagiarismComplaint plagiarismComplaint = new PlagiarismComplaint();
-        plagiarismComplaint.setComplainant(complainant);
-        plagiarismComplaint.setComplainantBook(complainantBook);
-        plagiarismComplaint.setPlagiarism(plagiarismBook);
-        plagiarismComplaint = plagiarismComplaintRepository.save(plagiarismComplaint);
-
-        complainant.getComplaints().add(plagiarismComplaint);
-        userService.saveUser(complainant);
-
-        complainantBook.getBeingPlagiated().add(plagiarismComplaint);
-        bookService.saveBook(complainantBook);
-
-        plagiarismBook.getAccusedOfPlagiarism().add(plagiarismComplaint);
-        bookService.saveBook(plagiarismBook);
-
-        runtimeService.setVariable(processId, "plagiarism-complaint-id", plagiarismComplaint.getId());
-
-        Task task = taskService.createTaskQuery().processInstanceId(processId).singleResult();
-        taskService.complete(task.getId());
-
-    }
 
     public PlagiarismComplaint getPlagiarismComplaint(Long id){
         return plagiarismComplaintRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Plagiarism complaint with given id doesn't exist"));
+    }
+
+    public PlagiarismComplaint save(PlagiarismComplaint plagiarismComplaint) {
+        return plagiarismComplaintRepository.save(plagiarismComplaint);
     }
 }

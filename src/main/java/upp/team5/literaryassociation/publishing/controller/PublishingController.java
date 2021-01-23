@@ -65,7 +65,7 @@ public class PublishingController {
     @PreAuthorize("hasAuthority('ROLE_EDITOR')")
     @GetMapping(name = "getChiefEditorRequests", path="/chiefEditor-requests/{editorId}")
     public ResponseEntity<HashSet<PublishingRequestDTO>> getChiefEditorRequests(@PathVariable String editorId) throws JsonProcessingException {
-        HashSet<PublishingRequestDTO> retVal = publishingRequestService.getEditorRequests(Long.parseLong(editorId));
+        HashSet<PublishingRequestDTO> retVal = publishingRequestService.getAllEditorRequests(Long.parseLong(editorId));
         return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 
@@ -76,56 +76,9 @@ public class PublishingController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_EDITOR')")
-    @PostMapping(name = "read", path="/read")
-    public void readBook(@RequestBody ChiefEditorResponse response){
-        publishingRequestService.reviewRequest(response);
-    }
-
-    @PreAuthorize("hasAuthority('ROLE_EDITOR')")
-    @GetMapping(name = "getRequestsPlagiarismCheck", path="/get-requests-plagiarism-check/{editorId}")
-    public ResponseEntity<HashSet<PublishingRequestDTO>> GetRequestsPlagiarismCheck(@PathVariable String editorId) throws JsonProcessingException {
-        HashSet<PublishingRequestDTO> retRequests = publishingRequestService.getEditorRequestsPlagiarismCheck(Long.parseLong(editorId));
-        return new ResponseEntity<>(retRequests, HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasAuthority('ROLE_EDITOR')")
-    @PostMapping(name = "originalBook", path="/original-book")
-    public void originalBook(@RequestBody ChiefEditorResponse response){
-        publishingRequestService.originalBook(response);
-    }
-
-    @PreAuthorize("hasAuthority('ROLE_EDITOR')")
-    @PostMapping(name = "acceptBook", path="/accept-book")
-    public void acceptBook(@RequestBody ChiefEditorResponse response){
-        publishingRequestService.acceptBook(response);
-    }
-
-    @PreAuthorize("hasAuthority('ROLE_EDITOR')")
-    @PostMapping(name = "sendToBeta", path="/sent-to-beta")
-    public void sendToBeta(@RequestBody ChiefEditorResponse response){
-        publishingRequestService.sendToBeta(response);
-    }
-
     @GetMapping(path = "/documents/{id}")
     public ResponseEntity<byte[]> getDocument(@PathVariable Long id) {
         return this.publishingRequestService.getDocument(id);
-    }
-
-    @PreAuthorize("hasAuthority('ROLE_EDITOR')")
-    @GetMapping(name = "getRequestsReadBooks", path="/get-requests-read-books/{editorId}")
-    public ResponseEntity<HashSet<PublishingRequestDTO>> GetRequestsReadBooks(@PathVariable String editorId) throws JsonProcessingException {
-        HashSet<PublishingRequestDTO> retRequests = publishingRequestService.getEditorRequestsReadBooks(Long.parseLong(editorId));
-        return new ResponseEntity<>(retRequests, HttpStatus.OK);
-    }
-
-    private List<FileDTO> generateFileDTOList(List<FileDB> files) {
-        ModelMapper modelMapper = new ModelMapper();
-        List<FileDTO> newFiles = new LinkedList<>();
-        for(FileDB file : files){
-            newFiles.add(modelMapper.map(file, FileDTO.class));
-        }
-        return newFiles;
     }
 
 }

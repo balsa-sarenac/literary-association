@@ -24,11 +24,7 @@ import java.util.Map;
 public class OnTaskCreate implements TaskListener {
 
     @Autowired
-    private TaskService taskService;
-    @Autowired
     private FormService formService;
-    @Autowired
-    private RuntimeService runtimeService;
 
     private GenreService genreService;
 

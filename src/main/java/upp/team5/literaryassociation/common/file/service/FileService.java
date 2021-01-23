@@ -52,9 +52,6 @@ public class FileService {
     @Autowired
     private PublishingRequestService publishingRequestService;
 
-    @Autowired
-    private BookService bookService;
-
     public void store(MultipartFile[] files, String processId) throws IOException {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username;
@@ -86,7 +83,7 @@ public class FileService {
                 var request = runtimeService.getVariable(processId, "publishing-request-id");
                 PublishingRequest publishingRequest = publishingRequestService.getPublishingRequest(Long.parseLong(request.toString()));
 
-                publishingRequest.setStatus("BookUploaded");
+                publishingRequest.setStatus("Book uploaded");
                 publishingRequestService.savePublishingRequest(publishingRequest);
 
                 //var book = publishingRequest.getBook();

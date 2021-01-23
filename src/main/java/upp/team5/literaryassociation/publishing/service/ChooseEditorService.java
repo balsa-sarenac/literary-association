@@ -33,9 +33,6 @@ public class ChooseEditorService implements JavaDelegate {
     @Autowired
     private IdentityService identityService;
 
-    @Autowired
-    private AuthUserService authUserService;
-
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
 
@@ -78,7 +75,7 @@ public class ChooseEditorService implements JavaDelegate {
         bookService.saveBook(book);
 
         PublishingRequest req = new PublishingRequest();
-        req.setStatus("Created");
+        req.setStatus("New request");
         req.setBook(book);
         publishingRequestService.savePublishingRequest(req);
 

@@ -1,4 +1,4 @@
-package upp.team5.literaryassociation.publishing.betaReader;
+package upp.team5.literaryassociation.publishing.betaReader.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
