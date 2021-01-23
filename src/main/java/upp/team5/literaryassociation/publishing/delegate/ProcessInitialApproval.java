@@ -33,7 +33,14 @@ public class ProcessInitialApproval implements JavaDelegate {
         if(request.isPresent()){
             PublishingRequest publishingRequest = request.get();
             HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data-read-manuscript");
-            Boolean read = (Boolean)formSubmission.get("read");
+            var readObj = formSubmission.get("read");
+            boolean read  = false;
+
+            try {
+                read = Boolean.parseBoolean(readObj.toString());
+            }catch (Exception e){
+
+            }
 
             publishingRequest.setReviewed(read);
             if(read)

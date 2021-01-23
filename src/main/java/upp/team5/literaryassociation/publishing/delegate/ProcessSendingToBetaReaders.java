@@ -33,6 +33,8 @@ public class ProcessSendingToBetaReaders implements JavaDelegate {
 
             Boolean sendToBeta = formSubmission.get("sendToBeta").equals("")?false:(Boolean)formSubmission.get("sendToBeta");
 
+
+
             delegateExecution.setVariable("beta", sendToBeta);
             if (sendToBeta) {
                 publishingRequest.setStatus("Sent to beta readers");
