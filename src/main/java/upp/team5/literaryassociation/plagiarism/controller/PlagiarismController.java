@@ -49,4 +49,9 @@ public class PlagiarismController {
     public ResponseEntity<List<PlagiarismComplaintDTO>> getComplaints() {
         return new ResponseEntity<>(plagiarismComplaintService.getComplaints(), HttpStatus.OK);
     }
+
+    @GetMapping(name = "getAllComplaints", path = "/complaints/{complaintId}")
+    public ResponseEntity<PlagiarismComplaintDTO> getComplaint(@PathVariable Long complaintId) {
+        return new ResponseEntity<>(plagiarismComplaintService.getComplaint(complaintId), HttpStatus.OK);
+    }
 }

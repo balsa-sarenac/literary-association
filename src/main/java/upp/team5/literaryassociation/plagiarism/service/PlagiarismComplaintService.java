@@ -3,11 +3,14 @@ package upp.team5.literaryassociation.plagiarism.service;
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.task.Task;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import upp.team5.literaryassociation.common.dto.FileDTO;
 import upp.team5.literaryassociation.common.dto.PlagiarismComplaintDTO;
 import upp.team5.literaryassociation.common.dto.UserDTO;
 import upp.team5.literaryassociation.model.*;
@@ -78,5 +81,43 @@ public class PlagiarismComplaintService {
                 .collect(Collectors.toList());
 
         return complaintDTOS;
+    }
+
+    public PlagiarismComplaintDTO getComplaint(Long complaintId) {
+        PlagiarismComplaint plagiarismComplaint = getPlagiarismComplaint(complaintId);
+        PlagiarismComplaintDTO plagiarismComplaintDTO = modelMapper.map(plagiarismComplaint, PlagiarismComplaintDTO.class);
+
+        FileDB complainantBook = plagiarismComplaint.getComplainantBook().getBookFile();
+        FileDB plagiarismBook = plagiarismComplaint.getPlagiarism().getBookFile();
+
+        if (complainantBook == null || plagiarismBook == null) {
+            throw new BpmnError("BOOK_FILES_DONT_EXIST");
+        }
+
+        String fileDownloadUri = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path("/membership-requests/documents/")
+                .path(String.valueOf(complainantBook.getId()))
+                .toUriString();
+        FileDTO fileDTO = new FileDTO(
+                complainantBook.getName(),
+                fileDownloadUri,
+                complainantBook.getType(),
+                complainantBook.getData().length);
+        plagiarismComplaintDTO.getComplainantBook().setBookFile(fileDTO);
+
+        fileDownloadUri = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path("/membership-requests/documents/")
+                .path(String.valueOf(plagiarismBook.getId()))
+                .toUriString();
+        fileDTO = new FileDTO(
+                plagiarismBook.getName(),
+                fileDownloadUri,
+                plagiarismBook.getType(),
+                plagiarismBook.getData().length);
+        plagiarismComplaintDTO.getPlagiarism().setBookFile(fileDTO);
+
+        return plagiarismComplaintDTO;
     }
 }
