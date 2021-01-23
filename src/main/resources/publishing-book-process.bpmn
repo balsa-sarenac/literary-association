@@ -91,10 +91,10 @@
     <bpmn:sequenceFlow id="Flow_0ke993q" sourceRef="Gateway_116dpgd" targetRef="Activity_0783vvp" />
     <bpmn:sequenceFlow id="Flow_1bipx7l" sourceRef="Activity_12a0zqe" targetRef="Activity_0ipt0pv" />
     <bpmn:sequenceFlow id="Flow_16zozk9" name="No" sourceRef="Gateway_1djy8sd" targetRef="Activity_12a0zqe">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${changes!=true}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${suggestions!=true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1kd1mgn" name="Yes" sourceRef="Gateway_1djy8sd" targetRef="Activity_088tyrt">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${changes==true}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${suggestions==true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_18fctrs" name="Yes" sourceRef="Gateway_0ku0yb0" targetRef="Activity_0btn9qx">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${edits==true}</bpmn:conditionExpression>
@@ -510,6 +510,16 @@
       <bpmn:outgoing>Flow_1xusaek</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:userTask id="more-suggestions" name="Any more suggestions?">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="suggestions" label="Does the book need more changes?" type="boolean" />
+          <camunda:formField id="textarea" label="Your suggestions:" type="string">
+            <camunda:properties>
+              <camunda:property id="controlledBy" value="suggestions" />
+            </camunda:properties>
+          </camunda:formField>
+        </camunda:formData>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_1xusaek</bpmn:incoming>
       <bpmn:outgoing>Flow_1bombzf</bpmn:outgoing>
     </bpmn:userTask>
