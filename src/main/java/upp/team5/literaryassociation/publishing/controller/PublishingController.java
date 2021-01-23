@@ -69,7 +69,7 @@ public class PublishingController {
         return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_EDITOR')")
+    @PreAuthorize("hasAuthority('ROLE_EDITOR') or hasAuthority('ROLE_AUTHOR')")
     @GetMapping(name = "getRequest", path="/get-request/{requestId}")
     public ResponseEntity<PublishingRequestDTO> getRequest(@PathVariable String requestId) throws JsonProcessingException {
         var dto = publishingRequestService.getPublishingRequestDTO(Long.parseLong(requestId));
