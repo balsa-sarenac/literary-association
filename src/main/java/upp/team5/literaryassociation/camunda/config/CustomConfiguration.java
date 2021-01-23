@@ -1,4 +1,4 @@
-package upp.team5.literaryassociation.camunda;
+package upp.team5.literaryassociation.camunda.config;
 
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
@@ -8,9 +8,10 @@ import org.camunda.bpm.spring.boot.starter.configuration.Ordering;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import java.util.ArrayList;
+
+import upp.team5.literaryassociation.camunda.type.FileFormFieldType;
 import upp.team5.literaryassociation.camunda.type.MultiselectFormFieldType;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 

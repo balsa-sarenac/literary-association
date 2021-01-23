@@ -173,4 +173,9 @@ public class MembershipRequestService {
     public void updateRequest(MembershipRequest membershipRequest) {
         membershipRequestRepository.save(membershipRequest);
     }
+
+    public MembershipRequest getAuthorRequest(Long id) {
+        User author = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        return membershipRequestRepository.findByAuthor(author);
+    }
 }

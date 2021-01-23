@@ -22,12 +22,13 @@
         <bpmn:flowNodeRef>Activity_0rccf7p</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Lane_1pd1m4b" name="Author">
-        <bpmn:flowNodeRef>Activity_1dmwjzr</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0zqq2ef</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_1h42nns</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_19tamen</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0yq867v</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_02uf9ey</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>file-complaint</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:userTask id="Activity_00i92zr" name="Compare notes and decide if plagiarism">
@@ -70,22 +71,6 @@
     <bpmn:endEvent id="Event_1uygbv8">
       <bpmn:incoming>Flow_0ot8yxp</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:userTask id="Activity_1dmwjzr" name="File a complaint">
-      <bpmn:extensionElements>
-        <camunda:formData>
-          <camunda:formField id="auto-complete" label="Plagiarism Book:" type="string" defaultValue="&#34;&#34;">
-            <camunda:validation>
-              <camunda:constraint name="required" />
-            </camunda:validation>
-          </camunda:formField>
-        </camunda:formData>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0wik3p4</bpmn:incoming>
-      <bpmn:outgoing>Flow_0v1xio6</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:startEvent id="StartEvent_1">
-      <bpmn:outgoing>Flow_0wik3p4</bpmn:outgoing>
-    </bpmn:startEvent>
     <bpmn:subProcess id="Activity_0l0q5z8">
       <bpmn:incoming>Flow_1dw2d3g</bpmn:incoming>
       <bpmn:outgoing>Flow_0m11lns</bpmn:outgoing>
@@ -121,7 +106,7 @@
     </bpmn:exclusiveGateway>
     <bpmn:exclusiveGateway id="Gateway_19tamen">
       <bpmn:incoming>Flow_148m5qb</bpmn:incoming>
-      <bpmn:incoming>Flow_0v1xio6</bpmn:incoming>
+      <bpmn:incoming>Flow_1jka9mw</bpmn:incoming>
       <bpmn:outgoing>Flow_1t9056i</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_08ex7kk" sourceRef="Event_0qk4jiz" targetRef="Gateway_1h42nns" />
@@ -141,8 +126,6 @@
     <bpmn:sequenceFlow id="Flow_1dw2d3g" sourceRef="Activity_0rccf7p" targetRef="Activity_0l0q5z8" />
     <bpmn:sequenceFlow id="Flow_14gcrs8" sourceRef="Activity_1erv1wr" targetRef="Activity_0rccf7p" />
     <bpmn:sequenceFlow id="Flow_1udui1k" sourceRef="Activity_0j5yjks" targetRef="Activity_1erv1wr" />
-    <bpmn:sequenceFlow id="Flow_0v1xio6" sourceRef="Activity_1dmwjzr" targetRef="Gateway_19tamen" />
-    <bpmn:sequenceFlow id="Flow_0wik3p4" sourceRef="StartEvent_1" targetRef="Activity_1dmwjzr" />
     <bpmn:subProcess id="Activity_0yq867v" triggeredByEvent="true">
       <bpmn:sendTask id="Activity_14knotx" name="Notify user about timeout" camunda:class="upp.team5.literaryassociation.common.service.NotifyAboutProcessTimeoutService">
         <bpmn:incoming>Flow_0k7xf1x</bpmn:incoming>
@@ -166,6 +149,39 @@
         <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P14D</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
+    <bpmn:serviceTask id="Activity_02uf9ey" name="Process file complaint" camunda:class="upp.team5.literaryassociation.plagiarism.service.ProcessComplaintService">
+      <bpmn:incoming>Flow_0i7943t</bpmn:incoming>
+      <bpmn:outgoing>Flow_1jka9mw</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="file-complaint" name="File a complaint">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="auto-complete" label="Plagiarism Book:" type="string" defaultValue="&#34;&#34;">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="plagiarismBook" type="string">
+            <camunda:properties>
+              <camunda:property id="hidden" value="true" />
+            </camunda:properties>
+          </camunda:formField>
+          <camunda:formField id="authorBook" type="string">
+            <camunda:properties>
+              <camunda:property id="hidden" value="true" />
+            </camunda:properties>
+          </camunda:formField>
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0wik3p4</bpmn:incoming>
+      <bpmn:outgoing>Flow_0i7943t</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_0wik3p4</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0i7943t" sourceRef="file-complaint" targetRef="Activity_02uf9ey" />
+    <bpmn:sequenceFlow id="Flow_0wik3p4" sourceRef="StartEvent_1" targetRef="file-complaint" />
+    <bpmn:sequenceFlow id="Flow_1jka9mw" sourceRef="Activity_02uf9ey" targetRef="Gateway_19tamen" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_10ofp7w">
@@ -184,13 +200,17 @@
       <bpmndi:BPMNShape id="Lane_0egxhwq_di" bpmnElement="Lane_0egxhwq" isHorizontal="true">
         <dc:Bounds x="187" y="780" width="1501" height="218" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_0wik3p4_di" bpmnElement="Flow_0wik3p4">
-        <di:waypoint x="388" y="270" />
-        <di:waypoint x="480" y="270" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0v1xio6_di" bpmnElement="Flow_0v1xio6">
-        <di:waypoint x="580" y="270" />
+      <bpmndi:BPMNEdge id="Flow_1jka9mw_di" bpmnElement="Flow_1jka9mw">
+        <di:waypoint x="640" y="270" />
         <di:waypoint x="694" y="270" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0wik3p4_di" bpmnElement="Flow_0wik3p4">
+        <di:waypoint x="328" y="270" />
+        <di:waypoint x="380" y="270" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0i7943t_di" bpmnElement="Flow_0i7943t">
+        <di:waypoint x="480" y="270" />
+        <di:waypoint x="540" y="270" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1udui1k_di" bpmnElement="Flow_1udui1k">
         <di:waypoint x="930" y="460" />
@@ -275,12 +295,6 @@
       <bpmndi:BPMNShape id="Event_1uygbv8_di" bpmnElement="Event_1uygbv8">
         <dc:Bounds x="1552" y="842" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1chp5ji_di" bpmnElement="Activity_1dmwjzr">
-        <dc:Bounds x="480" y="230" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
-        <dc:Bounds x="352" y="252" width="36" height="36" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0l0q5z8_di" bpmnElement="Activity_0l0q5z8" isExpanded="true">
         <dc:Bounds x="960" y="560" width="530" height="200" />
       </bpmndi:BPMNShape>
@@ -336,6 +350,15 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1p6uefi_di" bpmnElement="Event_0m16fhg">
         <dc:Bounds x="1202" y="202" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_05zzwrd_di" bpmnElement="Activity_02uf9ey">
+        <dc:Bounds x="540" y="230" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1chp5ji_di" bpmnElement="file-complaint">
+        <dc:Bounds x="380" y="230" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="292" y="252" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1e9zkc9_di" bpmnElement="Event_0qk4jiz">
         <dc:Bounds x="1472" y="592" width="36" height="36" />

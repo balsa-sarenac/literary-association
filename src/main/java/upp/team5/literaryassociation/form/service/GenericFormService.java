@@ -36,8 +36,6 @@ public class GenericFormService {
     @Autowired
     private MembershipRequestService membershipRequestService;
 
-    @Autowired
-    private PublishingRequestService publishingRequestService;
 
     public FormFieldsDTO getForm(String processInstanceId) {
 
@@ -70,25 +68,4 @@ public class GenericFormService {
         return map;
     }
 
-
-    public String getProcessInstanceId(String userId) {
-        Long membershipRequestId = membershipRequestService.getAuthorMembershipRequest(userId);
-
-        ProcessInstance pi = this.runtimeService.createProcessInstanceQuery()
-                .processInstanceBusinessKey(userId)
-                .variableValueEquals("membershipRequestId", membershipRequestId)
-                .singleResult();
-
-        return pi.getId();
-    }
-
-    public String getPubProcessInstanceId(String publishingRequestId) {
-
-        ProcessInstance pi = this.runtimeService.createProcessInstanceQuery()
-                .processDefinitionKey("book-publishing")
-                .variableValueEquals("publishing-request-id", Long.parseLong(publishingRequestId))
-                .singleResult();
-
-        return pi.getId();
-    }
 }

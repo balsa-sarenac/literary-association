@@ -23,11 +23,7 @@ import java.util.Map;
 @Slf4j
 public class OnTaskCreatePublishBook implements TaskListener {
     @Autowired
-    private TaskService taskService;
-    @Autowired
     private FormService formService;
-    @Autowired
-    private RuntimeService runtimeService;
 
     private GenreService genreService;
 

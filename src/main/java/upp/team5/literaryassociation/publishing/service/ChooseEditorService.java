@@ -33,9 +33,6 @@ public class ChooseEditorService implements JavaDelegate {
     @Autowired
     private IdentityService identityService;
 
-    @Autowired
-    private AuthUserService authUserService;
-
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
 
