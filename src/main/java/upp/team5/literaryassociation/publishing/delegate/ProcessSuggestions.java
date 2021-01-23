@@ -38,7 +38,14 @@ public class ProcessSuggestions implements JavaDelegate {
 
             HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data-more-suggestions");
 
-            Boolean suggestions = (Boolean)formSubmission.get("suggestions");
+            var suggestionsObj = formSubmission.get("suggestions");
+            boolean suggestions = false;
+
+            try {
+                suggestions = Boolean.parseBoolean(suggestionsObj.toString());
+            } catch (Exception e) {
+
+            }
 
             delegateExecution.setVariable("suggestions", suggestions);
             if (suggestions) {

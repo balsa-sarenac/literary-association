@@ -30,10 +30,17 @@ public class ProcessSendingToBetaReaders implements JavaDelegate {
             PublishingRequest publishingRequest = request.get();
 
             HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data-choose-beta");
-            Boolean sendToBeta = (Boolean)formSubmission.get("sendToBeta");
+            var sendToBeta = formSubmission.get("sendToBeta");
+            boolean send = false;
 
-            delegateExecution.setVariable("beta", sendToBeta);
-            if (sendToBeta) {
+            try {
+                send = Boolean.parseBoolean(sendToBeta.toString());
+            } catch (Exception e) {
+
+            }
+
+            delegateExecution.setVariable("beta", send);
+            if (send) {
                 publishingRequest.setStatus("Sent to beta readers");
             }
             else{
