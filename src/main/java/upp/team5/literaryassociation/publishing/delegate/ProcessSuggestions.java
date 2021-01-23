@@ -52,10 +52,11 @@ public class ProcessSuggestions implements JavaDelegate {
                 publishingRequest.setStatus("Editor gave suggestions");
 
                 Note note = new Note();
-                note.setContent((String) formSubmission.get("textarea"));
+                note.setContent((String) formSubmission.get("textareaSuggestions"));
                 note.setType(NoteType.SUGGESTION);
                 note.setPublishingRequest(publishingRequest);
                 note.setUser(editor);
+                noteService.saveNote(note);
             }
             else {
                 publishingRequest.setStatus("Book is sent to lector");
