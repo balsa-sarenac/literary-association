@@ -4,18 +4,24 @@ import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.task.Task;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.common.dto.PlagiarismComplaintDTO;
-import upp.team5.literaryassociation.model.Book;
-import upp.team5.literaryassociation.model.PlagiarismComplaint;
-import upp.team5.literaryassociation.model.User;
+import upp.team5.literaryassociation.common.dto.UserDTO;
+import upp.team5.literaryassociation.model.*;
 import upp.team5.literaryassociation.plagiarism.repository.PlagiarismComplaintRepository;
 import upp.team5.literaryassociation.publishing.service.BookService;
+import upp.team5.literaryassociation.security.repository.RoleRepository;
+import upp.team5.literaryassociation.security.repository.UserRepository;
 import upp.team5.literaryassociation.security.service.CustomUserDetailsService;
+import upp.team5.literaryassociation.security.service.RoleService;
 
 import javax.ws.rs.NotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -23,6 +29,14 @@ public class PlagiarismComplaintService {
     @Autowired
     private PlagiarismComplaintRepository plagiarismComplaintRepository;
 
+    @Autowired
+    private RoleService roleService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     public PlagiarismComplaint getPlagiarismComplaint(Long id){
         return plagiarismComplaintRepository.findById(id)
@@ -31,5 +45,38 @@ public class PlagiarismComplaintService {
 
     public PlagiarismComplaint save(PlagiarismComplaint plagiarismComplaint) {
         return plagiarismComplaintRepository.save(plagiarismComplaint);
+    }
+
+    public List<UserDTO> getEditorsThatCanLeaveNotes(Long complaintId) {
+        var plagiarismComplaint = getPlagiarismComplaint(complaintId);
+        Role role = roleService.getByName("ROLE_EDITOR");
+        List<User> editors = userRepository.findAllByRolesIn(List.of(role));
+
+        List<User> editorsThatHaveLeftNotes = null;
+        if (plagiarismComplaint.getNotes() != null) {
+            editorsThatHaveLeftNotes = plagiarismComplaint.getNotes()
+                    .stream().map(Note::getUser).collect(Collectors.toList());
+        }
+
+        if (editorsThatHaveLeftNotes != null) {
+            editors.removeIf(editorsThatHaveLeftNotes::contains);
+        }
+
+        List<UserDTO> editorDTOs = new ArrayList<>();
+        for (User user : editors) {
+            UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+            editorDTOs.add(userDTO);
+        }
+
+        return editorDTOs;
+    }
+
+    public List<PlagiarismComplaintDTO> getComplaints() {
+        List<PlagiarismComplaint> complaints = plagiarismComplaintRepository.findAll();
+        List<PlagiarismComplaintDTO> complaintDTOS = complaints.stream()
+                .map(plagiarismComplaint -> modelMapper.map(plagiarismComplaint, PlagiarismComplaintDTO.class))
+                .collect(Collectors.toList());
+
+        return complaintDTOS;
     }
 }
