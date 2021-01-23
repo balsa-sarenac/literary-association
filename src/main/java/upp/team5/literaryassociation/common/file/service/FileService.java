@@ -104,6 +104,7 @@ public class FileService {
 
                     fileDBRepository.deleteById(oldFile.getId());
 
+                    publishingRequest.setNotes(new HashSet<>());
 
                     fileDB.setPublishingRequest(publishingRequest);
                     fileDB.setUploadedBookId(publishingRequest.getBook().getId());
