@@ -44,6 +44,10 @@ public class ProcessComments implements JavaDelegate {
         note.setUser(betaReader);
 
         noteService.saveNote(note);
+
+        publishingRequest.setStatus("Book upload requested");
+        publishingRequestService.savePublishingRequest(publishingRequest);
+
     }
 
 }
