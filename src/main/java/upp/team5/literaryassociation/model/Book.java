@@ -45,13 +45,13 @@ public class Book implements Serializable {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<PlagiarismComplaint> accusedOfPlagiarism = new ArrayList<>();
+    private Set<PlagiarismComplaint> accusedOfPlagiarism;
 
     @OneToMany(
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<PlagiarismComplaint> beingPlagiated = new ArrayList<>();
+    private Set<PlagiarismComplaint> beingPlagiated;
 
     @ManyToMany
     @JoinTable(name = "books_genres",

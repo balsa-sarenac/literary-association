@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -27,4 +28,7 @@ public class PlagiarismComplaint implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Book plagiarism;
+
+    @OneToMany(mappedBy = "plagiarismComplaint")
+    private Set<Note> notes;
 }
