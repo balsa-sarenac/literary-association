@@ -79,7 +79,7 @@ public class FileService {
 
             if(task.getTaskDefinitionKey().equals("SubmitDocuments"))
                 fileDB.setMembershipRequest(dbUser.getMembershipRequest());
-            else if(task.getTaskDefinitionKey().equals("UploadBook") || task.getName().equals("Upload book for review")){
+            else if(task.getTaskDefinitionKey().equals("UploadBook") || task.getName().equals("Upload book for review") || task.getTaskDefinitionKey().equals("change-book")){
                 var request = runtimeService.getVariable(processId, "publishing-request-id");
                 PublishingRequest publishingRequest = publishingRequestService.getPublishingRequest(Long.parseLong(request.toString()));
 
