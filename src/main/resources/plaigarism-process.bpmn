@@ -50,8 +50,9 @@
     <bpmn:userTask id="Activity_0j5yjks" name="Choose editors to compare books">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="FormField_3ugb1pj" label="Editors:" type="multiselect" />
+          <camunda:formField id="editors" label="Editors:" type="multiselect" />
         </camunda:formData>
+        <camunda:taskListener class="upp.team5.literaryassociation.camunda.eventListener.OnTaskCreateChooseEditors" event="create" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1mh0u1f</bpmn:incoming>
       <bpmn:outgoing>Flow_1udui1k</bpmn:outgoing>
