@@ -33,10 +33,17 @@ public class ProcessIfOriginal implements JavaDelegate {
             PublishingRequest publishingRequest = request.get();
 
             HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data-plagiarism");
-            Boolean original = (Boolean)formSubmission.get("original");
+            var original = formSubmission.get("original");
+            boolean isOriginal  = false;
 
-            delegateExecution.setVariable("original", original);
-            if (original)
+            try {
+                isOriginal = Boolean.parseBoolean(original.toString());
+            }catch (Exception e){
+
+            }
+
+            delegateExecution.setVariable("original", isOriginal);
+            if (isOriginal)
                 publishingRequest.setStatus("Book is original");
             else {
                 publishingRequest.setStatus("Book is not original");

@@ -104,7 +104,7 @@ public class PublishingRequestService {
 
         PublishingRequestDTO dto = modelMapper.map(req, PublishingRequestDTO.class);
 
-        if(req.getStatus().equals("Book uploaded")) {
+        if(req.getStatus().equals("Book is original") ) {
             List<FileDB> sources = null;
             try {
                 sources = this.fileService.findAllByPublishingRequest(req);
@@ -130,7 +130,7 @@ public class PublishingRequestService {
             dto.setPotentialPlagiarismList(files);
         }
 
-        if(req.getStatus().equals("Book is original")) {
+        if(!req.getStatus().equals("New request") && !req.getStatus().equals("Book upload requested") && !req.getStatus().equals("Reading rejected")) {
             FileDB bookFile = null;
 
             try {
