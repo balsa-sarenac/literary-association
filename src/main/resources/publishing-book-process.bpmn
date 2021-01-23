@@ -187,7 +187,7 @@
     <bpmn:userTask id="read-manuscript" name="Decide whether to read the manuscript" camunda:assignee="${editor}">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="read" label="Check if you want to read the manuscript" type="boolean" />
+          <camunda:formField id="read" label="Check if you want to read the manuscript" type="boolean" defaultValue="false" />
           <camunda:formField id="explanation" label="Please write explanation:" type="string">
             <camunda:properties>
               <camunda:property id="controlledBy" value="read" />
@@ -407,7 +407,7 @@
     <bpmn:userTask id="choose-beta" name="Choose whether to send to listed beta readers" camunda:assignee="${editor}">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="sendToBeta" label="Would you like to send the book to beta readers?" type="boolean">
+          <camunda:formField id="sendToBeta" label="Would you like to send the book to beta readers?" type="boolean" defaultValue="false">
             <camunda:properties>
               <camunda:property id="controlField" value="true" />
             </camunda:properties>
@@ -431,7 +431,7 @@
     <bpmn:userTask id="approve-book" name="Read book and approve publishing" camunda:assignee="${editor}">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="approve" label="Check if you want to approve publishing of this book" type="boolean" />
+          <camunda:formField id="approve" label="Check if you want to approve publishing of this book" type="boolean" defaultValue="false" />
           <camunda:formField id="explanation" label="Please write explanation:" type="string">
             <camunda:properties>
               <camunda:property id="controlledBy" value="approve" />
@@ -450,7 +450,7 @@
     <bpmn:userTask id="plagiarism" name="Decide if the manuscript is a plagiarism" camunda:assignee="${editor}">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="original" label="Check if the book is original" type="boolean">
+          <camunda:formField id="original" label="Check if the book is original" type="boolean" defaultValue="false">
             <camunda:validation>
               <camunda:constraint name="required" />
             </camunda:validation>
@@ -507,7 +507,7 @@
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="suggestions" label="Does the book need more changes?" type="boolean" />
-          <camunda:formField id="textarea" label="Your suggestions:" type="string">
+          <camunda:formField id="textareaSuggestions" label="Your suggestions:" type="string">
             <camunda:properties>
               <camunda:property id="controlledBy" value="suggestions" />
             </camunda:properties>
