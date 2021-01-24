@@ -14,7 +14,7 @@ public class CamundaService {
     private RuntimeService runtimeService;
 
     public ProcessDTO getProcessInstanceId(String requestType, Long publishingRequestId) {
-        log.info("Getting proces instance if for " + requestType + " id: " + publishingRequestId);
+        log.info("Getting proces instance for " + requestType + ": " + publishingRequestId);
 
         String type;
         String definitionKey;
@@ -22,7 +22,7 @@ public class CamundaService {
             type = requestType;
             definitionKey = "author-reg";
         }
-        else if (requestType.equals("publishing-request-id")) {
+        else if (requestType.equals("publishingRequestId")) {
             type = "publishing-request-id";
             definitionKey = "book-publishing";
         }
