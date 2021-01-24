@@ -34,8 +34,10 @@ public class OnTaskCreateChooseEditors implements TaskListener {
         List<UserDTO> editors = plagiarismComplaintService.getEditorsThatCanLeaveNotes(complaintId);
 
         String minEditors = null;
+        String maxEditors = null;
         try {
             minEditors = (String) delegateTask.getVariable("minEditors");
+            maxEditors = (String) delegateTask.getVariable("maxEditors");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -44,11 +46,16 @@ public class OnTaskCreateChooseEditors implements TaskListener {
             minEditors = "2";
         }
 
+        if (maxEditors == null || maxEditors.equals("")) {
+            maxEditors = "-1";
+        }
+
         for (FormField formField : properties) {
             if (formField.getId().equals("editors")) {
                 MultiselectFormFieldType multiselectFormFieldType = (MultiselectFormFieldType) formField.getType();
                 multiselectFormFieldType.setValues(listToMap(editors));
                 formField.getProperties().put("minEditors", minEditors);
+                formField.getProperties().put("maxEditors", maxEditors);
                 break;
             }
         }
