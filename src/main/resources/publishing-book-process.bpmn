@@ -251,6 +251,16 @@
       <bpmn:outgoing>Flow_0ke993q</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:userTask id="corrections" name="Download and find mistakes">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="mistakes" label="Were there any mistakes" type="boolean" defaultValue="false" />
+          <camunda:formField id="textareaSuggestions" label="Write your corrections here:" type="string">
+            <camunda:properties>
+              <camunda:property id="controlledBy" value="mistakes" />
+            </camunda:properties>
+          </camunda:formField>
+        </camunda:formData>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_1bipx7l</bpmn:incoming>
       <bpmn:outgoing>Flow_1egrf67</bpmn:outgoing>
     </bpmn:userTask>
