@@ -36,7 +36,7 @@ public class ProcessCorrections implements JavaDelegate {
         if(request.isPresent()){
             PublishingRequest publishingRequest = request.get();
 
-            HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data-more-suggestions");
+            HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data-corrections");
 
             var editsObj = formSubmission.get("mistakes");
             boolean edits = false;
