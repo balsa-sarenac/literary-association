@@ -31,4 +31,7 @@ public class PlagiarismComplaint implements Serializable {
 
     @OneToMany(mappedBy = "plagiarismComplaint")
     private Set<Note> notes;
+
+    @ManyToMany(mappedBy = "complaintsToInvestigate")
+    private Set<User> editorsOnInvestigation;
 }
