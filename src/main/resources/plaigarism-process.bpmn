@@ -57,11 +57,11 @@
       <bpmn:incoming>Flow_1mh0u1f</bpmn:incoming>
       <bpmn:outgoing>Flow_1udui1k</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:serviceTask id="Activity_1erv1wr" name="Store chosen editors" camunda:class="upp.team5.literaryassociation.plagiarism.service.PlagiarismService">
+    <bpmn:serviceTask id="Activity_1erv1wr" name="Store chosen editors" camunda:class="upp.team5.literaryassociation.plagiarism.delegate.StoreEditorsForInvestigation">
       <bpmn:incoming>Flow_1udui1k</bpmn:incoming>
       <bpmn:outgoing>Flow_14gcrs8</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sendTask id="Activity_0rccf7p" name="Notify editors" camunda:class="upp.team5.literaryassociation.plagiarism.service.PlagiarismService">
+    <bpmn:sendTask id="Activity_0rccf7p" name="Notify editors" camunda:class="upp.team5.literaryassociation.plagiarism.delegate.NotifyEditorsAboutInvestigationStart">
       <bpmn:incoming>Flow_14gcrs8</bpmn:incoming>
       <bpmn:outgoing>Flow_1dw2d3g</bpmn:outgoing>
     </bpmn:sendTask>
@@ -79,12 +79,10 @@
         <bpmn:outgoing>Flow_1kkjlag</bpmn:outgoing>
       </bpmn:startEvent>
       <bpmn:sequenceFlow id="Flow_1kkjlag" sourceRef="Event_1vb02mm" targetRef="Activity_129meao" />
-      <bpmn:userTask id="Activity_129meao" name="Make notes">
+      <bpmn:userTask id="Activity_129meao" name="Make notes" camunda:assignee="${editor.id}">
         <bpmn:incoming>Flow_1kkjlag</bpmn:incoming>
         <bpmn:outgoing>Flow_0glb9du</bpmn:outgoing>
-        <bpmn:multiInstanceLoopCharacteristics>
-          <bpmn:loopCardinality xsi:type="bpmn:tFormalExpression">${editorsList}</bpmn:loopCardinality>
-        </bpmn:multiInstanceLoopCharacteristics>
+        <bpmn:multiInstanceLoopCharacteristics camunda:collection="${editorsList}" camunda:elementVariable="editor" />
       </bpmn:userTask>
       <bpmn:sequenceFlow id="Flow_0glb9du" sourceRef="Activity_129meao" targetRef="Activity_1uf67le" />
       <bpmn:serviceTask id="Activity_1uf67le" name="Process notes" camunda:class="upp.team5.literaryassociation.plagiarism.service.PlagiarismService">
