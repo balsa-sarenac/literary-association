@@ -8,7 +8,9 @@ import upp.team5.literaryassociation.model.Note;
 import upp.team5.literaryassociation.model.NoteType;
 import upp.team5.literaryassociation.model.User;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service @Slf4j
 public class NoteService {
@@ -27,4 +29,6 @@ public class NoteService {
     public List<Note> getUserNotes(User user, NoteType type) {
         return this.noteRepository.findAllByUserAndType(user, type);
     }
+
+    public void deleteNotes(Set<Note> notes) { noteRepository.deleteInBatch(notes); }
 }
