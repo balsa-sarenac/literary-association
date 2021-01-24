@@ -91,7 +91,8 @@ public class PlagiarismComplaintService {
         FileDB plagiarismBook = plagiarismComplaint.getPlagiarism().getBookFile();
 
         if (complainantBook == null || plagiarismBook == null) {
-            throw new BpmnError("BOOK_FILES_DONT_EXIST");
+//            throw new BpmnError("BOOK_FILES_DONT_EXIST");
+            return plagiarismComplaintDTO;
         }
 
         String fileDownloadUri = ServletUriComponentsBuilder
