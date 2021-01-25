@@ -108,7 +108,6 @@ public class FileService {
 
                     fileDBRepository.deleteById(oldFile.getId());
 
-                    //publishingRequest.setNotes(new HashSet<>());
                     noteService.deleteNotes(publishingRequest.getNotes());
 
                     fileDB.setPublishingRequest(publishingRequest);
