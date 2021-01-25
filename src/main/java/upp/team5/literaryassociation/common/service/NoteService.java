@@ -30,5 +30,10 @@ public class NoteService {
         return this.noteRepository.findAllByUserAndType(user, type);
     }
 
-    public void deleteNotes(Set<Note> notes) { noteRepository.deleteInBatch(notes); }
+    public void deleteNotes(Set<Note> notes) {
+        for (Note note: notes) {
+            note.setDeleted(true);
+            noteRepository.save(note);
+        }
+    }
 }
