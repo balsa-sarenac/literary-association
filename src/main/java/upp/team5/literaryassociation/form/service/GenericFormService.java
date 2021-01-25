@@ -2,6 +2,7 @@ package upp.team5.literaryassociation.form.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.FormService;
+import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.form.FormField;
@@ -11,10 +12,12 @@ import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import upp.team5.literaryassociation.authorRegistration.service.MembershipRequestService;
 import upp.team5.literaryassociation.common.dto.FormFieldsDTO;
 import upp.team5.literaryassociation.common.dto.FormSubmissionDTO;
 import upp.team5.literaryassociation.common.dto.FormSubmissionFieldDTO;
+import upp.team5.literaryassociation.common.service.AuthUserService;
 import upp.team5.literaryassociation.model.PublishingRequest;
 import upp.team5.literaryassociation.model.User;
 import upp.team5.literaryassociation.publishing.service.PublishingRequestService;
@@ -32,14 +35,13 @@ public class GenericFormService {
     private FormService formService;
     @Autowired
     private RuntimeService runtimeService;
-
     @Autowired
-    private MembershipRequestService membershipRequestService;
-
+    private AuthUserService authUserService;
+    @Autowired
+    private IdentityService identityService;
 
     public FormFieldsDTO getForm(String processInstanceId) {
-
-        Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).active().singleResult();
+        Task task = getTask(processInstanceId);
 
         TaskFormData taskFormData = formService.getTaskFormData(task.getId());
         List<FormField> properties = taskFormData.getFormFields();
@@ -49,15 +51,36 @@ public class GenericFormService {
         return formFieldsDTO;
     }
 
-
     public void submitForm(String processInstanceId, FormSubmissionDTO formSubmissionDTO) {
         HashMap<String, Object> map = this.listToMap(formSubmissionDTO.getFormFields());
 
-        Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).active().singleResult();
-        //String processInstanceId = task.getProcessInstanceId();
+        Task task = getTask(processInstanceId);
+
         runtimeService.setVariable(processInstanceId, "data-" + task.getTaskDefinitionKey(), map);
 
         formService.submitTaskForm(task.getId(), map);
+    }
+
+    private Task getTask(String processInstanceId) {
+        User user = authUserService.getLoggedInUser();
+        org.camunda.bpm.engine.identity.User camundaUser = null;
+        Task task = null;
+
+        if (user != null) {
+            camundaUser = identityService.createUserQuery()
+                    .userId(String.valueOf(user.getId())).singleResult();
+        }
+        if (camundaUser != null) {
+            task = taskService.createTaskQuery()
+                    .processInstanceId(processInstanceId)
+                    .taskAssignee(camundaUser.getId())
+                    .active()
+                    .singleResult();
+        }
+        if (task == null) {
+            task = taskService.createTaskQuery().processInstanceId(processInstanceId).active().singleResult();
+        }
+        return task;
     }
 
     private HashMap<String, Object> listToMap(List<FormSubmissionFieldDTO> formSubmissionDTOS) {
