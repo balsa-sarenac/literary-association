@@ -46,12 +46,12 @@ public class ChooseEditorService implements JavaDelegate {
             }
         }
 
-        Role role = roleService.getByName("ROLE_EDITOR");
-        //Role newRole = roleService.getByName("ROLE_CHIEF_EDITOR");
+//        Role role = roleService.getByName("ROLE_EDITOR");
+        Role role = roleService.getByName("ROLE_CHIEF_EDITOR");
 
-        List<User> editors = userService.getUsersByRole(role.getId());
-        int rand = getRandomNumber(0, editors.size()-1);
-        User chief = editors.get(rand);
+        List<User> chiefs = userService.getUsersByRole(role.getId());
+//        int rand = getRandomNumber(0, editors.size()-1);
+        User chief = chiefs.get(0);
 
         //Set<Role> currentRoles = chief.getRoles();
         //currentRoles.add(newRole);

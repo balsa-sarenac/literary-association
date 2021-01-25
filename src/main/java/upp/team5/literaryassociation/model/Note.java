@@ -33,4 +33,7 @@ public class Note implements Serializable {
       @ManyToOne
       @JoinColumn(name = "membership_request_id")
       private MembershipRequest membershipRequest;
+
+      @ManyToOne
+      private PlagiarismComplaint plagiarismComplaint;
 }

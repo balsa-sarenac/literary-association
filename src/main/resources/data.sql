@@ -5,6 +5,7 @@ DELETE FROM act_ru_variable;
 DELETE FROM act_ru_job;
 DELETE FROM act_ge_bytearray;
 DELETE FROM act_re_deployment;
+
 -- ROLES
 insert into role (id, name) values (1, 'ROLE_ADMIN');
 insert into role (id, name) values (2, 'ROLE_READER');
@@ -49,20 +50,36 @@ insert into user_table (first_name, last_name, city, country, email, password, e
 ('Ana', 'Antic', 'Kragujevac', 'Serbia', 'ana@a.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  true, 0, true, true, true, null);
 
+insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
+('5','5', 'Ana', 'antic', 'ana@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
+ 'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
+
 insert into user_table (first_name, last_name, city, country, email, password, enabled, penalty_points,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
 ('Stefan', 'Stefanovic', 'Kragujevac', 'Serbia', 'stefan@a.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  true, 0, true, true, true, null);
+
+insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
+('6','6', 'Stefan', 'Stefanovic', 'stefan@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
+ 'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
 
 insert into user_table (first_name, last_name, city, country, email, password, enabled, penalty_points,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
 ('Filip', 'Filipovic', 'Novi Sad', 'Serbia', 'filip@a.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  true, 0, true, true, true, null);
 
+insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
+('7','7', 'Filip', 'Filipovic', 'filip@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
+ 'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
+
 insert into user_table (first_name, last_name, city, country, email, password, enabled, penalty_points,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
 ('Stanko', 'Stankovic', 'Novi Sad', 'Serbia', 'stanko@a.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  true, 0, true, true, true, null);
+
+insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
+('8','8', 'STANKO', 'Stankovic', 'stanko@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
+'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
 
  -- 9
 insert into user_table (first_name, last_name, city, country, email, password, enabled, penalty_points,
@@ -132,9 +149,11 @@ insert into users_roles (user_id, role_id) values (4, 5);
 
 -- EDITORS
 insert into users_roles (user_id, role_id) values (5, 6);
--- insert into users_roles (user_id, role_id) values (6, 6);
--- insert into users_roles (user_id, role_id) values (7, 6);
--- insert into users_roles (user_id, role_id) values (8, 6);
+insert into users_roles (user_id, role_id) values (6, 6);
+insert into users_roles (user_id, role_id) values (7, 6);
+
+-- CHIEF EDITOR
+insert into users_roles (user_id, role_id) values (8, 7);
 
 -- COMMITTEE MEMBERS
 insert into users_roles (user_id, role_id) values (9, 8);

@@ -105,6 +105,12 @@ public class User implements UserDetails, Serializable { //, org.camunda.bpm.eng
             inverseJoinColumns = @JoinColumn(name = "publishing_request_id", referencedColumnName = "id"))
     private Set<PublishingRequest> earlyAccessBooks;
 
+    @ManyToMany
+    @JoinTable(name = "editors_plagiarism_complaints",
+            joinColumns = @JoinColumn(name = "editor_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "plagiarism_complaint_id", referencedColumnName = "id"))
+    private Set<PlagiarismComplaint> complaintsToInvestigate;
+
     @Column
     private boolean enabled;
 
