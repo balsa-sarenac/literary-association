@@ -30,10 +30,17 @@ public class ProcessApproval implements JavaDelegate {
             PublishingRequest publishingRequest = request.get();
 
             HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data-approve-book");
-            Boolean approve = (Boolean)formSubmission.get("approve");
+            var approve = formSubmission.get("approve");
+            boolean approved  = false;
 
-            delegateExecution.setVariable("approved", approve);
-            if (approve)
+            try {
+                approved = Boolean.parseBoolean(approve.toString());
+            }
+            catch (Exception e) {
+            }
+
+            delegateExecution.setVariable("approved", approved);
+            if (approved)
                 publishingRequest.setStatus("Book is approved for publishing");
             else {
                 publishingRequest.setStatus("Book is not approved for publishing");

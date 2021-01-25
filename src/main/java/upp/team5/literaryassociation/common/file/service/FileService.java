@@ -26,10 +26,7 @@ import upp.team5.literaryassociation.security.repository.UserRepository;
 
 import javax.ws.rs.NotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -52,6 +49,7 @@ public class FileService {
     @Autowired
     private PublishingRequestService publishingRequestService;
 
+    @Transactional
     public void store(MultipartFile[] files, String processId) throws IOException {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username;
@@ -72,38 +70,60 @@ public class FileService {
             dbUser.setStatus("reviewExpected");
         }
 
+
         HashSet<FileDB> toMap = new HashSet<>();
-        for (MultipartFile file: files) {
-            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-            FileDB fileDB = new FileDB(fileName, file.getContentType(), file.getBytes());
 
-            if(task.getTaskDefinitionKey().equals("SubmitDocuments"))
-                fileDB.setMembershipRequest(dbUser.getMembershipRequest());
-            else if(task.getTaskDefinitionKey().equals("UploadBook") || task.getName().equals("Upload book for review")){
-                var request = runtimeService.getVariable(processId, "publishing-request-id");
-                PublishingRequest publishingRequest = publishingRequestService.getPublishingRequest(Long.parseLong(request.toString()));
+        var request = runtimeService.getVariable(processId, "publishing-request-id");
+        PublishingRequest publishingRequest = publishingRequestService.getPublishingRequest(Long.parseLong(request.toString()));
 
-                publishingRequest.setStatus("Book uploaded");
-                publishingRequestService.savePublishingRequest(publishingRequest);
 
-                //var book = publishingRequest.getBook();
-                //book.setBookFile(fileDB);
-                //bookService.saveBook(book);
+        if(task.getTaskDefinitionKey().equals("change-book") && Arrays.stream(files).count()==0){
 
-                fileDB.setPublishingRequest(publishingRequest);
-                fileDB.setUploadedBookId(publishingRequest.getBook().getId());
-            }
-            toMap.add(fileDB);
+            publishingRequest.setStatus("Editor review");
+
         }
+        else {
+            for (MultipartFile file : files) {
+                String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+                FileDB fileDB = new FileDB(fileName, file.getContentType(), file.getBytes());
 
-        fileDBRepository.saveAll(toMap);
+                if (task.getTaskDefinitionKey().equals("SubmitDocuments"))
+                    fileDB.setMembershipRequest(dbUser.getMembershipRequest());
+                else if (task.getTaskDefinitionKey().equals("UploadBook") || task.getName().equals("Upload book for review") ) {
+                    publishingRequest.setStatus("Book uploaded");
+
+                    fileDB.setPublishingRequest(publishingRequest);
+                    fileDB.setUploadedBookId(publishingRequest.getBook().getId());
+                }
+                else if(task.getTaskDefinitionKey().equals("change-book")){
+
+                    publishingRequest.setStatus("Editor review");
+
+                    FileDB oldFile = getByBookId(publishingRequest.getBook().getId());
+                    oldFile.setUploadedBookId(null);
+
+                    fileDBRepository.deleteById(oldFile.getId());
+
+                    publishingRequest.setNotes(new HashSet<>());
+
+                    fileDB.setPublishingRequest(publishingRequest);
+                    fileDB.setUploadedBookId(publishingRequest.getBook().getId());
+                }
+
+                toMap.add(fileDB);
+            }
+
+            publishingRequestService.savePublishingRequest(publishingRequest);
+            fileDBRepository.saveAll(toMap);
 
 //        runtimeService.setVariable(processId, "files", toMap);
+        }
 
         HashMap<String, Object> map = listToMap(toMap);
 
         formService.submitTaskForm(task.getId(), map );
     }
+
 
     @Transactional
     public FileDB getByBookId(Long id){
