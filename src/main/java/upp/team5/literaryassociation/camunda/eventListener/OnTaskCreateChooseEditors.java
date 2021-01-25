@@ -33,29 +33,29 @@ public class OnTaskCreateChooseEditors implements TaskListener {
         Long complaintId = (Long) delegateTask.getVariable("plagiarism-complaint-id");
         List<UserDTO> editors = plagiarismComplaintService.getEditorsThatCanLeaveNotes(complaintId);
 
-        String minEditors = null;
-        String maxEditors = null;
+        int minEditors = 0;
+        int maxEditors = 0;
         try {
-            minEditors = (String) delegateTask.getVariable("minEditors");
-            maxEditors = (String) delegateTask.getVariable("maxEditors");
+            minEditors = Integer.parseInt(String.valueOf(delegateTask.getVariable("minEditors")));
+            maxEditors = Integer.parseInt(String.valueOf(delegateTask.getVariable("maxEditors"))) ;
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if (minEditors == null || minEditors.equals("")) {
-            minEditors = "2";
+        if (minEditors == 0) {
+            minEditors = 2;
         }
 
-        if (maxEditors == null || maxEditors.equals("")) {
-            maxEditors = "-1";
+        if (maxEditors == 0) {
+            maxEditors = editors.size();
         }
 
         for (FormField formField : properties) {
             if (formField.getId().equals("editors")) {
                 MultiselectFormFieldType multiselectFormFieldType = (MultiselectFormFieldType) formField.getType();
                 multiselectFormFieldType.setValues(listToMap(editors));
-                formField.getProperties().put("minEditors", minEditors);
-                formField.getProperties().put("maxEditors", maxEditors);
+                formField.getProperties().put("minEditors", String.valueOf(minEditors));
+                formField.getProperties().put("maxEditors", String.valueOf(maxEditors));
                 break;
             }
         }
