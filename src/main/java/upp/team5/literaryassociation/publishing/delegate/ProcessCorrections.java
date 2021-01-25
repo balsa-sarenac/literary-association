@@ -56,6 +56,7 @@ public class ProcessCorrections implements JavaDelegate {
                 note.setType(NoteType.CORRECTION);
                 note.setPublishingRequest(publishingRequest);
                 note.setUser(lector);
+                note.setDeleted(false);
                 noteService.saveNote(note);
             }
             else {
