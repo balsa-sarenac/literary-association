@@ -34,4 +34,7 @@ public class PlagiarismComplaint implements Serializable {
 
     @ManyToMany(mappedBy = "complaintsToInvestigate")
     private Set<User> editorsOnInvestigation;
+
+    @Enumerated(value = EnumType.STRING)
+    private PlagiarismComplaintStage plagiarismComplaintStage;
 }
