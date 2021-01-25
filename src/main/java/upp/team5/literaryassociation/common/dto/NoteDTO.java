@@ -12,4 +12,5 @@ public class NoteDTO {
     private UserDTO user;
     private String content;
     private String noteType;
+    private boolean deleted;
 }
