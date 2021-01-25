@@ -97,8 +97,11 @@ public class PublishingRequestService {
         if(user.getRoles().contains(roleService.getByName("ROLE_LECTOR"))) {
             requests = new ArrayList<>( publishingRequestRepository.findByBookLectors(user));
         }
-        else if(user.getRoles().contains(roleService.getByName("ROLE_EDITOR"))) {
+        else if(user.getRoles().contains(roleService.getByName("ROLE_CHIEF_EDITOR"))) {
             requests = new ArrayList<>( publishingRequestRepository.findByBookChiefEditor(user));
+        }
+        else if(user.getRoles().contains(roleService.getByName("ROLE_AUTHOR"))) {
+            requests = new ArrayList<>( publishingRequestRepository.findByBookAuthors(user));
         }
 
         for(PublishingRequest req : requests){
