@@ -50,7 +50,11 @@
     <bpmn:userTask id="choose-editors" name="Choose editors to compare books">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="editors" label="Editors:" type="multiselect" />
+          <camunda:formField id="editors" label="Editors:" type="multiselect">
+            <camunda:validation>
+              <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.EditorsValidator" />
+            </camunda:validation>
+          </camunda:formField>
         </camunda:formData>
         <camunda:taskListener class="upp.team5.literaryassociation.camunda.eventListener.OnTaskCreateChooseEditors" event="create" />
       </bpmn:extensionElements>
