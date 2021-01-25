@@ -17,7 +17,7 @@
         <bpmn:flowNodeRef>Event_0qk4jiz</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Lane_1li8gqw" name="Chief editor">
-        <bpmn:flowNodeRef>Activity_0j5yjks</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>choose-editors</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_1erv1wr</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0rccf7p</bpmn:flowNodeRef>
       </bpmn:lane>
@@ -47,20 +47,25 @@
       <bpmn:outgoing>Flow_148m5qb</bpmn:outgoing>
       <bpmn:outgoing>Flow_0pqml4l</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:userTask id="Activity_0j5yjks" name="Choose editors to compare books">
+    <bpmn:userTask id="choose-editors" name="Choose editors to compare books">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="FormField_3ugb1pj" label="Editors:" type="multiselect" />
+          <camunda:formField id="editors" label="Editors:" type="multiselect">
+            <camunda:validation>
+              <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.EditorsValidator" />
+            </camunda:validation>
+          </camunda:formField>
         </camunda:formData>
+        <camunda:taskListener class="upp.team5.literaryassociation.camunda.eventListener.OnTaskCreateChooseEditors" event="create" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1mh0u1f</bpmn:incoming>
       <bpmn:outgoing>Flow_1udui1k</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:serviceTask id="Activity_1erv1wr" name="Store chosen editors" camunda:class="upp.team5.literaryassociation.plagiarism.service.PlagiarismService">
+    <bpmn:serviceTask id="Activity_1erv1wr" name="Store chosen editors" camunda:class="upp.team5.literaryassociation.plagiarism.delegate.StoreEditorsForInvestigation">
       <bpmn:incoming>Flow_1udui1k</bpmn:incoming>
       <bpmn:outgoing>Flow_14gcrs8</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sendTask id="Activity_0rccf7p" name="Notify editors" camunda:class="upp.team5.literaryassociation.plagiarism.service.PlagiarismService">
+    <bpmn:sendTask id="Activity_0rccf7p" name="Notify editors" camunda:class="upp.team5.literaryassociation.plagiarism.delegate.NotifyEditorsAboutInvestigationStart">
       <bpmn:incoming>Flow_14gcrs8</bpmn:incoming>
       <bpmn:outgoing>Flow_1dw2d3g</bpmn:outgoing>
     </bpmn:sendTask>
@@ -78,12 +83,10 @@
         <bpmn:outgoing>Flow_1kkjlag</bpmn:outgoing>
       </bpmn:startEvent>
       <bpmn:sequenceFlow id="Flow_1kkjlag" sourceRef="Event_1vb02mm" targetRef="Activity_129meao" />
-      <bpmn:userTask id="Activity_129meao" name="Make notes">
+      <bpmn:userTask id="Activity_129meao" name="Make notes" camunda:assignee="${editor.id}">
         <bpmn:incoming>Flow_1kkjlag</bpmn:incoming>
         <bpmn:outgoing>Flow_0glb9du</bpmn:outgoing>
-        <bpmn:multiInstanceLoopCharacteristics>
-          <bpmn:loopCardinality xsi:type="bpmn:tFormalExpression">${editorsList}</bpmn:loopCardinality>
-        </bpmn:multiInstanceLoopCharacteristics>
+        <bpmn:multiInstanceLoopCharacteristics camunda:collection="${editorsList}" camunda:elementVariable="editor" />
       </bpmn:userTask>
       <bpmn:sequenceFlow id="Flow_0glb9du" sourceRef="Activity_129meao" targetRef="Activity_1uf67le" />
       <bpmn:serviceTask id="Activity_1uf67le" name="Process notes" camunda:class="upp.team5.literaryassociation.plagiarism.service.PlagiarismService">
@@ -110,7 +113,7 @@
       <bpmn:outgoing>Flow_1t9056i</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_08ex7kk" sourceRef="Event_0qk4jiz" targetRef="Gateway_1h42nns" />
-    <bpmn:sequenceFlow id="Flow_1mh0u1f" sourceRef="Gateway_1h42nns" targetRef="Activity_0j5yjks" />
+    <bpmn:sequenceFlow id="Flow_1mh0u1f" sourceRef="Gateway_1h42nns" targetRef="choose-editors" />
     <bpmn:sequenceFlow id="Flow_0fg31uu" sourceRef="Activity_0zqq2ef" targetRef="Gateway_1h42nns" />
     <bpmn:sequenceFlow id="Flow_0ot8yxp" sourceRef="Activity_04nmv3v" targetRef="Event_1uygbv8" />
     <bpmn:sequenceFlow id="Flow_0pqml4l" sourceRef="Gateway_0pzh2r6" targetRef="Activity_04nmv3v">
@@ -125,7 +128,7 @@
     <bpmn:sequenceFlow id="Flow_0m11lns" sourceRef="Activity_0l0q5z8" targetRef="Activity_00i92zr" />
     <bpmn:sequenceFlow id="Flow_1dw2d3g" sourceRef="Activity_0rccf7p" targetRef="Activity_0l0q5z8" />
     <bpmn:sequenceFlow id="Flow_14gcrs8" sourceRef="Activity_1erv1wr" targetRef="Activity_0rccf7p" />
-    <bpmn:sequenceFlow id="Flow_1udui1k" sourceRef="Activity_0j5yjks" targetRef="Activity_1erv1wr" />
+    <bpmn:sequenceFlow id="Flow_1udui1k" sourceRef="choose-editors" targetRef="Activity_1erv1wr" />
     <bpmn:subProcess id="Activity_0yq867v" triggeredByEvent="true">
       <bpmn:sendTask id="Activity_14knotx" name="Notify user about timeout" camunda:class="upp.team5.literaryassociation.common.service.NotifyAboutProcessTimeoutService">
         <bpmn:incoming>Flow_0k7xf1x</bpmn:incoming>
@@ -280,7 +283,7 @@
           <dc:Bounds x="1291" y="805" width="80" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1coikul_di" bpmnElement="Activity_0j5yjks">
+      <bpmndi:BPMNShape id="Activity_1coikul_di" bpmnElement="choose-editors">
         <dc:Bounds x="830" y="420" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1tk4k68_di" bpmnElement="Activity_1erv1wr">

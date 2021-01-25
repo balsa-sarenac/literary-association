@@ -62,14 +62,14 @@ public class PublishingController {
         return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_EDITOR') || hasAuthority('ROLE_LECTOR')")
+    @PreAuthorize("hasAuthority('ROLE_CHIEF_EDITOR') || hasAuthority('ROLE_LECTOR')")
     @GetMapping(name = "getAllRequests", path="/all-requests/{userId}")
     public ResponseEntity<HashSet<PublishingRequestDTO>> getAllRequests(@PathVariable String userId) throws JsonProcessingException {
         HashSet<PublishingRequestDTO> retVal = publishingRequestService.getAllEditorRequests(Long.parseLong(userId));
         return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_EDITOR') or hasAuthority('ROLE_LECTOR') or hasAuthority('ROLE_AUTHOR')")
+    @PreAuthorize("hasAuthority('ROLE_EDITOR') or hasAuthority('ROLE_AUTHOR') or hasAuthority('ROLE_CHIEF_EDITOR') or hasAuthority('ROLE_LECTOR')")
     @GetMapping(name = "getRequest", path="/get-request/{requestId}")
     public ResponseEntity<PublishingRequestDTO> getRequest(@PathVariable String requestId) throws JsonProcessingException {
         var dto = publishingRequestService.getPublishingRequestDTO(Long.parseLong(requestId));

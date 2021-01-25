@@ -14,6 +14,8 @@ import upp.team5.literaryassociation.common.service.AuthUserService;
 import upp.team5.literaryassociation.model.PlagiarismComplaint;
 import upp.team5.literaryassociation.plagiarism.service.PlagiarismComplaintService;
 
+import java.util.List;
+
 @CrossOrigin
 @RestController
 @Slf4j
@@ -41,5 +43,17 @@ public class PlagiarismController {
         ProcessDTO processDTO = new ProcessDTO(processInstance.getId());
 
         return new ResponseEntity<>(processDTO, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_CHIEF_EDITOR')")
+    @GetMapping(name = "getAllComplaints", path = "/complaints")
+    public ResponseEntity<List<PlagiarismComplaintDTO>> getComplaints() {
+        return new ResponseEntity<>(plagiarismComplaintService.getComplaints(), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_CHIEF_EDITOR')")
+    @GetMapping(name = "getAllComplaints", path = "/complaints/{complaintId}")
+    public ResponseEntity<PlagiarismComplaintDTO> getComplaint(@PathVariable Long complaintId) {
+        return new ResponseEntity<>(plagiarismComplaintService.getComplaint(complaintId), HttpStatus.OK);
     }
 }
