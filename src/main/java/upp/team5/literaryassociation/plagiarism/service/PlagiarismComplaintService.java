@@ -13,6 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import upp.team5.literaryassociation.common.dto.FileDTO;
 import upp.team5.literaryassociation.common.dto.PlagiarismComplaintDTO;
 import upp.team5.literaryassociation.common.dto.UserDTO;
+import upp.team5.literaryassociation.common.service.AuthUserService;
 import upp.team5.literaryassociation.model.*;
 import upp.team5.literaryassociation.plagiarism.repository.PlagiarismComplaintRepository;
 import upp.team5.literaryassociation.publishing.service.BookService;
@@ -40,6 +41,9 @@ public class PlagiarismComplaintService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private AuthUserService authUserService;
 
     public PlagiarismComplaint getPlagiarismComplaint(Long id){
         return plagiarismComplaintRepository.findById(id)
@@ -75,7 +79,15 @@ public class PlagiarismComplaintService {
     }
 
     public List<PlagiarismComplaintDTO> getComplaints() {
-        List<PlagiarismComplaint> complaints = plagiarismComplaintRepository.findAll();
+        User user = authUserService.getLoggedInUser();
+        PlagiarismComplaintStage stage = switch (user.getRoles().iterator().next().getName()) {
+            case "ROLE_CHIEF_EDITOR" -> PlagiarismComplaintStage.CHOOSE_EDITORS;
+            case "ROLE_EDITOR" -> PlagiarismComplaintStage.EDITORS_LEAVE_NOTES;
+            case "ROLE_COMMITTEE_MEMBER" -> PlagiarismComplaintStage.COMMITTEE_VOTING;
+            default -> null;
+        };
+
+        List<PlagiarismComplaint> complaints = plagiarismComplaintRepository.findAllByPlagiarismComplaintStage(stage);
         List<PlagiarismComplaintDTO> complaintDTOS = complaints.stream()
                 .map(plagiarismComplaint -> modelMapper.map(plagiarismComplaint, PlagiarismComplaintDTO.class))
                 .collect(Collectors.toList());
