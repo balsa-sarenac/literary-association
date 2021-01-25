@@ -56,6 +56,7 @@ public class ProcessSuggestions implements JavaDelegate {
                 note.setType(NoteType.SUGGESTION);
                 note.setPublishingRequest(publishingRequest);
                 note.setUser(editor);
+                note.setDeleted(false);
                 noteService.saveNote(note);
             }
             else {
