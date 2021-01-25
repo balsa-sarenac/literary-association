@@ -17,7 +17,7 @@ import java.util.HashMap;
 
 @Service
 @Slf4j
-public class ProcessSuggestions implements JavaDelegate {
+public class ProcessCorrections implements JavaDelegate {
     @Autowired
     private AuthUserService authUserService;
 
@@ -31,36 +31,36 @@ public class ProcessSuggestions implements JavaDelegate {
     public void execute(DelegateExecution delegateExecution) throws Exception {
         var requestId = delegateExecution.getVariable("publishing-request-id");
         var request = publishingRequestService.getById(Long.parseLong(requestId.toString()));
-        User editor = this.authUserService.getLoggedInUser();
+        User lector = this.authUserService.getLoggedInUser();
 
         if(request.isPresent()){
             PublishingRequest publishingRequest = request.get();
 
-            HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data-more-suggestions");
+            HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data-corrections");
 
-            var suggestionsObj = formSubmission.get("suggestions");
-            boolean suggestions = false;
+            var editsObj = formSubmission.get("mistakes");
+            boolean edits = false;
 
             try {
-                suggestions = Boolean.parseBoolean(suggestionsObj.toString());
+                edits = Boolean.parseBoolean(editsObj.toString());
             } catch (Exception e) {
 
             }
 
-            delegateExecution.setVariable("suggestions", suggestions);
-            if (suggestions) {
-                publishingRequest.setStatus("Editor gave suggestions");
+            delegateExecution.setVariable("edits", edits);
+            if (edits) {
+                publishingRequest.setStatus("Lector sent corrections");
 
                 Note note = new Note();
                 note.setContent((String) formSubmission.get("textareaSuggestions"));
-                note.setType(NoteType.SUGGESTION);
+                note.setType(NoteType.CORRECTION);
                 note.setPublishingRequest(publishingRequest);
-                note.setUser(editor);
+                note.setUser(lector);
                 note.setDeleted(false);
                 noteService.saveNote(note);
             }
             else {
-                publishingRequest.setStatus("Book is sent to lector");
+                publishingRequest.setStatus("Final editor check");
             }
             publishingRequestService.savePublishingRequest(publishingRequest);
         }

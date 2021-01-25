@@ -33,8 +33,8 @@ public class FileDB implements Serializable {
     @JoinColumn(name = "publishing_request_id", referencedColumnName = "id")
     private PublishingRequest publishingRequest;
 
-//    @OneToOne
-//    private Book book;
+    @OneToOne
+    private Book book;
 
     @Column
     private Long uploadedBookId;

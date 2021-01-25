@@ -42,6 +42,7 @@ public class ProcessComments implements JavaDelegate {
         note.setType(NoteType.COMMENT);
         note.setPublishingRequest(publishingRequest);
         note.setUser(betaReader);
+        note.setDeleted(false);
 
         noteService.saveNote(note);
 

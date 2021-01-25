@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import upp.team5.literaryassociation.common.dto.FileDTO;
+import upp.team5.literaryassociation.common.service.NoteService;
 import upp.team5.literaryassociation.model.FileDB;
 import upp.team5.literaryassociation.common.file.repository.FileDBRepository;
 import upp.team5.literaryassociation.model.MembershipRequest;
@@ -48,6 +49,9 @@ public class FileService {
 
     @Autowired
     private PublishingRequestService publishingRequestService;
+
+    @Autowired
+    private NoteService noteService;
 
     @Transactional
     public void store(MultipartFile[] files, String processId) throws IOException {
@@ -104,7 +108,7 @@ public class FileService {
 
                     fileDBRepository.deleteById(oldFile.getId());
 
-                    publishingRequest.setNotes(new HashSet<>());
+                    noteService.deleteNotes(publishingRequest.getNotes());
 
                     fileDB.setPublishingRequest(publishingRequest);
                     fileDB.setUploadedBookId(publishingRequest.getBook().getId());

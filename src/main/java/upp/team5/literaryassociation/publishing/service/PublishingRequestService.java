@@ -19,6 +19,7 @@ import upp.team5.literaryassociation.common.service.NoteService;
 import upp.team5.literaryassociation.model.*;
 import upp.team5.literaryassociation.publishing.repository.PublishingRequestRepository;
 import upp.team5.literaryassociation.security.repository.UserRepository;
+import upp.team5.literaryassociation.security.service.RoleService;
 
 import javax.ws.rs.NotFoundException;
 import java.util.*;
@@ -39,6 +40,8 @@ public class PublishingRequestService {
     private IdentityService identityService;
     @Autowired
     private FileService fileService;
+    @Autowired
+    private RoleService roleService;
 
     private final AuthUserService authUserService;
     private final ModelMapper modelMapper;
@@ -87,9 +90,19 @@ public class PublishingRequestService {
 
     public HashSet<PublishingRequestDTO> getAllEditorRequests(Long editorId) {
         HashSet<PublishingRequestDTO> retVal = new HashSet<>();
-        User chiefEditor = userRepository.findById(editorId).orElseThrow(NotFoundException::new);
+        User user = userRepository.findById(editorId).orElseThrow(NotFoundException::new);
 
-        List<PublishingRequest> requests = new ArrayList<>(publishingRequestRepository.findByBookChiefEditor(chiefEditor));
+        List<PublishingRequest> requests = new ArrayList<>();
+
+        if(user.getRoles().contains(roleService.getByName("ROLE_LECTOR"))) {
+            requests = new ArrayList<>( publishingRequestRepository.findByBookLectors(user));
+        }
+        else if(user.getRoles().contains(roleService.getByName("ROLE_CHIEF_EDITOR"))) {
+            requests = new ArrayList<>( publishingRequestRepository.findByBookChiefEditor(user));
+        }
+        else if(user.getRoles().contains(roleService.getByName("ROLE_AUTHOR"))) {
+            requests = new ArrayList<>( publishingRequestRepository.findByBookAuthors(user));
+        }
 
         for(PublishingRequest req : requests){
             PublishingRequestDTO pubReq = modelMapper.map(req, PublishingRequestDTO.class);
@@ -104,7 +117,7 @@ public class PublishingRequestService {
 
         PublishingRequestDTO dto = modelMapper.map(req, PublishingRequestDTO.class);
 
-        if(req.getStatus().equals("Book is original") ) {
+        if(req.getStatus().equals("Book uploaded") ) {
             List<FileDB> sources = null;
             try {
                 sources = this.fileService.findAllByPublishingRequest(req);
