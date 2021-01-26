@@ -35,4 +35,8 @@ public class Vote implements Serializable {
     @ManyToOne
     @JoinColumn(name = "committee_id", referencedColumnName = "id")
     private User committeeMember;
+
+    @ManyToOne
+    @JoinColumn(name = "plagiarism_complaint_id")
+    private PlagiarismComplaint plagiarismComplaint;
 }
