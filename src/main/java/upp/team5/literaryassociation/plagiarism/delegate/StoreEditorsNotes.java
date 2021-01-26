@@ -3,6 +3,7 @@ package upp.team5.literaryassociation.plagiarism.delegate;
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.common.service.AuthUserService;
@@ -40,6 +41,7 @@ public class StoreEditorsNotes implements JavaDelegate {
         note.setContent(noteContent);
         note.setUser(authUserService.getLoggedInUser());
         note.setPlagiarismComplaint(complaint);
+        note.setDateTime(DateTime.now());
         noteService.saveNote(note);
 
         log.info("Set send to committee variable to true");

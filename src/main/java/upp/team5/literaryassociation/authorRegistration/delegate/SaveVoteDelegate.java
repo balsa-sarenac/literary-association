@@ -5,6 +5,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.authorRegistration.service.MembershipRequestService;
@@ -65,7 +66,7 @@ public class SaveVoteDelegate implements JavaDelegate {
             note.setType(NoteType.COMMENT);
             note.setMembershipRequest(membershipRequest);
             note.setUser(committee);
-
+            note.setDateTime(DateTime.now());
             noteService.saveNote(note);
         }
     }

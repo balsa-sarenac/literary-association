@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.common.dto.NoteDTO;
@@ -42,7 +43,7 @@ public class ProcessComments implements JavaDelegate {
         note.setType(NoteType.COMMENT);
         note.setPublishingRequest(publishingRequest);
         note.setUser(betaReader);
-
+        note.setDateTime(DateTime.now());
         noteService.saveNote(note);
 
         publishingRequest.setStatus("Change book based on comments");
