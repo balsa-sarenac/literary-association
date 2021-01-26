@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 
 @Getter @Setter
 @NoArgsConstructor
@@ -23,7 +23,7 @@ public class Vote implements Serializable {
     private VoteOption voteOption;
 
     @Column
-    private Date voteTime;
+    private DateTime voteTime;
 
     @Column
     private int round;

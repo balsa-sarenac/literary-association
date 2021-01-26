@@ -54,7 +54,7 @@ public class SaveVoteDelegate implements JavaDelegate {
         }
 
         vote.setMembershipRequest(membershipRequest);
-        vote.setVoteTime(new Date());
+        vote.setVoteTime(DateTime.now());
         vote.setRound(membershipRequest.getVoteRound());
         vote.setCommitteeMember(committee);
 
