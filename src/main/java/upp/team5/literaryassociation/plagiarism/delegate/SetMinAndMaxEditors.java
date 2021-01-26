@@ -37,8 +37,8 @@ public class SetMinAndMaxEditors implements JavaDelegate {
         delegateExecution.setVariable("minEditors", editors.size());
         delegateExecution.setVariable("maxEditors", editors.size());
 
-        complaint.setIteration(complaint.getIteration() + 1);
-        complaint.setIterationStart(DateTime.now());
+//        complaint.setIteration(complaint.getIteration() + 1);
+//        complaint.setIterationStart(DateTime.now());
         complaint.setPlagiarismComplaintStage(PlagiarismComplaintStage.CHOOSE_EDITORS);
         plagiarismComplaintService.save(complaint);
     }

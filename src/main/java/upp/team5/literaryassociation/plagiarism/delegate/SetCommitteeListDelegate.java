@@ -33,6 +33,21 @@ public class SetCommitteeListDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
+        log.info("Getting plagiarism complaint id");
+        Long  requestId = (Long) delegateExecution.getVariable("plagiarism-complaint-id");
+        PlagiarismComplaint complaint = plagiarismComplaintService.getPlagiarismComplaint(requestId);
 
+        complaint.setPlagiarismComplaintStage(PlagiarismComplaintStage.COMMITTEE_VOTING);
+        plagiarismComplaintService.save(complaint);
+
+        Role committee = roleRepository.findByName("ROLE_COMMITTEE_MEMBER");
+        List<User> users = userRepository.findAllByEnabledAndRolesIn(true, List.of(committee));
+
+        log.info("Creating list of camunda users");
+        List<org.camunda.bpm.engine.identity.User> camundaUsers = new ArrayList<>();
+        for (User user: users) {
+            camundaUsers.add(identityService.createUserQuery().userId(String.valueOf(user.getId())).singleResult());
+        }
+        delegateExecution.setVariable("committeeList", camundaUsers);
     }
 }
