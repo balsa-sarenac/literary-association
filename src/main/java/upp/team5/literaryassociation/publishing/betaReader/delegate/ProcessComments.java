@@ -44,6 +44,7 @@ public class ProcessComments implements JavaDelegate {
         note.setPublishingRequest(publishingRequest);
         note.setUser(betaReader);
         note.setDateTime(DateTime.now());
+        note.setDeleted(false);
         noteService.saveNote(note);
 
         publishingRequest.setStatus("Change book based on comments");

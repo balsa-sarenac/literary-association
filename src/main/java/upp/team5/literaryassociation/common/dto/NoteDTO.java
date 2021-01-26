@@ -14,4 +14,5 @@ public class NoteDTO {
     private String content;
     private String noteType;
     private DateTime dateTime;
+    private boolean deleted;
 }

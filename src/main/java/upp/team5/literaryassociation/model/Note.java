@@ -22,6 +22,8 @@ public class Note implements Serializable {
 
       private String content;
 
+      private boolean deleted;
+
       @Enumerated(value = EnumType.STRING)
       private NoteType type;
 
