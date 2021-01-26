@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.common.service.AuthUserService;
@@ -45,6 +46,8 @@ public class ProcessComplaintService implements JavaDelegate {
 
         PlagiarismComplaint plagiarismComplaint = new PlagiarismComplaint();
         plagiarismComplaint.setPlagiarismComplaintStage(PlagiarismComplaintStage.CHOOSE_EDITORS);
+        plagiarismComplaint.setIteration(0);
+        plagiarismComplaint.setIterationStart(DateTime.now());
         plagiarismComplaint.setComplainant(complainant);
         plagiarismComplaint.setComplainantBook(complainantBook);
         plagiarismComplaint.setPlagiarism(plagiarismBook);
