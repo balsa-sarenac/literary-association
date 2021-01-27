@@ -43,7 +43,7 @@ public class OnTaskCreateChooseEditors implements TaskListener {
         }
 
         if (minEditors == 0) {
-            minEditors = 2;
+            minEditors = Math.min(2, editors.size());
         }
 
         if (maxEditors == 0) {

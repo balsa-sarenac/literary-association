@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.camunda.type.MultiselectFormFieldType;
 import upp.team5.literaryassociation.model.PlagiarismComplaint;
+import upp.team5.literaryassociation.model.PlagiarismComplaintStage;
 import upp.team5.literaryassociation.model.PublishingRequest;
 import upp.team5.literaryassociation.model.User;
 import upp.team5.literaryassociation.plagiarism.service.PlagiarismComplaintService;
@@ -46,6 +47,7 @@ public class StoreEditorsForInvestigation implements JavaDelegate {
             editor.getComplaintsToInvestigate().add(complaint);
         }
         complaint.getEditorsOnInvestigation().addAll(editors);
+        complaint.setPlagiarismComplaintStage(PlagiarismComplaintStage.EDITORS_LEAVE_NOTES);
         userRepository.saveAll(editors);
         plagiarismComplaintService.save(complaint);
 

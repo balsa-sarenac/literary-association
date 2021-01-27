@@ -4,11 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.common.service.AuthUserService;
 import upp.team5.literaryassociation.model.Book;
 import upp.team5.literaryassociation.model.PlagiarismComplaint;
+import upp.team5.literaryassociation.model.PlagiarismComplaintStage;
 import upp.team5.literaryassociation.model.User;
 import upp.team5.literaryassociation.publishing.service.BookService;
 import upp.team5.literaryassociation.security.service.CustomUserDetailsService;
@@ -43,6 +45,9 @@ public class ProcessComplaintService implements JavaDelegate {
         Book plagiarismBook = bookService.getBook(Long.valueOf((Integer) formFields.get("plagiarismBook")));
 
         PlagiarismComplaint plagiarismComplaint = new PlagiarismComplaint();
+        plagiarismComplaint.setPlagiarismComplaintStage(PlagiarismComplaintStage.CHOOSE_EDITORS);
+        plagiarismComplaint.setIteration(0);
+        plagiarismComplaint.setIterationStart(DateTime.now());
         plagiarismComplaint.setComplainant(complainant);
         plagiarismComplaint.setComplainantBook(complainantBook);
         plagiarismComplaint.setPlagiarism(plagiarismBook);

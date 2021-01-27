@@ -162,6 +162,7 @@ insert into users_roles (user_id, role_id) values (9, 8);
 --insert into users_roles (user_id, role_id) values (12, 8);
 
 -- HEAD OF COMMITTEE
+insert into users_roles (user_id, role_id) values (13, 8);
 insert into users_roles (user_id, role_id) values (13, 9);
 
 -- AUTHOR

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -34,4 +35,13 @@ public class PlagiarismComplaint implements Serializable {
 
     @ManyToMany(mappedBy = "complaintsToInvestigate")
     private Set<User> editorsOnInvestigation;
+
+    @Enumerated(value = EnumType.STRING)
+    private PlagiarismComplaintStage plagiarismComplaintStage;
+
+    @Column
+    private int iteration;
+
+    @Column
+    private DateTime iterationStart;
 }

@@ -45,13 +45,13 @@ public class PlagiarismController {
         return new ResponseEntity<>(processDTO, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_CHIEF_EDITOR')")
+    @PreAuthorize("hasAuthority('ROLE_CHIEF_EDITOR') or hasAuthority('ROLE_EDITOR') or hasAuthority('ROLE_COMMITTEE_MEMBER')")
     @GetMapping(name = "getAllComplaints", path = "/complaints")
     public ResponseEntity<List<PlagiarismComplaintDTO>> getComplaints() {
         return new ResponseEntity<>(plagiarismComplaintService.getComplaints(), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_CHIEF_EDITOR')")
+    @PreAuthorize("hasAuthority('ROLE_CHIEF_EDITOR') or hasAuthority('ROLE_EDITOR') or hasAuthority('ROLE_COMMITTEE_MEMBER')")
     @GetMapping(name = "getAllComplaints", path = "/complaints/{complaintId}")
     public ResponseEntity<PlagiarismComplaintDTO> getComplaint(@PathVariable Long complaintId) {
         return new ResponseEntity<>(plagiarismComplaintService.getComplaint(complaintId), HttpStatus.OK);
