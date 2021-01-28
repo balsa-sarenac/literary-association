@@ -98,7 +98,7 @@
       <bpmn:boundaryEvent id="Event_0qk4jiz" attachedToRef="editor-notes">
         <bpmn:outgoing>Flow_15iu26j</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_0syh8je">
-          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT20S</bpmn:timeDuration>
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P14D</bpmn:timeDuration>
         </bpmn:timerEventDefinition>
       </bpmn:boundaryEvent>
       <bpmn:sequenceFlow id="Flow_15iu26j" sourceRef="Event_0qk4jiz" targetRef="Activity_1q5u69y" />
@@ -227,25 +227,21 @@
         <bpmn:incoming>Flow_1kiural</bpmn:incoming>
         <bpmn:outgoing>Flow_160z1np</bpmn:outgoing>
       </bpmn:serviceTask>
-      <bpmn:sequenceFlow id="Flow_15ug4c4" sourceRef="Event_1r6d2xp" targetRef="Activity_00i92zr" />
+      <bpmn:sequenceFlow id="Flow_15ug4c4" sourceRef="Event_1r6d2xp" targetRef="plagiarism-vote" />
       <bpmn:endEvent id="Event_0y3uh2e">
         <bpmn:incoming>Flow_160z1np</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_160z1np" sourceRef="Activity_1f4sggd" targetRef="Event_0y3uh2e" />
-      <bpmn:userTask id="Activity_00i92zr" name="Compare notes and decide if plagiarism" camunda:assignee="${committee.id}">
+      <bpmn:userTask id="plagiarism-vote" name="Compare notes and decide if plagiarism" camunda:assignee="${committee.id}">
         <bpmn:extensionElements>
           <camunda:formData>
-            <camunda:formField id="isPlagiarism" label="Is it plagiarism?" type="boolean">
-              <camunda:validation>
-                <camunda:constraint name="required" />
-              </camunda:validation>
-            </camunda:formField>
+            <camunda:formField id="isPlagiarism" label="Is it plagiarism?" type="boolean" />
           </camunda:formData>
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_15ug4c4</bpmn:incoming>
         <bpmn:outgoing>Flow_1kiural</bpmn:outgoing>
       </bpmn:userTask>
-      <bpmn:sequenceFlow id="Flow_1kiural" sourceRef="Activity_00i92zr" targetRef="Activity_1f4sggd" />
+      <bpmn:sequenceFlow id="Flow_1kiural" sourceRef="plagiarism-vote" targetRef="Activity_1f4sggd" />
     </bpmn:subProcess>
     <bpmn:sequenceFlow id="Flow_12v5hdp" sourceRef="Activity_0eklwqs" targetRef="Gateway_0pzh2r6" />
     <bpmn:serviceTask id="Activity_0eklwqs" name="Process votes" camunda:class="upp.team5.literaryassociation.plagiarism.delegate.ProcessCommitteeVotesDelegate">
@@ -492,7 +488,7 @@
       <bpmndi:BPMNShape id="Event_0y3uh2e_di" bpmnElement="Event_0y3uh2e">
         <dc:Bounds x="1262" y="992" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_12a368c_di" bpmnElement="Activity_00i92zr">
+      <bpmndi:BPMNShape id="Activity_12a368c_di" bpmnElement="plagiarism-vote">
         <dc:Bounds x="960" y="970" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1u7ml3b_di" bpmnElement="Activity_0eklwqs">

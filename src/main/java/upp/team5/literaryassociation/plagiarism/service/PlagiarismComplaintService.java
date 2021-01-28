@@ -62,7 +62,9 @@ public class PlagiarismComplaintService {
         List<User> editorsThatHaveLeftNotes = null;
         if (plagiarismComplaint.getNotes() != null) {
             editorsThatHaveLeftNotes = plagiarismComplaint.getNotes()
-                    .stream().map(Note::getUser).collect(Collectors.toList());
+                    .stream()
+                    .filter(note -> note.getDateTime().isAfter(plagiarismComplaint.getIterationStart()))
+                    .map(Note::getUser).collect(Collectors.toList());
         }
 
         if (editorsThatHaveLeftNotes != null) {
