@@ -277,6 +277,7 @@
           <camunda:formField id="password" label="Password" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
+              <camunda:constraint name="minlength" config="8" />
             </camunda:validation>
           </camunda:formField>
         </camunda:formData>
