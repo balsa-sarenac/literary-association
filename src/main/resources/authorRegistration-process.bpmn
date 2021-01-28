@@ -179,6 +179,9 @@
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="files" label="Documents" type="file">
+            <camunda:properties>
+              <camunda:property id="twoFiles" value="true" />
+            </camunda:properties>
             <camunda:validation>
               <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.FileValidator" />
             </camunda:validation>
