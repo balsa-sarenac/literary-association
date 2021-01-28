@@ -70,20 +70,22 @@ public class FileService {
         var pi = runtimeService.createProcessInstanceQuery().processInstanceId(processId).singleResult();
         var p = runtimeService.getVariables(processId);
 
-        if(task.getTaskDefinitionKey()=="SubmitDocuments"){
+        if(task.getTaskDefinitionKey().equals("SubmitDocuments")){
             dbUser.setStatus("reviewExpected");
         }
 
 
         HashSet<FileDB> toMap = new HashSet<>();
 
-        var request = runtimeService.getVariable(processId, "publishing-request-id");
-        PublishingRequest publishingRequest = publishingRequestService.getPublishingRequest(Long.parseLong(request.toString()));
 
 
         if(task.getTaskDefinitionKey().equals("change-book") && Arrays.stream(files).count()==0){
+            var request = runtimeService.getVariable(processId, "publishing-request-id");
+            PublishingRequest publishingRequest = publishingRequestService.getPublishingRequest(Long.parseLong(request.toString()));
 
             publishingRequest.setStatus("Editor review");
+
+            publishingRequestService.savePublishingRequest(publishingRequest);
 
         }
         else {
@@ -94,12 +96,19 @@ public class FileService {
                 if (task.getTaskDefinitionKey().equals("SubmitDocuments"))
                     fileDB.setMembershipRequest(dbUser.getMembershipRequest());
                 else if (task.getTaskDefinitionKey().equals("UploadBook") || task.getName().equals("Upload book for review") ) {
+                    var request = runtimeService.getVariable(processId, "publishing-request-id");
+                    PublishingRequest publishingRequest = publishingRequestService.getPublishingRequest(Long.parseLong(request.toString()));
+
                     publishingRequest.setStatus("Book uploaded");
 
                     fileDB.setPublishingRequest(publishingRequest);
                     fileDB.setUploadedBookId(publishingRequest.getBook().getId());
+
+                    publishingRequestService.savePublishingRequest(publishingRequest);
                 }
                 else if(task.getTaskDefinitionKey().equals("change-book") || task.getTaskDefinitionKey().equals("last-book-change")){
+                    var request = runtimeService.getVariable(processId, "publishing-request-id");
+                    PublishingRequest publishingRequest = publishingRequestService.getPublishingRequest(Long.parseLong(request.toString()));
 
                     publishingRequest.setStatus("Editor review");
 
@@ -112,12 +121,14 @@ public class FileService {
 
                     fileDB.setPublishingRequest(publishingRequest);
                     fileDB.setUploadedBookId(publishingRequest.getBook().getId());
+
+                    publishingRequestService.savePublishingRequest(publishingRequest);
                 }
 
                 toMap.add(fileDB);
+
             }
 
-            publishingRequestService.savePublishingRequest(publishingRequest);
             fileDBRepository.saveAll(toMap);
 
 //        runtimeService.setVariable(processId, "files", toMap);
