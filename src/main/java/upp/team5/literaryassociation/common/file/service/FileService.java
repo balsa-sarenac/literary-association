@@ -99,7 +99,7 @@ public class FileService {
                     fileDB.setPublishingRequest(publishingRequest);
                     fileDB.setUploadedBookId(publishingRequest.getBook().getId());
                 }
-                else if(task.getTaskDefinitionKey().equals("change-book")){
+                else if(task.getTaskDefinitionKey().equals("change-book") || task.getTaskDefinitionKey().equals("last-book-change")){
 
                     publishingRequest.setStatus("Editor review");
 
