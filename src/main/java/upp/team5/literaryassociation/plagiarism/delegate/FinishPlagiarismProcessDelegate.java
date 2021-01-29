@@ -11,7 +11,7 @@ import upp.team5.literaryassociation.plagiarism.service.PlagiarismComplaintServi
 import upp.team5.literaryassociation.publishing.service.BookService;
 
 @Service @Slf4j
-public class FinishProcessDelegate implements JavaDelegate {
+public class FinishPlagiarismProcessDelegate implements JavaDelegate {
 
     @Autowired
     private PlagiarismComplaintService plagiarismComplaintService;
