@@ -34,7 +34,7 @@ public class StoreCommitteeVoteDelegate implements JavaDelegate {
         PlagiarismComplaint complaint = plagiarismComplaintService.getPlagiarismComplaint(requestId);
 
         HashMap<String, Object> formSubmission = (HashMap<String, Object>) delegateExecution.getVariable("data-plagiarism-vote");
-        boolean isPlagiarism = (boolean) formSubmission.get("isPlagiarism");
+        boolean isPlagiarism = formSubmission.get("isPlagiarism").equals("") ? false : (boolean) formSubmission.get("isPlagiarism");
 
         log.info("Saving committee vote");
         Vote vote = new Vote();
