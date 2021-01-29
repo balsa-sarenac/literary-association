@@ -178,6 +178,9 @@
             <camunda:properties>
               <camunda:property id="controlledBy" value="read" />
             </camunda:properties>
+            <camunda:validation>
+              <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.ExplanationValidator" />
+            </camunda:validation>
           </camunda:formField>
         </camunda:formData>
       </bpmn:extensionElements>
@@ -358,6 +361,9 @@
             <camunda:properties>
               <camunda:property id="controlledBy" value="sendToBeta" />
             </camunda:properties>
+            <camunda:validation>
+              <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.SelectedReaderValidator" />
+            </camunda:validation>
           </camunda:formField>
         </camunda:formData>
         <camunda:taskListener class="upp.team5.literaryassociation.camunda.eventListener.OnTaskCreateChooseReaders" event="create" />
@@ -378,6 +384,9 @@
             <camunda:properties>
               <camunda:property id="controlledBy" value="approve" />
             </camunda:properties>
+            <camunda:validation>
+              <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.ExplanationValidator" />
+            </camunda:validation>
           </camunda:formField>
         </camunda:formData>
       </bpmn:extensionElements>
@@ -392,15 +401,14 @@
     <bpmn:userTask id="plagiarism" name="Decide if the manuscript is a plagiarism" camunda:assignee="${editor}">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="original" label="Check if the book is original" type="boolean" defaultValue="false">
-            <camunda:validation>
-              <camunda:constraint name="required" />
-            </camunda:validation>
-          </camunda:formField>
+          <camunda:formField id="original" label="Check if the book is original" type="boolean" defaultValue="false" />
           <camunda:formField id="explanation" label="Please write explanation:" type="string">
             <camunda:properties>
               <camunda:property id="controlledBy" value="original" />
             </camunda:properties>
+            <camunda:validation>
+              <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.ExplanationValidator" />
+            </camunda:validation>
           </camunda:formField>
         </camunda:formData>
       </bpmn:extensionElements>
@@ -449,6 +457,9 @@
             <camunda:properties>
               <camunda:property id="controlledBy" value="suggestions" />
             </camunda:properties>
+            <camunda:validation>
+              <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.TextareaValidator" />
+            </camunda:validation>
           </camunda:formField>
         </camunda:formData>
       </bpmn:extensionElements>
@@ -479,6 +490,9 @@
             <camunda:properties>
               <camunda:property id="controlledBy" value="suggestions" />
             </camunda:properties>
+            <camunda:validation>
+              <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.TextareaValidator" />
+            </camunda:validation>
           </camunda:formField>
         </camunda:formData>
       </bpmn:extensionElements>
@@ -542,6 +556,9 @@
             <camunda:properties>
               <camunda:property id="controlledBy" value="mistakes" />
             </camunda:properties>
+            <camunda:validation>
+              <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.TextareaValidator" />
+            </camunda:validation>
           </camunda:formField>
         </camunda:formData>
       </bpmn:extensionElements>
