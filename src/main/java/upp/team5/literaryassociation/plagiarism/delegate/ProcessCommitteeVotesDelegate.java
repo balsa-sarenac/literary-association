@@ -62,8 +62,8 @@ public class ProcessCommitteeVotesDelegate implements JavaDelegate {
             complaint.getEditorsOnInvestigation()
                     .forEach(editor -> editor.getComplaintsToInvestigate().remove(complaint));
             complaint.setEditorsOnInvestigation(new HashSet<>());
+            userRepository.saveAll(complaint.getEditorsOnInvestigation());
         }
-        userRepository.saveAll(complaint.getEditorsOnInvestigation());
         plagiarismComplaintService.save(complaint);
     }
 }
