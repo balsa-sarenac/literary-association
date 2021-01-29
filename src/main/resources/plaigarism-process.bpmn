@@ -120,7 +120,7 @@
     <bpmn:endEvent id="Event_1uygbv8">
       <bpmn:incoming>Flow_0ot8yxp</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:serviceTask id="Activity_04nmv3v" name="Store decision" camunda:class="upp.team5.literaryassociation.plagiarism.delegate.FinishProcessDelegate">
+    <bpmn:serviceTask id="Activity_04nmv3v" name="Store decision" camunda:class="upp.team5.literaryassociation.plagiarism.delegate.FinishPlagiarismProcessDelegate">
       <bpmn:incoming>Flow_0pqml4l</bpmn:incoming>
       <bpmn:outgoing>Flow_0ot8yxp</bpmn:outgoing>
     </bpmn:serviceTask>
