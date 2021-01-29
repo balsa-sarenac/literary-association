@@ -90,11 +90,20 @@ public class PlagiarismComplaintService {
         };
 
         List<PlagiarismComplaint> complaints = plagiarismComplaintRepository.findAllByPlagiarismComplaintStage(stage);
-        List<PlagiarismComplaintDTO> complaintDTOS = complaints.stream()
+
+        if (user.getRoles().iterator().next().getName().equals("ROLE_EDITOR")) {
+            complaints.removeIf(plagiarismComplaint -> plagiarismComplaint.getNotes()
+                    .stream().filter(note -> note.getDateTime().isAfter(plagiarismComplaint.getIterationStart()))
+                    .map(Note::getUser).collect(Collectors.toList()).contains(user));
+        } else if (user.getRoles().stream().map(Role::getName).collect(Collectors.toList()).contains("ROLE_COMMITTEE_MEMBER")) {
+            complaints.removeIf(plagiarismComplaint -> plagiarismComplaint.getVotes()
+                    .stream().filter(vote -> vote.getRound() == plagiarismComplaint.getIteration())
+                    .map(Vote::getCommitteeMember).collect(Collectors.toList()).contains(user));
+        }
+
+        return complaints.stream()
                 .map(plagiarismComplaint -> modelMapper.map(plagiarismComplaint, PlagiarismComplaintDTO.class))
                 .collect(Collectors.toList());
-
-        return complaintDTOS;
     }
 
     public PlagiarismComplaintDTO getComplaint(Long complaintId) {
