@@ -49,18 +49,19 @@ public class SaveVoteDelegate implements JavaDelegate {
             vote.setVoteOption(VoteOption.APPROVE);
         } else if ("refuse".equals(value)) {
             vote.setVoteOption(VoteOption.REFUSE);
+
         } else if ("request_more".equals(value)) {
             vote.setVoteOption(VoteOption.REQUEST_MORE_MATERIAL);
         }
 
         vote.setMembershipRequest(membershipRequest);
-        vote.setVoteTime(new Date());
+        vote.setVoteTime(DateTime.now());
         vote.setRound(membershipRequest.getVoteRound());
         vote.setCommitteeMember(committee);
 
         voteService.saveVote(vote);
 
-        if (!formFields.get("textarea").equals("")) {
+        if (!String.valueOf(formFields.get("textarea")).isBlank()) {
             Note note = new Note();
             note.setContent((String) formFields.get("textarea"));
             note.setType(NoteType.COMMENT);

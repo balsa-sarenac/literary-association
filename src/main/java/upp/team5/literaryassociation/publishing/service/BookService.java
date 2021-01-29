@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import upp.team5.literaryassociation.common.dto.BookDTO;
 import upp.team5.literaryassociation.common.dto.UserDTO;
@@ -27,6 +28,7 @@ public class BookService {
 
     public void saveBook(Book book) { bookRepository.save(book);}
 
+    @Transactional
     public HashSet<BookDTO> getAuthorBooks(String authorId) {
         ModelMapper modelMapper = new ModelMapper();
         HashSet<BookDTO> retVal = new HashSet<>();
@@ -41,6 +43,7 @@ public class BookService {
         return retVal;
     }
 
+    @Transactional
     public HashSet<BookDTO> getOtherAuthorBooks(String authorId) {
         ModelMapper modelMapper = new ModelMapper();
         HashSet<BookDTO> retVal = new HashSet<>();
@@ -61,6 +64,7 @@ public class BookService {
         return retVal;
     }
 
+    @Transactional
     public Book getBook(Long bookId) throws BookNotFoundException {
         return bookRepository.findById(bookId).orElseThrow(BookNotFoundException::new);
     }

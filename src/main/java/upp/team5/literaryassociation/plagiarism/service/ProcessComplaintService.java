@@ -13,9 +13,10 @@ import upp.team5.literaryassociation.model.PlagiarismComplaint;
 import upp.team5.literaryassociation.model.PlagiarismComplaintStage;
 import upp.team5.literaryassociation.model.User;
 import upp.team5.literaryassociation.publishing.service.BookService;
-import upp.team5.literaryassociation.security.service.CustomUserDetailsService;
+import upp.team5.literaryassociation.security.repository.UserRepository;
 
 import java.util.HashMap;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -24,7 +25,7 @@ public class ProcessComplaintService implements JavaDelegate {
     private AuthUserService authUserService;
 
     @Autowired
-    private CustomUserDetailsService userService;
+    private UserRepository userRepository;
 
     @Autowired
     private BookService bookService;
@@ -54,7 +55,7 @@ public class ProcessComplaintService implements JavaDelegate {
         plagiarismComplaint = plagiarismComplaintService.save(plagiarismComplaint);
 
         complainant.getComplaints().add(plagiarismComplaint);
-        userService.saveUser(complainant);
+        userRepository.save(complainant);
 
         complainantBook.getBeingPlagiated().add(plagiarismComplaint);
         bookService.saveBook(complainantBook);
@@ -64,5 +65,7 @@ public class ProcessComplaintService implements JavaDelegate {
 
         runtimeService.setVariable(execution.getProcessInstanceId(), "plagiarism-complaint-id", plagiarismComplaint.getId());
 
+        List<User> chiefEditors = userRepository.findByRoles_Id(7L);
+        execution.setVariable("chiefEditor", String.valueOf(chiefEditors.get(0).getId()));
     }
 }

@@ -44,4 +44,7 @@ public class PlagiarismComplaint implements Serializable {
 
     @Column
     private DateTime iterationStart;
+
+    @OneToMany(mappedBy = "plagiarismComplaint")
+    private Set<Vote> votes;
 }
