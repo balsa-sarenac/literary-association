@@ -184,6 +184,7 @@
             </camunda:properties>
             <camunda:validation>
               <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.FileValidator" />
+              <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.PdfOnlyValidator" />
             </camunda:validation>
           </camunda:formField>
         </camunda:formData>
@@ -212,7 +213,11 @@
     <bpmn:userTask id="SumbitDocuments" name="Submit more documents" camunda:assignee="${authorId}">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="files" label="Documents:" type="file" defaultValue="null" />
+          <camunda:formField id="files" label="Documents:" type="file" defaultValue="null">
+            <camunda:validation>
+              <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.PdfOnlyValidator" />
+            </camunda:validation>
+          </camunda:formField>
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_11vskta</bpmn:incoming>

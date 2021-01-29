@@ -196,7 +196,11 @@
     <bpmn:userTask id="change-book" name="Change the book based on comments" camunda:assignee="${ starter }">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="reupload" label="Changed book (if needed or want):" type="file" defaultValue="null" />
+          <camunda:formField id="reupload" label="Changed book (if needed or want):" type="file" defaultValue="null">
+            <camunda:validation>
+              <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.PdfOnlyValidator" />
+            </camunda:validation>
+          </camunda:formField>
         </camunda:formData>
         <camunda:taskListener class="upp.team5.literaryassociation.camunda.eventListener.OnChangeBookTaskCreate" event="create" />
       </bpmn:extensionElements>
@@ -217,6 +221,7 @@
             <camunda:validation>
               <camunda:constraint name="required" />
               <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.SingleFileRequiredValidator" />
+              <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.PdfOnlyValidator" />
             </camunda:validation>
           </camunda:formField>
         </camunda:formData>
@@ -492,6 +497,7 @@
             <camunda:validation>
               <camunda:constraint name="required" />
               <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.SingleFileRequiredValidator" />
+              <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.PdfOnlyValidator" />
             </camunda:validation>
           </camunda:formField>
         </camunda:formData>
@@ -939,9 +945,6 @@
       <bpmndi:BPMNShape id="Activity_0dyuba2_di" bpmnElement="change-book">
         <dc:Bounds x="2890" y="490" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_116dpgd_di" bpmnElement="Gateway_116dpgd" isMarkerVisible="true">
-        <dc:Bounds x="2755" y="505" width="50" height="50" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0wvyom9_di" bpmnElement="Event_01nyb44">
         <dc:Bounds x="1262" y="382" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -1153,6 +1156,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1pqhxa8_di" bpmnElement="Activity_0bddmba">
         <dc:Bounds x="4420" y="1120" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_116dpgd_di" bpmnElement="Gateway_116dpgd" isMarkerVisible="true">
+        <dc:Bounds x="2755" y="505" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_1clwsk3_di" bpmnElement="TextAnnotation_1clwsk3">
         <dc:Bounds x="1390" y="430" width="100" height="53" />
