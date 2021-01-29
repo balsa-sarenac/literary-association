@@ -188,8 +188,8 @@ insert into genre (id, name) values (10,'Thriller');
 
 --insert into users_roles (user_id, role_id) values (1, 7);
 
- insert into book(title, synopsis, chief_editor_id) values ('book1', 'sin1', 5);
-insert into book(title, synopsis, chief_editor_id) values ('book2', 'sin2', 5);
+insert into book(title, synopsis, is_plagiarism, chief_editor_id) values ('book1', 'sin1', false, 5);
+insert into book(title, synopsis, is_plagiarism, chief_editor_id) values ('book2', 'sin2', false, 5);
 
  insert into authors_books(author_id, book_id) values (14, 1);
 insert into authors_books(author_id, book_id) values (12, 2);
