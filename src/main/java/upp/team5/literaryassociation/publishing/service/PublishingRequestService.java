@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import upp.team5.literaryassociation.common.dto.*;
 import upp.team5.literaryassociation.common.file.service.FileService;
@@ -54,12 +55,16 @@ public class PublishingRequestService {
         this.noteService = noteService;
     }
 
+    @Transactional
     public void savePublishingRequest(PublishingRequest request) { publishingRequestRepository.save(request); }
 
+    @Transactional
     public List<PublishingRequest> getAll() { return publishingRequestRepository.findAll(); }
 
+    @Transactional
     public Optional<PublishingRequest> getById(Long id) { return publishingRequestRepository.findById(id); }
 
+    @Transactional
     public List<PublishingRequestDTO> getBetaRequests() {
         User user = this.authUserService.getLoggedInUser();
 
@@ -80,6 +85,7 @@ public class PublishingRequestService {
         return publishingRequestBetaDTOS;
     }
 
+    @Transactional
     public List<PublishingRequest> getRequests(Long authorId) {
         User author = userRepository.findById(authorId).orElseThrow(NotFoundException::new);
         List<PublishingRequest> requests = publishingRequestRepository.findByBookAuthors(author).stream().collect(Collectors.toList());
@@ -88,6 +94,7 @@ public class PublishingRequestService {
 
     }
 
+    @Transactional
     public HashSet<PublishingRequestDTO> getAllEditorRequests(Long editorId) {
         HashSet<PublishingRequestDTO> retVal = new HashSet<>();
         User user = userRepository.findById(editorId).orElseThrow(NotFoundException::new);
@@ -112,6 +119,7 @@ public class PublishingRequestService {
         return retVal;
     }
 
+    @Transactional
     public PublishingRequestDTO getPublishingRequestDTO(long requestId) {
         var req = publishingRequestRepository.findById(requestId).orElseThrow(NotFoundException::new);
 
@@ -121,6 +129,7 @@ public class PublishingRequestService {
             List<FileDB> sources = null;
             try {
                 sources = this.fileService.findAllByPublishingRequest(req);
+                sources.removeIf(file -> req.getBook().getId() == file.getUploadedBookId());
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
@@ -171,6 +180,7 @@ public class PublishingRequestService {
         return dto;
     }
 
+    @Transactional
     public ResponseEntity<byte[]> getDocument(Long id) {
         FileDB fileDB = this.fileService.findById(id);
 
@@ -179,11 +189,13 @@ public class PublishingRequestService {
                 .body(fileDB.getData());
     }
 
+    @Transactional
     public PublishingRequest getPublishingRequest(long requestId) {
         return publishingRequestRepository.findById(requestId).orElseThrow(NotFoundException::new);
     }
 
 
+    @Transactional
     public List<UserDTO> getAllBetaReadersForRequest(String requestId) {
         List<UserDTO> ret = new LinkedList<>();
         var request = publishingRequestRepository.findById(Long.parseLong(requestId)).orElseThrow(NotFoundException::new);
@@ -203,6 +215,7 @@ public class PublishingRequestService {
         return ret;
     }
 
+    @Transactional
     public PublishingRequestDTO getBetaRequest(Long id) {
         PublishingRequest publishingRequest = getPublishingRequest(id);
         PublishingRequestDTO publishingRequestDTO = modelMapper.map(publishingRequest, PublishingRequestDTO.class);
@@ -222,7 +235,8 @@ public class PublishingRequestService {
         return publishingRequestDTO;
     }
 
-    private PublishingRequest getPublishingRequest(Long id) {
+    @Transactional
+    PublishingRequest getPublishingRequest(Long id) {
         return this.publishingRequestRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Request with given id doesn't exist"));
     }

@@ -18,6 +18,7 @@ import upp.team5.literaryassociation.common.dto.FormFieldsDTO;
 import upp.team5.literaryassociation.common.dto.FormSubmissionDTO;
 import upp.team5.literaryassociation.common.dto.FormSubmissionFieldDTO;
 import upp.team5.literaryassociation.common.service.AuthUserService;
+import upp.team5.literaryassociation.exception.BadInputException;
 import upp.team5.literaryassociation.model.PublishingRequest;
 import upp.team5.literaryassociation.model.User;
 import upp.team5.literaryassociation.publishing.service.PublishingRequestService;
@@ -58,7 +59,12 @@ public class GenericFormService {
 
         runtimeService.setVariable(processInstanceId, "data-" + task.getTaskDefinitionKey(), map);
 
-        formService.submitTaskForm(task.getId(), map);
+        try {
+            formService.submitTaskForm(task.getId(), map);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            throw new BadInputException(exception.getMessage());
+        }
     }
 
     private Task getTask(String processInstanceId) {
