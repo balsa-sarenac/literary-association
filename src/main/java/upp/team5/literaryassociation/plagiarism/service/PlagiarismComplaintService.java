@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import upp.team5.literaryassociation.common.dto.FileDTO;
 import upp.team5.literaryassociation.common.dto.PlagiarismComplaintDTO;
@@ -80,6 +81,7 @@ public class PlagiarismComplaintService {
         return editorDTOs;
     }
 
+    @Transactional
     public List<PlagiarismComplaintDTO> getComplaints() {
         User user = authUserService.getLoggedInUser();
         PlagiarismComplaintStage stage = switch (user.getRoles().iterator().next().getName()) {
@@ -106,6 +108,7 @@ public class PlagiarismComplaintService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public PlagiarismComplaintDTO getComplaint(Long complaintId) {
         PlagiarismComplaint plagiarismComplaint = getPlagiarismComplaint(complaintId);
         PlagiarismComplaintDTO plagiarismComplaintDTO = modelMapper.map(plagiarismComplaint, PlagiarismComplaintDTO.class);
