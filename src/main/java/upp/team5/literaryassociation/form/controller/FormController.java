@@ -36,8 +36,9 @@ public class FormController {
     }
 
     @PostMapping(name = "submitForm", path = "/submit/{processInstanceId}")
-    public void submitForm(@RequestBody FormSubmissionDTO formSubmissionDTO, @PathVariable String processInstanceId) {
+    public ResponseEntity<?> submitForm(@RequestBody FormSubmissionDTO formSubmissionDTO, @PathVariable String processInstanceId) {
         genericFormService.submitForm(processInstanceId, formSubmissionDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

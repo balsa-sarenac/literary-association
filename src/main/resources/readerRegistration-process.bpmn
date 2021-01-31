@@ -14,42 +14,38 @@
           <camunda:formField id="firstName" label="First Name" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
-              <camunda:constraint name="minlength" config="5" />
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="lastName" label="Last Name" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
-              <camunda:constraint name="minlength" config="5" />
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="country" label="Country" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
-              <camunda:constraint name="minlength" config="5" />
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="city" label="City" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
-              <camunda:constraint name="minlength" config="5" />
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="email" label="E-mail" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
+              <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.EmailValidator" />
+              <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.EmailExistsValidator" />
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="password" label="Password" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
+              <camunda:constraint name="minlength" config="8" />
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="isBetaReader" label="Beta reader" type="boolean" defaultValue="false" />
           <camunda:formField id="genres" label="Genres I am interested in:" type="multiselect">
-            <camunda:properties>
-              <camunda:property id="Property_3lmqbpo" value="xssss" />
-            </camunda:properties>
             <camunda:validation>
               <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.GenresValidator" />
             </camunda:validation>
@@ -137,21 +133,30 @@
       <bpmndi:BPMNShape id="Participant_0x3qo9w_di" bpmnElement="Participant_0x3qo9w" isHorizontal="true">
         <dc:Bounds x="160" y="114" width="1200" height="500" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_14l1fyy_di" bpmnElement="Flow_14l1fyy">
-        <di:waypoint x="860" y="177" />
-        <di:waypoint x="930" y="177" />
+      <bpmndi:BPMNEdge id="Flow_0ts4j2f_di" bpmnElement="Flow_0ts4j2f">
+        <di:waypoint x="248" y="550" />
+        <di:waypoint x="370" y="550" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_03wxsli_di" bpmnElement="Flow_03wxsli">
-        <di:waypoint x="420" y="260" />
-        <di:waypoint x="420" y="177" />
-        <di:waypoint x="605" y="177" />
+      <bpmndi:BPMNEdge id="Flow_1w8vw92_di" bpmnElement="Flow_1w8vw92">
+        <di:waypoint x="1030" y="177" />
+        <di:waypoint x="1092" y="177" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1dzvoee_di" bpmnElement="Flow_1dzvoee">
-        <di:waypoint x="630" y="425" />
-        <di:waypoint x="630" y="202" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="639" y="323" width="13" height="14" />
-        </bpmndi:BPMNLabel>
+      <bpmndi:BPMNEdge id="Flow_01qmwm7_di" bpmnElement="Flow_01qmwm7">
+        <di:waypoint x="1128" y="177" />
+        <di:waypoint x="1170" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1wiotym_di" bpmnElement="Flow_1wiotym">
+        <di:waypoint x="1270" y="177" />
+        <di:waypoint x="1302" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05xrd04_di" bpmnElement="Flow_05xrd04">
+        <di:waypoint x="470" y="550" />
+        <di:waypoint x="630" y="550" />
+        <di:waypoint x="630" y="475" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0uarq1d_di" bpmnElement="Flow_0uarq1d">
+        <di:waypoint x="655" y="177" />
+        <di:waypoint x="760" y="177" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0ae065j_di" bpmnElement="Flow_0ae065j">
         <di:waypoint x="605" y="450" />
@@ -161,30 +166,21 @@
           <dc:Bounds x="461" y="423" width="18" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0uarq1d_di" bpmnElement="Flow_0uarq1d">
-        <di:waypoint x="655" y="177" />
-        <di:waypoint x="760" y="177" />
+      <bpmndi:BPMNEdge id="Flow_1dzvoee_di" bpmnElement="Flow_1dzvoee">
+        <di:waypoint x="630" y="425" />
+        <di:waypoint x="630" y="202" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="639" y="323" width="13" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_05xrd04_di" bpmnElement="Flow_05xrd04">
-        <di:waypoint x="470" y="550" />
-        <di:waypoint x="630" y="550" />
-        <di:waypoint x="630" y="475" />
+      <bpmndi:BPMNEdge id="Flow_03wxsli_di" bpmnElement="Flow_03wxsli">
+        <di:waypoint x="420" y="260" />
+        <di:waypoint x="420" y="177" />
+        <di:waypoint x="605" y="177" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1wiotym_di" bpmnElement="Flow_1wiotym">
-        <di:waypoint x="1270" y="177" />
-        <di:waypoint x="1302" y="177" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_01qmwm7_di" bpmnElement="Flow_01qmwm7">
-        <di:waypoint x="1128" y="177" />
-        <di:waypoint x="1170" y="177" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1w8vw92_di" bpmnElement="Flow_1w8vw92">
-        <di:waypoint x="1030" y="177" />
-        <di:waypoint x="1092" y="177" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0ts4j2f_di" bpmnElement="Flow_0ts4j2f">
-        <di:waypoint x="248" y="550" />
-        <di:waypoint x="370" y="550" />
+      <bpmndi:BPMNEdge id="Flow_14l1fyy_di" bpmnElement="Flow_14l1fyy">
+        <di:waypoint x="860" y="177" />
+        <di:waypoint x="930" y="177" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="212" y="532" width="36" height="36" />
@@ -228,13 +224,13 @@
       <bpmndi:BPMNShape id="Activity_06t8k4r_di" bpmnElement="Activity_06t8k4r" isExpanded="true">
         <dc:Bounds x="900" y="380" width="350" height="200" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_0hk5wz0_di" bpmnElement="Flow_0hk5wz0">
-        <di:waypoint x="1130" y="480" />
-        <di:waypoint x="1192" y="480" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_09295k4_di" bpmnElement="Flow_09295k4">
         <di:waypoint x="976" y="480" />
         <di:waypoint x="1030" y="480" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0hk5wz0_di" bpmnElement="Flow_0hk5wz0">
+        <di:waypoint x="1130" y="480" />
+        <di:waypoint x="1192" y="480" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_0bm2j46_di" bpmnElement="Event_0bm2j46">
         <dc:Bounds x="940" y="462" width="36" height="36" />

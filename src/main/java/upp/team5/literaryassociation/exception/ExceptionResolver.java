@@ -68,8 +68,8 @@ public class ExceptionResolver {
         return new ResponseEntity<>(exception.getMessage(), headers, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(FormFieldValidatorException.class)
-    public ResponseEntity<?> formFieldValidationException(Exception exception) {
+    @ExceptionHandler(BadInputException.class)
+    public ResponseEntity<?> badInputException(Exception exception) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);
         return new ResponseEntity<>(exception.getMessage().split(":")[0], headers, HttpStatus.BAD_REQUEST);

@@ -179,8 +179,12 @@
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="files" label="Documents" type="file">
+            <camunda:properties>
+              <camunda:property id="twoFiles" value="true" />
+            </camunda:properties>
             <camunda:validation>
               <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.FileValidator" />
+              <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.PdfOnlyValidator" />
             </camunda:validation>
           </camunda:formField>
         </camunda:formData>
@@ -209,7 +213,11 @@
     <bpmn:userTask id="SumbitDocuments" name="Submit more documents" camunda:assignee="${authorId}">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="files" label="Documents:" type="file" defaultValue="null" />
+          <camunda:formField id="files" label="Documents:" type="file" defaultValue="null">
+            <camunda:validation>
+              <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.PdfOnlyValidator" />
+            </camunda:validation>
+          </camunda:formField>
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_11vskta</bpmn:incoming>
@@ -269,11 +277,14 @@
           <camunda:formField id="email" label="E-mail" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
+              <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.EmailValidator" />
+              <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.EmailExistsValidator" />
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="password" label="Password" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
+              <camunda:constraint name="minlength" config="8" />
             </camunda:validation>
           </camunda:formField>
         </camunda:formData>

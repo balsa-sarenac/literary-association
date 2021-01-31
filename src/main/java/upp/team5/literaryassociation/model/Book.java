@@ -62,4 +62,6 @@ public class Book implements Serializable {
     @OneToOne
     private FileDB bookFile;
 
+    @Column
+    private boolean isPlagiarism;
 }

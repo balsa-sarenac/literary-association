@@ -46,9 +46,10 @@ public class ProcessCommitteeVotesDelegate implements JavaDelegate {
             }
         }
 
-        if ((plagiarismVotes == 0 && plagiarismVotes == committeeList.size()) ||
-                (notPlagiarismVotes == 0 && notPlagiarismVotes == committeeList.size())) {
+        if ((notPlagiarismVotes == 0 && plagiarismVotes == committeeList.size()) ||
+                (plagiarismVotes == 0 && notPlagiarismVotes == committeeList.size())) {
             delegateExecution.setVariable("unanimous", true);
+            delegateExecution.setVariable("plagiarism", notPlagiarismVotes == 0);
             complaint.setPlagiarismComplaintStage(PlagiarismComplaintStage.FINISH);
         } else {
             delegateExecution.setVariable("unanimous", false);
@@ -61,8 +62,8 @@ public class ProcessCommitteeVotesDelegate implements JavaDelegate {
             complaint.getEditorsOnInvestigation()
                     .forEach(editor -> editor.getComplaintsToInvestigate().remove(complaint));
             complaint.setEditorsOnInvestigation(new HashSet<>());
+            userRepository.saveAll(complaint.getEditorsOnInvestigation());
         }
-        userRepository.saveAll(complaint.getEditorsOnInvestigation());
         plagiarismComplaintService.save(complaint);
     }
 }

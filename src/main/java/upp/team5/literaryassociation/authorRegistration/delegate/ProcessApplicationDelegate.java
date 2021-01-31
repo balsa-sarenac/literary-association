@@ -43,8 +43,6 @@ public class ProcessApplicationDelegate implements JavaDelegate {
         author.setStatus("reviewExpected");
         userRepository.save(author);
 
-//        HashSet<FileDB> files = (HashSet<FileDB>)execution.getVariable("files");
-
         List<String> roleName = new ArrayList<String>();
         roleName.add("ROLE_COMMITTEE_MEMBER");
         roleName.add("ROLE_HEAD_OF_COMMITTEE");
