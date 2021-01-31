@@ -187,6 +187,7 @@ public class PublishingRequestService {
         List<FileDB> sources = null;
         try {
             sources = this.fileService.findAllByPublishingRequest(req);
+            sources.removeIf(file -> req.getBook().getId() == file.getUploadedBookId());
         } catch (Exception exception) {
             exception.printStackTrace();
         }
