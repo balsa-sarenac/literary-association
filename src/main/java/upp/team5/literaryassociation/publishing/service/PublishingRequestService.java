@@ -102,7 +102,7 @@ public class PublishingRequestService {
         List<PublishingRequest> requests = new ArrayList<>();
 
         if(user.getRoles().contains(roleService.getByName("ROLE_LECTOR"))) {
-            requests = new ArrayList<>( publishingRequestRepository.findByBookLectors(user));
+            requests = new ArrayList<>( publishingRequestRepository.findByBookLectorsAndStatus(user, "Book is sent to lector"));
         }
         else if(user.getRoles().contains(roleService.getByName("ROLE_CHIEF_EDITOR"))) {
             requests = new ArrayList<>( publishingRequestRepository.findByBookChiefEditor(user));
