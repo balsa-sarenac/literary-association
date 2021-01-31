@@ -12,9 +12,9 @@
   <bpmn:process id="book-publishing" isExecutable="true">
     <bpmn:laneSet id="LaneSet_16wd6r3">
       <bpmn:lane id="Lane_0qc140n" name="Lector">
-        <bpmn:flowNodeRef>corrections</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0evncpa</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_0ku0yb0</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>corrections</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Lane_1qhku0r" name="Beta-reader">
         <bpmn:flowNodeRef>Activity_16d22ym</bpmn:flowNodeRef>
@@ -458,23 +458,6 @@
       <bpmn:incoming>Flow_16zozk9</bpmn:incoming>
       <bpmn:outgoing>Flow_1bipx7l</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:userTask id="corrections" name="Download and find mistakes">
-      <bpmn:extensionElements>
-        <camunda:formData>
-          <camunda:formField id="mistakes" label="Were there any mistakes" type="boolean" defaultValue="false" />
-          <camunda:formField id="textareaSuggestions" label="Write your corrections here:" type="string">
-            <camunda:properties>
-              <camunda:property id="controlledBy" value="mistakes" />
-            </camunda:properties>
-            <camunda:validation>
-              <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.TextareaValidator" />
-            </camunda:validation>
-          </camunda:formField>
-        </camunda:formData>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1bipx7l</bpmn:incoming>
-      <bpmn:outgoing>Flow_1egrf67</bpmn:outgoing>
-    </bpmn:userTask>
     <bpmn:serviceTask id="Activity_0evncpa" name="Process corrections" camunda:class="upp.team5.literaryassociation.publishing.delegate.ProcessCorrections">
       <bpmn:incoming>Flow_1egrf67</bpmn:incoming>
       <bpmn:outgoing>Flow_1oha5t6</bpmn:outgoing>
@@ -745,6 +728,50 @@
       <bpmn:incoming>Flow_16hfzl0</bpmn:incoming>
       <bpmn:outgoing>Flow_1ff2zi8</bpmn:outgoing>
     </bpmn:serviceTask>
+    <bpmn:userTask id="corrections" name="Download and find mistakes" camunda:assignee="${lector}">
+      <bpmn:extensionElements>
+        <camunda:taskListener class="upp.team5.literaryassociation.camunda.eventListener.OnCreatePublishingTask" event="create" />
+        <camunda:formData>
+          <camunda:formField id="title" label="Title: " type="string">
+            <camunda:properties>
+              <camunda:property id="readonly" value="true" />
+            </camunda:properties>
+          </camunda:formField>
+          <camunda:formField id="synopsis" label="Synopsis" type="string">
+            <camunda:properties>
+              <camunda:property id="readonly" value="true" />
+            </camunda:properties>
+          </camunda:formField>
+          <camunda:formField id="author" label="Author: " type="string">
+            <camunda:properties>
+              <camunda:property id="readonly" value="true" />
+            </camunda:properties>
+          </camunda:formField>
+          <camunda:formField id="status" label="Status: " type="string">
+            <camunda:properties>
+              <camunda:property id="readonly" value="true" />
+            </camunda:properties>
+          </camunda:formField>
+          <camunda:formField id="book" label="Download the book: " type="enum">
+            <camunda:properties>
+              <camunda:property id="readonly" value="true" />
+              <camunda:property id="links" value="true" />
+            </camunda:properties>
+          </camunda:formField>
+          <camunda:formField id="mistakes" label="Were there any mistakes?" type="boolean" defaultValue="false" />
+          <camunda:formField id="textareaSuggestions" label="Your corrections:" type="string">
+            <camunda:properties>
+              <camunda:property id="controlledBy" value="mistakes" />
+            </camunda:properties>
+            <camunda:validation>
+              <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.TextareaValidator" />
+            </camunda:validation>
+          </camunda:formField>
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1bipx7l</bpmn:incoming>
+      <bpmn:outgoing>Flow_1egrf67</bpmn:outgoing>
+    </bpmn:userTask>
     <bpmn:textAnnotation id="TextAnnotation_1clwsk3">
       <bpmn:text>Run plagiator software on the book</bpmn:text>
     </bpmn:textAnnotation>
@@ -1027,8 +1054,10 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1bipx7l_di" bpmnElement="Flow_1bipx7l">
-        <di:waypoint x="3130" y="1040" />
-        <di:waypoint x="3130" y="1210" />
+        <di:waypoint x="3080" y="1000" />
+        <di:waypoint x="3030" y="1000" />
+        <di:waypoint x="3030" y="1250" />
+        <di:waypoint x="3080" y="1250" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0ke993q_di" bpmnElement="Flow_0ke993q">
         <di:waypoint x="2805" y="530" />
@@ -1064,8 +1093,8 @@
         <di:waypoint x="750" y="820" />
         <di:waypoint x="810" y="820" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Activity_114b577_di" bpmnElement="Activity_1eexs3k">
-        <dc:Bounds x="1410" y="780" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_0jjwrxr_di" bpmnElement="corrections">
+        <dc:Bounds x="3080" y="1210" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_16d22ym_di" bpmnElement="Activity_16d22ym" isExpanded="true">
         <dc:Bounds x="450" y="1610" width="350" height="200" />
@@ -1266,9 +1295,6 @@
       <bpmndi:BPMNShape id="Activity_0v1fx0v_di" bpmnElement="Activity_12a0zqe">
         <dc:Bounds x="3080" y="960" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_09dapi5_di" bpmnElement="corrections">
-        <dc:Bounds x="3080" y="1210" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1adivc7_di" bpmnElement="Activity_0evncpa">
         <dc:Bounds x="3280" y="1210" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -1325,6 +1351,9 @@
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1573" y="1026" width="76" height="27" />
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_114b577_di" bpmnElement="Activity_1eexs3k">
+        <dc:Bounds x="1410" y="780" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_1clwsk3_di" bpmnElement="TextAnnotation_1clwsk3">
         <dc:Bounds x="1390" y="430" width="100" height="53" />
