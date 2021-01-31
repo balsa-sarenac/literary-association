@@ -92,6 +92,10 @@ public class OnCreatePublishingTask implements TaskListener {
                         multiselectType.setValues(listToMapUsers(readers));
                         break;
                     }
+                    case "textareaSuggestions": {
+                        delegateTask.setVariable("textareaSuggestions","");
+                        break;
+                    }
                 }
             }
         }

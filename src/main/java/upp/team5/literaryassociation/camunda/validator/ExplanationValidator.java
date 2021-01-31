@@ -21,7 +21,7 @@ public class ExplanationValidator implements FormFieldValidator {
             //empty = variable.equals("")?false:Boolean.parseBoolean(variable);
         }
 
-        if((!empty && !submittedValue.equals("")) || empty){
+        if((submittedValue !=null && !empty && !String.valueOf(submittedValue).isBlank()) || empty) {
             return true;
         }
         return false;
