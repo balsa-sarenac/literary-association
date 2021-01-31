@@ -43,7 +43,7 @@ public class ProcessComplaintService implements JavaDelegate {
 
         User complainant = authUserService.getLoggedInUser();
         Book complainantBook = bookService.getBook(Long.valueOf((Integer) formFields.get("authorBook")));
-        Book plagiarismBook = bookService.getBook(Long.valueOf((Integer) formFields.get("plagiarismBook")));
+        Book plagiarismBook = bookService.getBook(Long.parseLong(String.valueOf(formFields.get("plagiarismBook"))));
 
         PlagiarismComplaint plagiarismComplaint = new PlagiarismComplaint();
         plagiarismComplaint.setPlagiarismComplaintStage(PlagiarismComplaintStage.CHOOSE_EDITORS);
