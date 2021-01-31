@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import upp.team5.literaryassociation.common.dto.*;
 import upp.team5.literaryassociation.common.file.service.FileService;
@@ -169,6 +170,60 @@ public class PublishingRequestService {
         }
 
         return dto;
+    }
+
+    @Transactional
+    public List<FileDTO> getFiles(long reqId){
+        var req = publishingRequestRepository.findById(reqId).orElseThrow(NotFoundException::new);
+
+        List<FileDB> sources = null;
+        try {
+            sources = this.fileService.findAllByPublishingRequest(req);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+        assert sources != null;
+        List<FileDTO> files = sources.stream().map(file -> {
+            String fileDownloadUri = "http://localhost:8080/publish/documents/" + file.getId();
+
+
+            return new FileDTO(
+                    file.getName(),
+                    fileDownloadUri,
+                    file.getType(),
+                    file.getData().length);
+        }).collect(Collectors.toList());
+
+        return files;
+    }
+
+    @Transactional
+    public List<FileDTO> getBookFile(long reqId){
+        var req = publishingRequestRepository.findById(reqId).orElseThrow(NotFoundException::new);
+
+        List<FileDTO> files = new LinkedList<>();
+
+        FileDB bookFile = null;
+
+        try {
+            bookFile = fileService.getByBookId(req.getBook().getId());
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+        assert bookFile != null;
+        String fileDownloadUri = "http://localhost:8080/publish/documents/" + bookFile.getId();
+
+        FileDTO bookFileDto = new FileDTO();
+        bookFileDto.setName(bookFile.getName());
+        bookFileDto.setUrl(fileDownloadUri);
+        bookFileDto.setType(bookFile.getType());
+        bookFileDto.setSize(bookFile.getData().length);
+
+        files.add(bookFileDto);
+
+        return files;
     }
 
     public ResponseEntity<byte[]> getDocument(Long id) {
