@@ -19,5 +19,5 @@ public interface PublishingRequestRepository extends JpaRepository<PublishingReq
 
     HashSet<PublishingRequest> findByBookChiefEditor(User chiefEditor);
 
-    HashSet<PublishingRequest> findByBookLectors(User lector);
+    HashSet<PublishingRequest> findByBookLectorsAndStatus(User lector, String status);
 }

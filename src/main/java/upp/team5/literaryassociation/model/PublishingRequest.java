@@ -35,7 +35,7 @@ public class PublishingRequest implements Serializable {
     private boolean original;
 
     @Column
-    private String status="Review expected";
+    private String status;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "book_id", referencedColumnName = "id")

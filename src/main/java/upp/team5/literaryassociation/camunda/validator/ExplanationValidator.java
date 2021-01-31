@@ -18,12 +18,8 @@ public class ExplanationValidator implements FormFieldValidator {
         }
         if(!dependsOn.equals("")){
             empty = (Boolean) validatorContext.getVariableScope().getVariable(dependsOn);
-            //empty = variable.equals("")?false:Boolean.parseBoolean(variable);
         }
 
-        if((!empty && !submittedValue.equals("")) || empty){
-            return true;
-        }
-        return false;
+        return (submittedValue != null && !empty && !String.valueOf(submittedValue).isBlank()) || empty;
     }
 }

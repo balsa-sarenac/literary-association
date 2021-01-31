@@ -102,7 +102,7 @@ public class PublishingRequestService {
         List<PublishingRequest> requests = new ArrayList<>();
 
         if(user.getRoles().contains(roleService.getByName("ROLE_LECTOR"))) {
-            requests = new ArrayList<>( publishingRequestRepository.findByBookLectors(user));
+            requests = new ArrayList<>( publishingRequestRepository.findByBookLectorsAndStatus(user, "Book is sent to lector"));
         }
         else if(user.getRoles().contains(roleService.getByName("ROLE_CHIEF_EDITOR"))) {
             requests = new ArrayList<>( publishingRequestRepository.findByBookChiefEditor(user));
@@ -152,7 +152,7 @@ public class PublishingRequestService {
             dto.setPotentialPlagiarismList(files);
         }
 
-        if(!req.getStatus().equals("New request") && !req.getStatus().equals("Book upload requested") && !req.getStatus().equals("Reading rejected")) {
+        if(!req.getStatus().equals("New request") && !req.getStatus().equals("Book upload requested") && !req.getStatus().equals("Rejected")) {
             FileDB bookFile = null;
 
             try {
@@ -178,6 +178,61 @@ public class PublishingRequestService {
         }
 
         return dto;
+    }
+
+    @Transactional
+    public List<FileDTO> getFiles(long reqId){
+        var req = publishingRequestRepository.findById(reqId).orElseThrow(NotFoundException::new);
+
+        List<FileDB> sources = null;
+        try {
+            sources = this.fileService.findAllByPublishingRequest(req);
+            sources.removeIf(file -> req.getBook().getId() == file.getUploadedBookId());
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+        assert sources != null;
+        List<FileDTO> files = sources.stream().map(file -> {
+            String fileDownloadUri = "http://localhost:8080/publish/documents/" + file.getId();
+
+
+            return new FileDTO(
+                    file.getName(),
+                    fileDownloadUri,
+                    file.getType(),
+                    file.getData().length);
+        }).collect(Collectors.toList());
+
+        return files;
+    }
+
+    @Transactional
+    public List<FileDTO> getBookFile(long reqId){
+        var req = publishingRequestRepository.findById(reqId).orElseThrow(NotFoundException::new);
+
+        List<FileDTO> files = new LinkedList<>();
+
+        FileDB bookFile = null;
+
+        try {
+            bookFile = fileService.getByBookId(req.getBook().getId());
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+        assert bookFile != null;
+        String fileDownloadUri = "http://localhost:8080/publish/documents/" + bookFile.getId();
+
+        FileDTO bookFileDto = new FileDTO();
+        bookFileDto.setName(bookFile.getName());
+        bookFileDto.setUrl(fileDownloadUri);
+        bookFileDto.setType(bookFile.getType());
+        bookFileDto.setSize(bookFile.getData().length);
+
+        files.add(bookFileDto);
+
+        return files;
     }
 
     @Transactional

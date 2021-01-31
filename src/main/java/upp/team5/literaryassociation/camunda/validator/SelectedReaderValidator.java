@@ -5,7 +5,6 @@ import org.camunda.bpm.engine.impl.form.validator.FormFieldValidatorContext;
 import upp.team5.literaryassociation.model.FileDB;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Map;
 
 public class SelectedReaderValidator implements FormFieldValidator {
@@ -15,7 +14,7 @@ public class SelectedReaderValidator implements FormFieldValidator {
         String dependsOn="";
         Boolean empty=false;
         ArrayList<FileDB> readers = new ArrayList<>();
-        if(!submittedValue.equals("")){
+        if(submittedValue != null && !submittedValue.equals("")) {
             readers.addAll((ArrayList<FileDB>) submittedValue);
         }
         if(props.containsKey("controlledBy")){
@@ -27,7 +26,7 @@ public class SelectedReaderValidator implements FormFieldValidator {
             //empty = variable.equals("")?false:Boolean.parseBoolean(variable);
         }
 
-        if((empty && readers.size()>=1) || !empty){
+        if(!empty || readers.size() >= 1){
             return true;
         }
         return false;

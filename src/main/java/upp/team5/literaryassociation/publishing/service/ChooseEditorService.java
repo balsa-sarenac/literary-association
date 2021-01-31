@@ -66,6 +66,9 @@ public class ChooseEditorService implements JavaDelegate {
         book.setTitle(bookInfoSubmission.get("title").toString());
         book.setSynopsis(bookInfoSubmission.get("synopsis").toString());
         book.setChiefEditor(chief);
+        Set<User> authors = new HashSet<>();
+        authors.add(currentUser);
+        book.setAuthors(authors);
 
         Genre genre = genreService.getGenreByName(bookInfoSubmission.get("genre").toString());
         Set<Genre> genres = new HashSet<>();

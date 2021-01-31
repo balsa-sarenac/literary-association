@@ -43,6 +43,7 @@ public class SendBookToLector implements JavaDelegate {
             books.add(publishingRequest.getBook());
             lector.setLectorBooks(books);
             customUserDetailsService.saveUser(lector);
+            delegateExecution.setVariable("lector" ,lector.getId().toString());
         }
 
     }
