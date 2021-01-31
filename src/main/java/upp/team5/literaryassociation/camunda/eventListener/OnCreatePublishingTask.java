@@ -6,9 +6,7 @@ import org.camunda.bpm.engine.delegate.DelegateTask;
 import org.camunda.bpm.engine.delegate.TaskListener;
 import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
-import org.camunda.bpm.engine.impl.form.FormFieldImpl;
 import org.camunda.bpm.engine.impl.form.type.EnumFormType;
-import org.camunda.bpm.engine.variable.value.TypedValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.camunda.type.MultiselectFormFieldType;
@@ -32,9 +30,6 @@ public class OnCreatePublishingTask implements TaskListener {
     @Autowired
     private PublishingRequestService publishingRequestService;
 
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
-
     @Override
     public void notify(DelegateTask delegateTask) {
         var requestId = delegateTask.getVariable("publishing-request-id");
@@ -49,17 +44,14 @@ public class OnCreatePublishingTask implements TaskListener {
             for(FormField field : fields){
                 switch (field.getId()) {
                     case "title": {
-                        var value = (String) field.getValue().getValue();
-                        value = publishingRequest.getBook().getTitle();
+                        delegateTask.setVariable("synopsis", publishingRequest.getBook().getTitle());
                         break;
                     }
                     case "synopsis": {
-                        var value = (String) field.getValue().getValue();
-                        value = publishingRequest.getBook().getSynopsis();
+                        delegateTask.setVariable("synopsis", publishingRequest.getBook().getSynopsis());
                         break;
                     }
                     case "author": {
-                        var value = (String) field.getValue().getValue();
                         var authors = publishingRequest.getBook().getAuthors();
                         if (authors != null) {
                             var author = (User) authors.toArray()[0];
@@ -96,6 +88,8 @@ public class OnCreatePublishingTask implements TaskListener {
                         delegateTask.setVariable("textareaSuggestions","");
                         break;
                     }
+                    default:
+                        break;
                 }
             }
         }

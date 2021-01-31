@@ -1,6 +1,5 @@
 package upp.team5.literaryassociation.camunda.eventListener;
 
-import camundajar.impl.scala.Array;
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.delegate.DelegateTask;
@@ -9,10 +8,7 @@ import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
 import org.camunda.bpm.engine.impl.form.type.EnumFormType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.stereotype.Service;
-import upp.team5.literaryassociation.common.dto.UserDTO;
-import upp.team5.literaryassociation.model.Genre;
 import upp.team5.literaryassociation.model.Note;
 import upp.team5.literaryassociation.model.NoteType;
 import upp.team5.literaryassociation.publishing.service.PublishingRequestService;
