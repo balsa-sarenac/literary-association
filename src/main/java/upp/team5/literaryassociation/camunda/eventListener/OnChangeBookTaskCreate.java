@@ -37,22 +37,18 @@ public class OnChangeBookTaskCreate implements TaskListener {
 
         Long publishingRequestId = (Long) delegateTask.getVariable("publishing-request-id");
         Set<Note> notes = publishingRequestService.getPublishingRequest(publishingRequestId).getNotes();
-       // boolean exists = notes.stream().anyMatch(x->x.getType().equals(NoteType.COMMENT));
         ArrayList<Note> notesArray = new ArrayList<Note>(notes);
-        boolean exists = notesArray.get(notesArray.size()-1).getType().equals(NoteType.COMMENT);
-        //if(exists) {
+        if(notesArray.size()>0) {
+            boolean exists = notesArray.get(notesArray.size() - 1).getType().equals(NoteType.COMMENT);
             for (FormField field : properties) {
                 if (field.getId().equals("reupload") && exists) {
                     Map<String, String> props = field.getProperties();
-//                    if (props.containsKey("oneIfNeeded")) {
-//                        props.replace("oneIfNeeded", "false");
-//                    }
-                        field.getProperties().put("oneIfNeeded", "false");
-                }
-                else if(field.getId().equals("reupload") && !exists){
+                    field.getProperties().put("oneIfNeeded", "false");
+                } else if (field.getId().equals("reupload") && !exists) {
                     field.getProperties().put("oneIfNeeded", "true");
 
                 }
             }
+        }
     }
 }
