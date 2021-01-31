@@ -53,4 +53,12 @@ public class BookController {
         ModelMapper modelMapper = new ModelMapper();
         return new ResponseEntity<>(modelMapper.map(book, BookDTO.class), HttpStatus.OK);
     }
+
+    @PreAuthorize("hasAuthority('ROLE_BETA_READER')")
+    @GetMapping(name = "getAllBooks", path="/get")
+    public ResponseEntity<HashSet<BookDTO>> getAllBook() {
+        HashSet<BookDTO> books = bookService.getPublishedBooks();
+
+        return new ResponseEntity<>(books, HttpStatus.OK);
+    }
 }
