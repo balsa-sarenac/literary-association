@@ -15,8 +15,10 @@ public class SelectedReaderValidator implements FormFieldValidator {
         String dependsOn="";
         Boolean empty=false;
         ArrayList<FileDB> readers = new ArrayList<>();
-        if(!submittedValue.equals("")){
-            readers.addAll((ArrayList<FileDB>) submittedValue);
+        if(submittedValue != null) {
+            if (!submittedValue.equals("")) {
+                readers.addAll((ArrayList<FileDB>) submittedValue);
+            }
         }
         if(props.containsKey("controlledBy")){
             dependsOn=props.get("controlledBy");
