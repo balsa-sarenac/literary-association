@@ -206,6 +206,18 @@
               <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.PdfOnlyValidator" />
             </camunda:validation>
           </camunda:formField>
+          <camunda:formField id="newComments" label="New comments:" type="enum">
+            <camunda:properties>
+              <camunda:property id="readonly" value="true" />
+              <camunda:property id="comments" value="true" />
+            </camunda:properties>
+          </camunda:formField>
+          <camunda:formField id="oldComments" label="Old comments:" type="enum">
+            <camunda:properties>
+              <camunda:property id="readonly" value="true" />
+              <camunda:property id="comments" value="true" />
+            </camunda:properties>
+          </camunda:formField>
         </camunda:formData>
         <camunda:taskListener class="upp.team5.literaryassociation.camunda.eventListener.OnChangeBookTaskCreate" event="create" />
       </bpmn:extensionElements>
@@ -387,7 +399,20 @@
               <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.PdfOnlyValidator" />
             </camunda:validation>
           </camunda:formField>
+          <camunda:formField id="newComments" label="New comments: " type="enum">
+            <camunda:properties>
+              <camunda:property id="readonly" value="true" />
+              <camunda:property id="comments" value="true" />
+            </camunda:properties>
+          </camunda:formField>
+          <camunda:formField id="oldComments" label="Old comments:" type="enum">
+            <camunda:properties>
+              <camunda:property id="readonly" value="true" />
+              <camunda:property id="comments" value="true" />
+            </camunda:properties>
+          </camunda:formField>
         </camunda:formData>
+        <camunda:taskListener class="upp.team5.literaryassociation.camunda.eventListener.OnChangeBookTaskCreate" event="create" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_14yjlod</bpmn:incoming>
       <bpmn:outgoing>Flow_1vc8y7o</bpmn:outgoing>
