@@ -152,7 +152,7 @@ public class PublishingRequestService {
             dto.setPotentialPlagiarismList(files);
         }
 
-        if(!req.getStatus().equals("New request") && !req.getStatus().equals("Book upload requested") && !req.getStatus().equals("Reading rejected")) {
+        if(!req.getStatus().equals("New request") && !req.getStatus().equals("Book upload requested") && !req.getStatus().equals("Rejected")) {
             FileDB bookFile = null;
 
             try {
