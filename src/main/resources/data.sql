@@ -1,10 +1,10 @@
 
 
--- DELETE FROM act_id_user WHERE first_ != 'Demo';
--- DELETE FROM act_ru_variable;
--- DELETE FROM act_ru_job;
--- DELETE FROM act_ge_bytearray;
--- DELETE FROM act_re_deployment;
+DELETE FROM act_id_user WHERE first_ != 'Demo';
+DELETE FROM act_ru_variable;
+DELETE FROM act_ru_job;
+DELETE FROM act_ge_bytearray;
+DELETE FROM act_re_deployment;
 
 -- ROLES
 insert into role (id, name) values (1, 'ROLE_ADMIN');
