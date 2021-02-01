@@ -15,6 +15,7 @@ import upp.team5.literaryassociation.common.dto.ChiefEditorResponse;
 import upp.team5.literaryassociation.common.dto.FileDTO;
 import upp.team5.literaryassociation.common.dto.ProcessDTO;
 import upp.team5.literaryassociation.common.dto.PublishingRequestDTO;
+import upp.team5.literaryassociation.common.service.AuthUserService;
 import upp.team5.literaryassociation.model.FileDB;
 import upp.team5.literaryassociation.model.PublishingRequest;
 import upp.team5.literaryassociation.publishing.service.PublishingRequestService;
@@ -30,8 +31,10 @@ import java.util.List;
 public class PublishingController {
     @Autowired
     private RuntimeService runtimeService;
-
+    @Autowired
     private final PublishingRequestService publishingRequestService;
+    @Autowired
+    private AuthUserService authUserService;
 
     @Autowired
     PublishingController(PublishingRequestService publishingRequestService){
@@ -42,6 +45,8 @@ public class PublishingController {
     @GetMapping(name = "bookPublishing", path="/start-book-publishing")
     public ResponseEntity<ProcessDTO> startBookPublishingProcess() {
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("book-publishing");
+
+        runtimeService.setVariable(processInstance.getId(), "starter", String.valueOf(authUserService.getLoggedInUser().getId()));
 
         ProcessDTO processDTO = new ProcessDTO(processInstance.getId());
 
