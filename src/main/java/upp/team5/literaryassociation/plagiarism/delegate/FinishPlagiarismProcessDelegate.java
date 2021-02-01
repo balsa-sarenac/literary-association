@@ -24,7 +24,7 @@ public class FinishPlagiarismProcessDelegate implements JavaDelegate {
         Long  requestId = (Long) delegateExecution.getVariable("plagiarism-complaint-id");
         PlagiarismComplaint complaint = plagiarismComplaintService.getPlagiarismComplaint(requestId);
 
-        if ((boolean) delegateExecution.getVariable("isPlagiarism")) {
+        if ((boolean) delegateExecution.getVariable("plagiarism")) {
             Book book = complaint.getPlagiarism();
             book.setPlagiarism(true);
             bookService.saveBook(book);
