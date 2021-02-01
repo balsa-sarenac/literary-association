@@ -38,7 +38,7 @@ public class PlagiarismController {
     public ResponseEntity<ProcessDTO> startBookPublishingProcess() {
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("plagiarism-process");
 
-        runtimeService.setVariable(processInstance.getId(), "assignee", authUserService.getLoggedInUser().getId());
+        runtimeService.setVariable(processInstance.getId(), "starter", String.valueOf(authUserService.getLoggedInUser().getId()));
 
         ProcessDTO processDTO = new ProcessDTO(processInstance.getId());
 

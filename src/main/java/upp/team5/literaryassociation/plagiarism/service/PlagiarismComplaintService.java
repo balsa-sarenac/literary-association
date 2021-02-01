@@ -97,6 +97,7 @@ public class PlagiarismComplaintService {
             complaints.removeIf(plagiarismComplaint -> plagiarismComplaint.getNotes()
                     .stream().filter(note -> note.getDateTime().isAfter(plagiarismComplaint.getIterationStart()))
                     .map(Note::getUser).collect(Collectors.toList()).contains(user));
+            complaints.removeIf(plagiarismComplaint -> !plagiarismComplaint.getEditorsOnInvestigation().contains(user));
         } else if (user.getRoles().stream().map(Role::getName).collect(Collectors.toList()).contains("ROLE_COMMITTEE_MEMBER")) {
             complaints.removeIf(plagiarismComplaint -> plagiarismComplaint.getVotes()
                     .stream().filter(vote -> vote.getRound() == plagiarismComplaint.getIteration())

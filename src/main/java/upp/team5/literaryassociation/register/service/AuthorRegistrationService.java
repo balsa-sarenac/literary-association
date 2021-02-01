@@ -60,7 +60,7 @@ public class AuthorRegistrationService implements JavaDelegate {
             user.setFirstName(formSubmission.get("firstName").toString());
             user.setLastName(formSubmission.get("lastName").toString());
             user.setPassword(passwordEncoder.encode(formSubmission.get("password").toString()));
-            user.setEnabled(true);
+            user.setEnabled(false);
             user.setAccountNonExpired(true);
             user.setAccountNonLocked(true);
             user.setCredentialsNonExpired(true);

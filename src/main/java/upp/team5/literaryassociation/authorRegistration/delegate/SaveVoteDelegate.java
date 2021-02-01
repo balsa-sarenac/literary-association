@@ -61,7 +61,7 @@ public class SaveVoteDelegate implements JavaDelegate {
 
         voteService.saveVote(vote);
 
-        if (!String.valueOf(formFields.get("textarea")).isBlank()) {
+        if (!String.valueOf(formFields.get("textarea")).isBlank() && formFields.get("textarea") != null) {
             Note note = new Note();
             note.setContent((String) formFields.get("textarea"));
             note.setType(NoteType.COMMENT);

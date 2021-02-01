@@ -70,11 +70,6 @@ public class FileService {
         var pi = runtimeService.createProcessInstanceQuery().processInstanceId(processId).singleResult();
         var p = runtimeService.getVariables(processId);
 
-        if(task.getTaskDefinitionKey().equals("SubmitDocuments")){
-            dbUser.setStatus("reviewExpected");
-        }
-
-
         HashSet<FileDB> toMap = new HashSet<>();
 
 
@@ -93,8 +88,10 @@ public class FileService {
                 String fileName = StringUtils.cleanPath(file.getOriginalFilename());
                 FileDB fileDB = new FileDB(fileName, file.getContentType(), file.getBytes());
 
-                if (task.getTaskDefinitionKey().equals("SubmitDocuments"))
+                if (task.getTaskDefinitionKey().equals("SubmitDocuments") || task.getTaskDefinitionKey().equals("SubmitMoreDocuments")) {
                     fileDB.setMembershipRequest(dbUser.getMembershipRequest());
+                    dbUser.setStatus("reviewExpected");
+                }
                 else if (task.getTaskDefinitionKey().equals("UploadBook") || task.getName().equals("Upload book for review") ) {
                     var request = runtimeService.getVariable(processId, "publishing-request-id");
                     PublishingRequest publishingRequest = publishingRequestService.getPublishingRequest(Long.parseLong(request.toString()));
@@ -137,6 +134,7 @@ public class FileService {
         HashMap<String, Object> map = listToMap(toMap);
 
         formService.submitTaskForm(task.getId(), map );
+        userRepository.save(dbUser);
     }
 
 
