@@ -5,4 +5,5 @@ public enum PlagiarismComplaintStage {
     EDITORS_LEAVE_NOTES,
     COMMITTEE_VOTING,
     FINISH,
+    TIMEOUT,
 }
