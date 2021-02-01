@@ -47,7 +47,7 @@ public class PublishingController {
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("book-publishing");
 
         runtimeService.setVariable(processInstance.getId(), "starter", String.valueOf(authUserService.getLoggedInUser().getId()));
-
+        runtimeService.setVariable(processInstance.getId(), "assignee", authUserService.getLoggedInUser().getId());
         ProcessDTO processDTO = new ProcessDTO(processInstance.getId());
 
         return new ResponseEntity<>(processDTO, HttpStatus.OK);

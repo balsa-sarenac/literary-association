@@ -60,9 +60,10 @@ public class OnChangeBookTaskCreate implements TaskListener {
     private Map<String, String> setToMap(Set<Note> notes, boolean old) {
         Map<String, String> map = new HashMap<>();
         for (Note n : notes) {
-            if(n.getDeleted() && old)
+            boolean deleted = n.getDeleted();
+            if(deleted && old)
                 map.put(n.getId().toString(), n.getType().toString()+ " - " + n.getUser().getFirstName() + " " + n.getUser().getLastName() + ": " + n.getContent());
-            else if(!n.getDeleted() && !old)
+            else if(!deleted && !old)
                 map.put(n.getId().toString(), n.getType().toString()+ " - " + n.getUser().getFirstName() + " " + n.getUser().getLastName() + ": " + n.getContent());
         }
         return map;
