@@ -1,27 +1,26 @@
-package upp.team5.literaryassociation.publishing.delegate;
+package upp.team5.literaryassociation.publishing.betaReader.delegate;
 
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import upp.team5.literaryassociation.model.Role;
+import upp.team5.literaryassociation.common.service.EmailService;
 import upp.team5.literaryassociation.model.User;
-import upp.team5.literaryassociation.security.repository.RoleRepository;
 import upp.team5.literaryassociation.security.repository.UserRepository;
 
 import javax.ws.rs.NotFoundException;
 
 @Service @Slf4j
-public class RemoveBetaStatusDelegate implements JavaDelegate {
+public class NotifyStatusLossDelegate implements JavaDelegate {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+    private final EmailService emailService;
 
     @Autowired
-    public RemoveBetaStatusDelegate(UserRepository userRepository, RoleRepository roleRepository) {
+    public NotifyStatusLossDelegate(UserRepository userRepository, EmailService emailService) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
+        this.emailService = emailService;
     }
 
     @Override
@@ -31,13 +30,9 @@ public class RemoveBetaStatusDelegate implements JavaDelegate {
         User betaUser = this.userRepository.findById(Long.valueOf(betaUserCamunda.getId()))
                 .orElseThrow(() -> new NotFoundException("User with given id doesn't exist"));
 
-        Role betaRole = this.roleRepository.findByName("ROLE_BETA_READER");
-        Role readerRole = this.roleRepository.findByName("ROLE_READER");
-
-        betaUser.getRoles().remove(betaRole);
-        betaUser.getRoles().add(readerRole);
-
-        log.info("Saving user with reader role");
-        this.userRepository.save(betaUser);
+        log.info("Sending mail to beta reader");
+        emailService.Send(betaUser.getEmail(), "You have 5 penalty points for not reading early access books," +
+                " therefore you've lost beta reader status. You only have reader status now.",
+                "You've lost beta reader status");
     }
 }

@@ -36,18 +36,10 @@ public class FormController {
     }
 
     @PostMapping(name = "submitForm", path = "/submit/{processInstanceId}")
-    public void submitForm(@RequestBody FormSubmissionDTO formSubmissionDTO, @PathVariable String processInstanceId) {
+    public ResponseEntity<?> submitForm(@RequestBody FormSubmissionDTO formSubmissionDTO, @PathVariable String processInstanceId) {
         genericFormService.submitForm(processInstanceId, formSubmissionDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping(name = "getProcessId", path="/get-process-id/{userId}")
-    public ResponseEntity<?> getProcessId(@PathVariable String userId){
-        return new ResponseEntity<>(new ProcessDTO(genericFormService.getProcessId(userId)), HttpStatus.OK);
-    }
-
-    @GetMapping(name = "getPubProcessId", path="/get-pub-process-id/{publishingRequestId}")
-    public ResponseEntity<?> getPubProcessId(@PathVariable String publishingRequestId){
-        return new ResponseEntity<>(new ProcessDTO(genericFormService.getPubProcessId(publishingRequestId)), HttpStatus.OK);
-    }
 }
 

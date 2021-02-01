@@ -11,15 +11,13 @@ import java.util.List;
 
 @Repository
 public interface PublishingRequestRepository extends JpaRepository<PublishingRequest, Long> {
-    PublishingRequest findByBook(Book book);
+
 
     HashSet<PublishingRequest> findByBookAuthors(User book_authors);
 
     List<PublishingRequest> findAllByBetaReaders(User beatReader);
 
-    HashSet<PublishingRequest> findByBookChiefEditorAndReviewed(User chiefEditor, Boolean reviewed);
+    HashSet<PublishingRequest> findByBookChiefEditor(User chiefEditor);
 
-    HashSet<PublishingRequest> findByBookChiefEditorAndSynopsisAcceptedAndOriginalChecked(User chiefEditor, Boolean synopsisAccepted, Boolean originalChecked);
-
-    List<PublishingRequest> findByBookChiefEditorAndStatus(User editor, String status);
+    HashSet<PublishingRequest> findByBookLectorsAndStatus(User lector, String status);
 }

@@ -16,4 +16,5 @@ public class MembershipRequestDTO {
     private Long id;
     private UserDTO user;
     private List<FileDTO> files;
+    private List<NoteDTO> notes;
 }
