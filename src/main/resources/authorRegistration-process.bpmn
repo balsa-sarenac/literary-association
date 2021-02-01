@@ -170,7 +170,7 @@
     </bpmn:sendTask>
     <bpmn:endEvent id="Event_1vimwpl" name="Notify about payment timeout">
       <bpmn:incoming>Flow_1vm872f</bpmn:incoming>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_0t57ezf" messageRef="Message_1wmwmun" camunda:class="upp.team5.literaryassociation.authorMembershipApplication.NotifyAuthorService" />
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0t57ezf" messageRef="Message_1wmwmun" camunda:class="upp.team5.literaryassociation.authorMembershipPayment.delegate.PaymentTimeout" />
     </bpmn:endEvent>
     <bpmn:endEvent id="Event_1q05n46">
       <bpmn:incoming>Flow_0xv8mmc</bpmn:incoming>
