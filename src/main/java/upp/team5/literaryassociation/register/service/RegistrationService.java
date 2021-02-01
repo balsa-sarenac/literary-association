@@ -60,6 +60,7 @@ public class RegistrationService implements JavaDelegate {
         
         this.userRepository.save(user);
 
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -101,7 +102,9 @@ public class RegistrationService implements JavaDelegate {
                 rolesSet.add(roleRepository.findByName("ROLE_READER"));
             user.setRoles(rolesSet);
 
-            this.userRepository.save(user);
+            user = this.userRepository.save(user);
+
+            delegateExecution.setVariable("assignee", user.getId());
         }
     }
 
