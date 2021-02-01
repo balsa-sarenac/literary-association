@@ -1,6 +1,6 @@
 
 
--- DELETE FROM act_id_user WHERE first_ != 'Demo';
+ DELETE FROM act_id_user WHERE first_ != 'Demo';
 -- DELETE FROM act_ru_variable;
 -- DELETE FROM act_ru_job;
 -- DELETE FROM act_ge_bytearray;
@@ -24,9 +24,9 @@ insert into user_table (first_name, last_name, city, country, email, password, e
 ('Admin', 'Admin', 'Novi Sad', 'Serbia', 'admin@admin.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  true, 0, true, true, true, null);
 
--- insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
--- ('1','1', 'Admin', 'Admin', 'admin@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
---  'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
+insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
+('1','1', 'Admin', 'Admin', 'admin@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
+ 'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
 
 -- READER
 insert into user_table (first_name, last_name, city, country, email, password, enabled, penalty_points,
@@ -34,9 +34,9 @@ insert into user_table (first_name, last_name, city, country, email, password, e
 ('Marko', 'Markovic', 'Novi Sad', 'Serbia', 'marko@a.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  true, 0, true, true, true, null);
 
--- insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
--- ('2','1', 'Marko', 'Markovic', 'marko@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
---  'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
+insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
+('2','1', 'Marko', 'Markovic', 'marko@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
+ 'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
 
 -- BETA READER
 insert into user_table (first_name, last_name, city, country, email, password, enabled, penalty_points,
@@ -44,9 +44,9 @@ insert into user_table (first_name, last_name, city, country, email, password, e
 ('Pera', 'Peric', 'Novi Sad', 'Serbia', 'pera@a.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  true, 0, true, true, true, null);
 
--- insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
--- ('3','1', 'Pera', 'Peric', 'pera@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
---         'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
+insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
+('3','1', 'Pera', 'Peric', 'pera@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
+        'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
 
 -- LECTOR
 insert into user_table (first_name, last_name, city, country, email, password, enabled, penalty_points,
@@ -54,9 +54,9 @@ insert into user_table (first_name, last_name, city, country, email, password, e
 ('Jovan', 'Jovanovic', 'Beograd', 'Serbia', 'jovan@a.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  true, 0, true, true, true, null);
 
--- insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
--- ('4','1', 'Jovan', 'Jovanovic', 'jovan@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
---  'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
+insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
+('4','1', 'Jovan', 'Jovanovic', 'jovan@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
+ 'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
 
 -- EDITORS
 insert into user_table (first_name, last_name, city, country, email, password, enabled, penalty_points,
@@ -65,27 +65,27 @@ insert into user_table (first_name, last_name, city, country, email, password, e
 ('Ana', 'Antic', 'Kragujevac', 'Serbia', 'ana@a.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  true, 0, true, true, true, null);
 
--- insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
--- ('5','1', 'Ana', 'antic', 'ana@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
---  'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
+insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
+('5','1', 'Ana', 'antic', 'ana@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
+ 'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
 
 insert into user_table (first_name, last_name, city, country, email, password, enabled, penalty_points,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
 ('Stefan', 'Stefanovic', 'Kragujevac', 'Serbia', 'stefan@a.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  true, 0, true, true, true, null);
 
--- insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
--- ('6','1', 'Stefan', 'Stefanovic', 'stefan@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
---  'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
+insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
+('6','1', 'Stefan', 'Stefanovic', 'stefan@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
+ 'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
 
 insert into user_table (first_name, last_name, city, country, email, password, enabled, penalty_points,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
 ('Filip', 'Filipovic', 'Novi Sad', 'Serbia', 'filip@a.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  true, 0, true, true, true, null);
 
--- insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
--- ('7','1', 'Filip', 'Filipovic', 'filip@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
---  'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
+insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
+('7','1', 'Filip', 'Filipovic', 'filip@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
+ 'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
 
 -- CHIEF EDITOR
 insert into user_table (first_name, last_name, city, country, email, password, enabled, penalty_points,
@@ -93,9 +93,9 @@ insert into user_table (first_name, last_name, city, country, email, password, e
 ('Stanko', 'Stankovic', 'Novi Sad', 'Serbia', 'stanko@a.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  true, 0, true, true, true, null);
 
--- insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
--- ('8','1', 'STANKO', 'Stankovic', 'stanko@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
--- 'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
+insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
+('8','1', 'STANKO', 'Stankovic', 'stanko@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
+'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
 
  -- 9 COMMITTEE MEMBERS
 insert into user_table (first_name, last_name, city, country, email, password, enabled, penalty_points,
@@ -104,9 +104,9 @@ insert into user_table (first_name, last_name, city, country, email, password, e
 ('Milica', 'Milic', 'Novi Sad', 'Serbia', 'milica@a.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  true, 0, true, true, true, null);
 
--- insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
--- ('9','1', 'Milica', 'Milic', 'milica@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
---         'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
+insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
+('9','1', 'Milica', 'Milic', 'milica@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
+        'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
 
 
 insert into user_table (first_name, last_name, city, country, email, password, enabled, penalty_points,
@@ -114,36 +114,36 @@ insert into user_table (first_name, last_name, city, country, email, password, e
 ('Ivan', 'Ivanovic', 'Novi Sad', 'Serbia', 'ivan@a.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  true, 0, true, true, true, null);
 
--- insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
--- ('10','1', 'Ivan', 'Ivanovic', 'ivan@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
---         'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
+insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
+('10','1', 'Ivan', 'Ivanovic', 'ivan@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
+        'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
 
 insert into user_table (first_name, last_name, city, country, email, password, enabled, penalty_points,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
 ('Milos', 'Milosevic', 'Novi Sad', 'Serbia', 'milos@a.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  true, 0, true, true, true, null);
 
--- insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
--- ('11','1', 'Milos', 'Milosevic', 'milos@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
---         'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
+insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
+('11','1', 'Milos', 'Milosevic', 'milos@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
+        'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
 
 insert into user_table (first_name, last_name, city, country, email, password, enabled, penalty_points,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
 ('Dejan', 'Dejanovic', 'Novi Sad', 'Serbia', 'dejan@a.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  true, 0, true, true, true, null);
 
--- insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
--- ('12','1', 'Dejan', 'Dejanovic', 'dejan@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
---         'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
+insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
+('12','1', 'Dejan', 'Dejanovic', 'dejan@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
+        'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
 
 insert into user_table (first_name, last_name, city, country, email, password, enabled, penalty_points,
                         account_non_expired, account_non_locked, credentials_non_expired, last_password_reset_date) values
 ('Nikola', 'Nikolic', 'Novi Sad', 'Serbia', 'nikola@a.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  true, 0, true, true, true, null);
 
--- insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
--- ('13', '1', 'Nikola', 'Nikolic',  'nikola@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
---         'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
+insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
+('13', '1', 'Nikola', 'Nikolic',  'nikola@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
+        'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
 
 -- AUTHOR
 insert into user_table (first_name, last_name, city, country, email, password, enabled, penalty_points,
@@ -151,9 +151,9 @@ insert into user_table (first_name, last_name, city, country, email, password, e
 ('Milan', 'Milanovic', 'Novi Sad', 'Serbia', 't@a.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  true, 0, true, true, true, null);
 
--- insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
--- ('14','1', 'Milan', 'Milanovic', 'milan@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
---  'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
+insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
+('14','1', 'Milan', 'Milanovic', 'milan@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
+ 'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
 
 -- BETA-READER
 insert into user_table (first_name, last_name, city, country, email, password, enabled, penalty_points,
@@ -161,9 +161,9 @@ insert into user_table (first_name, last_name, city, country, email, password, e
 ('Marija', 'Milanovic', 'Novi Sad', 'Serbia', 'marija@a.com', '$2a$10$N4CZptDrasoEx3IJHL.3ZO1q8xICGMf.EBQY98m.PiR6RjHExRENK',
  true, 0, true, true, true, null);
 
--- insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
--- ('15','1', 'Marija', 'Milanovic', 'marija@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
---  'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
+insert into ACT_ID_USER (ID_, REV_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, LOCK_EXP_TIME_, ATTEMPTS_, PICTURE_ID_) values
+('15','1', 'Marija', 'Milanovic', 'marija@a.com', '{SHA-512}DdwyJqhGQFMQ46VdZIMX0xjnuR9Yfta+k2NqLkpYuoE/ENfm7i13D14SVcBikXzTnXBY1mP38+R098mtj3ZErQ==',
+ 'Cc6LwfxJ+9rBrq/kf8paBg==', null, null, null);
 
 -- USERS_ROLES
 insert into users_roles (user_id, role_id) values (1, 1);
