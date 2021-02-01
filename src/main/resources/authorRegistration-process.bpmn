@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0yusdow" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.4.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0yusdow" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.5.0">
   <bpmn:message id="Message_1afdhm9" name="LinkClicked" />
   <bpmn:message id="Message_1s8vrjk" name="SubmissionTimeoutMessage" />
   <bpmn:message id="Message_1qks3fi" name="PaymentTimeoutMessage" />
@@ -24,7 +24,7 @@
         <bpmn:flowNodeRef>data-basic-information</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_00nur5h</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0n77etj</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>SumbitDocuments</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SubmitMoreDocuments</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_00gu06j</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_1flwsnu</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>SubmitDocuments</bpmn:flowNodeRef>
@@ -61,7 +61,7 @@
     <bpmn:sequenceFlow id="Flow_1ba5uae" sourceRef="Event_0vkasx3" targetRef="Event_1lypyd0" />
     <bpmn:sequenceFlow id="Flow_0xv8mmc" sourceRef="Activity_0jqjbbv" targetRef="Event_1q05n46" />
     <bpmn:sequenceFlow id="Flow_1vm872f" sourceRef="Event_1timofv" targetRef="Event_1vimwpl" />
-    <bpmn:sequenceFlow id="Flow_11vskta" sourceRef="Activity_00gu06j" targetRef="SumbitDocuments" />
+    <bpmn:sequenceFlow id="Flow_11vskta" sourceRef="Activity_00gu06j" targetRef="SubmitMoreDocuments" />
     <bpmn:sequenceFlow id="Flow_1fvpvil" sourceRef="Event_1ogdcb2" targetRef="Event_1flwsnu" />
     <bpmn:sequenceFlow id="Flow_1hcza5r" name="Approved" sourceRef="Gateway_00xsvqw" targetRef="Activity_19t9fyt">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${decision == 'approved'}</bpmn:conditionExpression>
@@ -80,7 +80,7 @@
     <bpmn:sequenceFlow id="Flow_04fo4x8" sourceRef="SubmitDocuments" targetRef="Gateway_0q504la" />
     <bpmn:sequenceFlow id="Flow_13ct1k1" sourceRef="Activity_1x9vl8u" targetRef="Activity_1t0coqt" />
     <bpmn:sequenceFlow id="Flow_1gicx8d" sourceRef="Activity_0b8b7bl" targetRef="Gateway_00xsvqw" />
-    <bpmn:sequenceFlow id="Flow_1xh3edb" sourceRef="SumbitDocuments" targetRef="Activity_0n77etj" />
+    <bpmn:sequenceFlow id="Flow_1xh3edb" sourceRef="SubmitMoreDocuments" targetRef="Activity_0n77etj" />
     <bpmn:sequenceFlow id="Flow_04dasq2" sourceRef="Event_00nur5h" targetRef="basic-information" />
     <bpmn:sequenceFlow id="Flow_0nh8hw1" sourceRef="Event_0dn6roz" targetRef="Activity_1b3a6a9" />
     <bpmn:sequenceFlow id="Flow_11owbb5" sourceRef="Activity_1c4fb44" targetRef="Event_0dn6roz" />
@@ -97,7 +97,7 @@
         <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P14D</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
-    <bpmn:boundaryEvent id="Event_1ogdcb2" attachedToRef="SumbitDocuments">
+    <bpmn:boundaryEvent id="Event_1ogdcb2" attachedToRef="SubmitMoreDocuments">
       <bpmn:outgoing>Flow_1fvpvil</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_0tt0mw7">
         <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P14D</bpmn:timeDuration>
@@ -210,7 +210,7 @@
       <bpmn:incoming>Flow_09h63bw</bpmn:incoming>
       <bpmn:outgoing>Flow_11vskta</bpmn:outgoing>
     </bpmn:sendTask>
-    <bpmn:userTask id="SumbitDocuments" name="Submit more documents" camunda:assignee="${authorId}">
+    <bpmn:userTask id="SubmitMoreDocuments" name="Submit more documents" camunda:assignee="${authorId}">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="files" label="Documents:" type="file" defaultValue="null">
@@ -605,7 +605,7 @@
       <bpmndi:BPMNShape id="Activity_00gu06j_di" bpmnElement="Activity_00gu06j">
         <dc:Bounds x="1190" y="420" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0hcajpf_di" bpmnElement="SumbitDocuments">
+      <bpmndi:BPMNShape id="Activity_0hcajpf_di" bpmnElement="SubmitMoreDocuments">
         <dc:Bounds x="1000" y="420" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0t010x6_di" bpmnElement="Activity_0n77etj">
