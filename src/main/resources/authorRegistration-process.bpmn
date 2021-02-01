@@ -151,7 +151,7 @@
       <bpmn:startEvent id="Event_1397nlc">
         <bpmn:outgoing>Flow_0u8blnc</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_0e53koy">
-          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1M</bpmn:timeDuration>
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P2M</bpmn:timeDuration>
         </bpmn:timerEventDefinition>
       </bpmn:startEvent>
       <bpmn:sequenceFlow id="Flow_0u8blnc" sourceRef="Event_1397nlc" targetRef="Activity_02zqolq" />

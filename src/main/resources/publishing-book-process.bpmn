@@ -134,7 +134,7 @@
       <bpmn:startEvent id="Event_122zymx">
         <bpmn:outgoing>Flow_14t3gsf</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_0353nq8">
-          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1M</bpmn:timeDuration>
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P6M</bpmn:timeDuration>
         </bpmn:timerEventDefinition>
       </bpmn:startEvent>
       <bpmn:sendTask id="Activity_02ngnjr" name="Publishing timeout" camunda:class="upp.team5.literaryassociation.common.service.NotifyAboutProcessTimeoutService">

@@ -209,7 +209,7 @@
       <bpmn:startEvent id="Event_0m16fhg">
         <bpmn:outgoing>Flow_0k7xf1x</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_0pe2m71">
-          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1M</bpmn:timeDuration>
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P2M</bpmn:timeDuration>
         </bpmn:timerEventDefinition>
       </bpmn:startEvent>
     </bpmn:subProcess>
