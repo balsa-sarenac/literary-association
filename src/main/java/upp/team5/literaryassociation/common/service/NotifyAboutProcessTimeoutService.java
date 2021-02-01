@@ -42,7 +42,10 @@ public class NotifyAboutProcessTimeoutService implements JavaDelegate {
                 String body = "Hello,\n\nwe would like to inform you that your time to finish started process has finished!";
 
                 emailService.Send(to, body, subject);
+            }
 
+        }
+        
                 if(execution.getProcessDefinitionId().split(":")[0].equals("plagiarism-process")){
                     Long id = (Long) execution.getVariable("plagiarism-complaint-id");
                     PlagiarismComplaint plagiarismComplaint = plagiarismComplaintService.getPlagiarismComplaint(id);
@@ -61,9 +64,6 @@ public class NotifyAboutProcessTimeoutService implements JavaDelegate {
                     membershipRequest.setActive(false);
                     membershipRequestService.save(membershipRequest);
                 }
-            }
-
-        }
 
     }
 }
