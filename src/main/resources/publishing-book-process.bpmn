@@ -134,7 +134,7 @@
       <bpmn:startEvent id="Event_122zymx">
         <bpmn:outgoing>Flow_14t3gsf</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_0353nq8">
-          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P6M</bpmn:timeDuration>
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1M</bpmn:timeDuration>
         </bpmn:timerEventDefinition>
       </bpmn:startEvent>
       <bpmn:sendTask id="Activity_02ngnjr" name="Publishing timeout" camunda:class="upp.team5.literaryassociation.common.service.NotifyAboutProcessTimeoutService">
@@ -427,7 +427,7 @@
     <bpmn:boundaryEvent id="Event_09d6sqy" attachedToRef="last-book-change">
       <bpmn:outgoing>Flow_1n9nsef</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_1tj8d99">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P14D</bpmn:timeDuration>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1S</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_1n9nsef" sourceRef="Event_09d6sqy" targetRef="Activity_1dzzkmh" />
@@ -1118,9 +1118,6 @@
         <di:waypoint x="750" y="820" />
         <di:waypoint x="810" y="820" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Activity_0jjwrxr_di" bpmnElement="corrections">
-        <dc:Bounds x="3080" y="1210" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_16d22ym_di" bpmnElement="Activity_16d22ym" isExpanded="true">
         <dc:Bounds x="450" y="1610" width="350" height="200" />
       </bpmndi:BPMNShape>
@@ -1379,6 +1376,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_114b577_di" bpmnElement="Activity_1eexs3k">
         <dc:Bounds x="1410" y="780" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0jjwrxr_di" bpmnElement="corrections">
+        <dc:Bounds x="3080" y="1210" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_1clwsk3_di" bpmnElement="TextAnnotation_1clwsk3">
         <dc:Bounds x="1390" y="430" width="100" height="53" />

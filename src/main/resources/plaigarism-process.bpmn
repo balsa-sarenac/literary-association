@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1wkofd2" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.5.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1wkofd2" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.4.0">
   <bpmn:collaboration id="Collaboration_10ofp7w">
     <bpmn:participant id="Participant_0xmhl6l" processRef="plagiarism-process" />
   </bpmn:collaboration>
@@ -98,7 +98,7 @@
       <bpmn:boundaryEvent id="Event_0qk4jiz" attachedToRef="editor-notes">
         <bpmn:outgoing>Flow_15iu26j</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_0syh8je">
-          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P14D</bpmn:timeDuration>
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT2M</bpmn:timeDuration>
         </bpmn:timerEventDefinition>
       </bpmn:boundaryEvent>
       <bpmn:sequenceFlow id="Flow_15iu26j" sourceRef="Event_0qk4jiz" targetRef="Activity_1q5u69y" />
@@ -142,7 +142,7 @@
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_0wik3p4</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:userTask id="file-complaint" name="File a complaint" camunda:assignee="${starter}">
+    <bpmn:userTask id="file-complaint" name="File a complaint">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="auto-complete" label="Plagiarism Book:" type="string">
@@ -209,7 +209,7 @@
       <bpmn:startEvent id="Event_0m16fhg">
         <bpmn:outgoing>Flow_0k7xf1x</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_0pe2m71">
-          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P2M</bpmn:timeDuration>
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1M</bpmn:timeDuration>
         </bpmn:timerEventDefinition>
       </bpmn:startEvent>
     </bpmn:subProcess>

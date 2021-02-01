@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0yusdow" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.5.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0yusdow" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.4.0">
   <bpmn:message id="Message_1afdhm9" name="LinkClicked" />
   <bpmn:message id="Message_1s8vrjk" name="SubmissionTimeoutMessage" />
   <bpmn:message id="Message_1qks3fi" name="PaymentTimeoutMessage" />
@@ -151,7 +151,7 @@
       <bpmn:startEvent id="Event_1397nlc">
         <bpmn:outgoing>Flow_0u8blnc</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_0e53koy">
-          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P2M</bpmn:timeDuration>
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1M</bpmn:timeDuration>
         </bpmn:timerEventDefinition>
       </bpmn:startEvent>
       <bpmn:sequenceFlow id="Flow_0u8blnc" sourceRef="Event_1397nlc" targetRef="Activity_02zqolq" />
