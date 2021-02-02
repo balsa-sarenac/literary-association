@@ -69,7 +69,7 @@ public class PublishingRequestService {
         User user = this.authUserService.getLoggedInUser();
 
         log.info("Finding user assigned books");
-        List<PublishingRequest> publishingRequests = this.publishingRequestRepository.findAllByBetaReaders(user).stream().filter(x -> !x.getStatus().equals("Time for publishing has expired")).collect(Collectors.toList());
+        List<PublishingRequest> publishingRequests = this.publishingRequestRepository.findAllByBetaReaders(user).stream().filter(x -> x.getStatus().equals("Sent to beta readers")).collect(Collectors.toList());
         List<Note> betaReaderNotes = this.noteService.getUserNotes(user, NoteType.COMMENT);
         List<PublishingRequest> commentedRequests = betaReaderNotes.stream().map(Note::getPublishingRequest).collect(Collectors.toList());
         log.info("Removing books user already read and commented");
