@@ -46,5 +46,7 @@ public class StoreEditorsNotes implements JavaDelegate {
 
         log.info("Set send to committee variable to true");
         delegateExecution.setVariable("sentToCommittee", true);
+
+        delegateExecution.removeVariable("textarea");
     }
 }

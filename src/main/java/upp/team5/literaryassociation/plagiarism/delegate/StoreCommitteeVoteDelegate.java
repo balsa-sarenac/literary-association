@@ -49,5 +49,7 @@ public class StoreCommitteeVoteDelegate implements JavaDelegate {
         vote.setRound(complaint.getIteration());
         vote.setPlagiarismComplaint(complaint);
         voteService.saveVote(vote);
+
+        delegateExecution.removeVariable("isPlagiarism");
     }
 }
