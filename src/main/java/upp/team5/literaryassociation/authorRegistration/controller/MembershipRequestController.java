@@ -46,8 +46,8 @@ public class MembershipRequestController {
 
     @PreAuthorize("hasAuthority('ROLE_PENDING_AUTHOR')")
     @GetMapping(path = "/author-request/{id}")
-    public ResponseEntity<?> getAuthorMembershipRequest(@PathVariable String id) {
-        MembershipRequest membershipRequest = this.membershipRequestService.getAuthorRequest(Long.parseLong(id));
-        return  new ResponseEntity<>(membershipRequest.getId(), HttpStatus.OK);
+    public ResponseEntity<MembershipRequestDTO> getAuthorMembershipRequest(@PathVariable String id) {
+        MembershipRequestDTO membershipRequest = this.membershipRequestService.getAuthorRequest(Long.parseLong(id));
+        return  new ResponseEntity<MembershipRequestDTO>(membershipRequest, HttpStatus.OK);
     }
 }

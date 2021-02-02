@@ -174,8 +174,9 @@ public class MembershipRequestService {
         membershipRequestRepository.save(membershipRequest);
     }
 
-    public MembershipRequest getAuthorRequest(Long id) {
+    public MembershipRequestDTO getAuthorRequest(Long id) {
         User author = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
-        return membershipRequestRepository.findByAuthor(author);
+        MembershipRequest request = membershipRequestRepository.findByAuthor(author);
+        return modelMapper.map(request, MembershipRequestDTO.class);
     }
 }
