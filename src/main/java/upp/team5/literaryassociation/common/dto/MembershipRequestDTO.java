@@ -15,6 +15,7 @@ import java.util.List;
 public class MembershipRequestDTO {
     private Long id;
     private UserDTO user;
+    private Boolean active;
     private List<FileDTO> files;
     private List<NoteDTO> notes;
 }
