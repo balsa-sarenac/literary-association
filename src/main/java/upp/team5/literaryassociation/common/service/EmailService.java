@@ -34,5 +34,6 @@ public class EmailService {
         message.setSubject(subject);
         message.setText(body);
         javaMailSender.send(message);
+        log.info("Email sent");
     }
 }
