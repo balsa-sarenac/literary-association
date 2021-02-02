@@ -57,12 +57,15 @@ public class GenericFormService {
 
         Task task = getTask(processInstanceId);
 
-        runtimeService.setVariable(processInstanceId, "data-" + task.getTaskDefinitionKey(), map);
+        try {
+            runtimeService.setVariable(processInstanceId, "data-" + task.getTaskDefinitionKey(), map);
+        } catch(Exception e) {
+            throw new BadInputException("Process instance no longer exists");
+        }
 
         try {
             formService.submitTaskForm(task.getId(), map);
         } catch (Exception exception) {
-            exception.printStackTrace();
             throw new BadInputException(exception.getMessage());
         }
     }
