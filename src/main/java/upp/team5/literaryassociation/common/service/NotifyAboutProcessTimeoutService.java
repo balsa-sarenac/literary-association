@@ -46,24 +46,24 @@ public class NotifyAboutProcessTimeoutService implements JavaDelegate {
 
         }
         
-                if(execution.getProcessDefinitionId().split(":")[0].equals("plagiarism-process")){
-                    Long id = (Long) execution.getVariable("plagiarism-complaint-id");
-                    PlagiarismComplaint plagiarismComplaint = plagiarismComplaintService.getPlagiarismComplaint(id);
-                    plagiarismComplaint.setPlagiarismComplaintStage(PlagiarismComplaintStage.TIMEOUT);
-                    plagiarismComplaintService.save(plagiarismComplaint);
-                }
-                else if(execution.getProcessDefinitionId().split(":")[0].equals("book-publishing")){
-                    Long id = (Long) execution.getVariable("publishing-request-id");
-                    PublishingRequest publishingRequest = publishingRequestService.getPublishingRequest(id);
-                    publishingRequest.setStatus("Timeout");
-                    publishingRequestService.savePublishingRequest(publishingRequest);
-                }
-                else if(execution.getProcessDefinitionId().split(":")[0].equals("author-reg")){
-                    Long id = (Long) execution.getVariable("membershipRequestId");
-                    MembershipRequest membershipRequest = membershipRequestService.getMembershipRequest(id);
-                    membershipRequest.setActive(false);
-                    membershipRequestService.save(membershipRequest);
-                }
+        if(execution.getProcessDefinitionId().split(":")[0].equals("plagiarism-process")){
+            Long id = (Long) execution.getVariable("plagiarism-complaint-id");
+            PlagiarismComplaint plagiarismComplaint = plagiarismComplaintService.getPlagiarismComplaint(id);
+            plagiarismComplaint.setPlagiarismComplaintStage(PlagiarismComplaintStage.TIMEOUT);
+            plagiarismComplaintService.save(plagiarismComplaint);
+        }
+        else if(execution.getProcessDefinitionId().split(":")[0].equals("book-publishing")){
+            Long id = (Long) execution.getVariable("publishing-request-id");
+            PublishingRequest publishingRequest = publishingRequestService.getPublishingRequest(id);
+            publishingRequest.setStatus("Timeout");
+            publishingRequestService.savePublishingRequest(publishingRequest);
+        }
+        else if(execution.getProcessDefinitionId().split(":")[0].equals("author-reg")){
+            Long id = (Long) execution.getVariable("membershipRequestId");
+            MembershipRequest membershipRequest = membershipRequestService.getMembershipRequest(id);
+            membershipRequest.setActive(false);
+            membershipRequestService.save(membershipRequest);
+        }
 
     }
 }
