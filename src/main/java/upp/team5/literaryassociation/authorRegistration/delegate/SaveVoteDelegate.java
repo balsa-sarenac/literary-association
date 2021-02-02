@@ -70,5 +70,7 @@ public class SaveVoteDelegate implements JavaDelegate {
             note.setDateTime(DateTime.now());
             noteService.saveNote(note);
         }
+        delegateExecution.removeVariable("textarea");
+        delegateExecution.removeVariable("accept-author");
     }
 }
