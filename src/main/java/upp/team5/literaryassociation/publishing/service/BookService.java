@@ -54,12 +54,13 @@ public class BookService {
         HashSet<BookDTO> retVal = new HashSet<>();
 
         User author = userService.getUserById(Long.parseLong(authorId));
-        List<Book> books = bookRepository.findAll();
+        List<Book> books = bookRepository.findAll()
+                .stream().filter(x -> x.getPublishingRequest().getStatus().equals("Book is published")).collect(Collectors.toList());
 
         for(Book book:books){
             BookDTO bookDTO = modelMapper.map(book, BookDTO.class);
             UserDTO foundAuthor = bookDTO.getAuthors().stream()
-                    .filter(x -> x.getId()==author.getId())
+                    .filter(x -> x.getId().equals(author.getId()))
                     .findAny()
                     .orElse(null);
             if(foundAuthor==null){
