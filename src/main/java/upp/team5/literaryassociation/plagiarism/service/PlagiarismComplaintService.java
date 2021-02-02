@@ -58,7 +58,7 @@ public class PlagiarismComplaintService {
     public List<UserDTO> getEditorsThatCanLeaveNotes(Long complaintId) {
         var plagiarismComplaint = getPlagiarismComplaint(complaintId);
         Role role = roleService.getByName("ROLE_EDITOR");
-        List<User> editors = userRepository.findAllByRolesIn(List.of(role));
+        List<User> editors = userRepository.findAllByEnabledAndRolesIn(true, List.of(role));
 
         List<User> editorsThatHaveLeftNotes = null;
         if (plagiarismComplaint.getNotes() != null) {

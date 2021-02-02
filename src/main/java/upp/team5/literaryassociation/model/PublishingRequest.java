@@ -37,8 +37,7 @@ public class PublishingRequest implements Serializable {
     @Column
     private String status;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "book_id", referencedColumnName = "id")
+    @OneToOne
     private Book book;
 
     @OneToMany(mappedBy = "publishingRequest", fetch = FetchType.LAZY)

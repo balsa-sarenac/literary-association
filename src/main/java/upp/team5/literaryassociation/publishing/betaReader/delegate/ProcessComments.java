@@ -47,9 +47,6 @@ public class ProcessComments implements JavaDelegate {
         note.setDeleted(false);
         noteService.saveNote(note);
 
-        publishingRequest.setStatus("Change book based on comments");
-        publishingRequestService.savePublishingRequest(publishingRequest);
-
         delegateExecution.removeVariable("textarea");
     }
 

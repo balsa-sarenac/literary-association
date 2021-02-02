@@ -38,8 +38,8 @@ public class Book implements Serializable {
     @JoinColumn(name = "chief_editor_id", referencedColumnName = "id")
     private User chiefEditor;
 
-    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
-    private Set<PublishingRequest> publishingRequests;
+    @OneToOne()
+    private PublishingRequest publishingRequest;
 
     @OneToMany(
             cascade = CascadeType.ALL,

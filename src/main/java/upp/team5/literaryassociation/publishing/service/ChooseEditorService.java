@@ -82,9 +82,7 @@ public class ChooseEditorService implements JavaDelegate {
         req.setBook(book);
         publishingRequestService.savePublishingRequest(req);
 
-        Set<PublishingRequest> requests = new HashSet<>();
-        requests.add(req);
-        book.setPublishingRequests(requests);
+        book.setPublishingRequest(req);
         bookService.saveBook(book);
 
         var books = currentUser.getAuthorBooks();
