@@ -34,12 +34,6 @@ public class PublishingRequestService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private TaskService taskService;
-    @Autowired
-    private RuntimeService runtimeService;
-    @Autowired
-    private IdentityService identityService;
-    @Autowired
     private FileService fileService;
     @Autowired
     private RoleService roleService;
@@ -69,7 +63,8 @@ public class PublishingRequestService {
         User user = this.authUserService.getLoggedInUser();
 
         log.info("Finding user assigned books");
-        List<PublishingRequest> publishingRequests = this.publishingRequestRepository.findAllByBetaReaders(user).stream().filter(x -> x.getStatus().equals("Sent to beta readers")).collect(Collectors.toList());
+        List<PublishingRequest> publishingRequests = this.publishingRequestRepository.findAllByBetaReaders(user)
+                .stream().filter(x -> x.getStatus().equals("Sent to beta readers")).collect(Collectors.toList());
         List<Note> betaReaderNotes = this.noteService.getUserNotes(user, NoteType.COMMENT);
         List<PublishingRequest> commentedRequests = betaReaderNotes.stream().map(Note::getPublishingRequest).collect(Collectors.toList());
         log.info("Removing books user already read and commented");
@@ -88,7 +83,7 @@ public class PublishingRequestService {
     @Transactional
     public List<PublishingRequest> getRequests(Long authorId) {
         User author = userRepository.findById(authorId).orElseThrow(NotFoundException::new);
-        List<PublishingRequest> requests = publishingRequestRepository.findByBookAuthors(author).stream().collect(Collectors.toList());
+        List<PublishingRequest> requests = new ArrayList<>(publishingRequestRepository.findByBookAuthors(author));
         log.info(requests.toString());
         return requests;
 
