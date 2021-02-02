@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import upp.team5.literaryassociation.common.dto.FileDTO;
 import upp.team5.literaryassociation.common.service.NoteService;
+import upp.team5.literaryassociation.exception.BadInputException;
 import upp.team5.literaryassociation.model.FileDB;
 import upp.team5.literaryassociation.common.file.repository.FileDBRepository;
 import upp.team5.literaryassociation.model.MembershipRequest;
@@ -65,76 +66,72 @@ public class FileService {
         }
 
         User dbUser = userRepository.getUserByEmail(username);
-
-        Task task = taskService.createTaskQuery().processInstanceId(processId).singleResult();
-        var pi = runtimeService.createProcessInstanceQuery().processInstanceId(processId).singleResult();
-        var p = runtimeService.getVariables(processId);
-
-        HashSet<FileDB> toMap = new HashSet<>();
+        try {
+            Task task = taskService.createTaskQuery().processInstanceId(processId).singleResult();
 
 
+            HashSet<FileDB> toMap = new HashSet<>();
 
-        if(task.getTaskDefinitionKey().equals("change-book") && Arrays.stream(files).count()==0){
-            var request = runtimeService.getVariable(processId, "publishing-request-id");
-            PublishingRequest publishingRequest = publishingRequestService.getPublishingRequest(Long.parseLong(request.toString()));
 
-            publishingRequest.setStatus("Editor review");
 
-            publishingRequestService.savePublishingRequest(publishingRequest);
+            if(task.getTaskDefinitionKey().equals("change-book") && Arrays.stream(files).count()==0){
+                var request = runtimeService.getVariable(processId, "publishing-request-id");
+                PublishingRequest publishingRequest = publishingRequestService.getPublishingRequest(Long.parseLong(request.toString()));
 
-        }
-        else {
-            for (MultipartFile file : files) {
-                String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-                FileDB fileDB = new FileDB(fileName, file.getContentType(), file.getBytes());
+                publishingRequest.setStatus("Editor review");
 
-                if (task.getTaskDefinitionKey().equals("SubmitDocuments") || task.getTaskDefinitionKey().equals("SubmitMoreDocuments")) {
-                    fileDB.setMembershipRequest(dbUser.getMembershipRequest());
-                    dbUser.setStatus("reviewExpected");
-                }
-                else if (task.getTaskDefinitionKey().equals("UploadBook") || task.getName().equals("Upload book for review") ) {
-                    var request = runtimeService.getVariable(processId, "publishing-request-id");
-                    PublishingRequest publishingRequest = publishingRequestService.getPublishingRequest(Long.parseLong(request.toString()));
-
-                    publishingRequest.setStatus("Book uploaded");
-
-                    fileDB.setPublishingRequest(publishingRequest);
-                    fileDB.setUploadedBookId(publishingRequest.getBook().getId());
-
-                    publishingRequestService.savePublishingRequest(publishingRequest);
-                }
-                else if(task.getTaskDefinitionKey().equals("change-book") || task.getTaskDefinitionKey().equals("last-book-change")){
-                    var request = runtimeService.getVariable(processId, "publishing-request-id");
-                    PublishingRequest publishingRequest = publishingRequestService.getPublishingRequest(Long.parseLong(request.toString()));
-
-                    publishingRequest.setStatus("Editor review");
-
-                    FileDB oldFile = getByBookId(publishingRequest.getBook().getId());
-                    oldFile.setUploadedBookId(null);
-
-                    fileDBRepository.deleteById(oldFile.getId());
-
-                    noteService.deleteNotes(publishingRequest.getNotes());
-
-                    fileDB.setPublishingRequest(publishingRequest);
-                    fileDB.setUploadedBookId(publishingRequest.getBook().getId());
-
-                    publishingRequestService.savePublishingRequest(publishingRequest);
-                }
-
-                toMap.add(fileDB);
+                publishingRequestService.savePublishingRequest(publishingRequest);
 
             }
+            else {
+                for (MultipartFile file : files) {
+                    String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+                    FileDB fileDB = new FileDB(fileName, file.getContentType(), file.getBytes());
 
-            fileDBRepository.saveAll(toMap);
+                    if (task.getTaskDefinitionKey().equals("SubmitDocuments") || task.getTaskDefinitionKey().equals("SubmitMoreDocuments")) {
+                        fileDB.setMembershipRequest(dbUser.getMembershipRequest());
+                        dbUser.setStatus("reviewExpected");
+                    }
+                    else if (task.getTaskDefinitionKey().equals("UploadBook") || task.getName().equals("Upload book for review") ) {
+                        var request = runtimeService.getVariable(processId, "publishing-request-id");
+                        PublishingRequest publishingRequest = publishingRequestService.getPublishingRequest(Long.parseLong(request.toString()));
 
-//        runtimeService.setVariable(processId, "files", toMap);
+                        publishingRequest.setStatus("Book uploaded");
+
+                        fileDB.setPublishingRequest(publishingRequest);
+                        fileDB.setUploadedBookId(publishingRequest.getBook().getId());
+
+                        publishingRequestService.savePublishingRequest(publishingRequest);
+                    }
+                    else if(task.getTaskDefinitionKey().equals("change-book") || task.getTaskDefinitionKey().equals("last-book-change")){
+                        var request = runtimeService.getVariable(processId, "publishing-request-id");
+                        PublishingRequest publishingRequest = publishingRequestService.getPublishingRequest(Long.parseLong(request.toString()));
+
+                        publishingRequest.setStatus("Editor review");
+
+                        FileDB oldFile = getByBookId(publishingRequest.getBook().getId());
+                        oldFile.setUploadedBookId(null);
+
+                        fileDBRepository.deleteById(oldFile.getId());
+
+                        noteService.deleteNotes(publishingRequest.getNotes());
+
+                        fileDB.setPublishingRequest(publishingRequest);
+                        fileDB.setUploadedBookId(publishingRequest.getBook().getId());
+
+                        publishingRequestService.savePublishingRequest(publishingRequest);
+                    }
+                    toMap.add(fileDB);
+                }
+                fileDBRepository.saveAll(toMap);
+            }
+            HashMap<String, Object> map = listToMap(toMap);
+
+            formService.submitTaskForm(task.getId(), map );
+            userRepository.save(dbUser);
+        } catch(Exception e) {
+            throw new BadInputException("Process instance no longer exists");
         }
-
-        HashMap<String, Object> map = listToMap(toMap);
-
-        formService.submitTaskForm(task.getId(), map );
-        userRepository.save(dbUser);
     }
 
 

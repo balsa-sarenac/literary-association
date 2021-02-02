@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import upp.team5.literaryassociation.common.file.service.FileService;
+import upp.team5.literaryassociation.exception.BadInputException;
 
 @CrossOrigin
 @RestController
@@ -25,6 +26,8 @@ public class FileController {
         try {
             storageService.store(files, processId);
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch (BadInputException exc) {
+            throw new BadInputException(exc.getMessage());
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
         }

@@ -55,7 +55,7 @@ public class NotifyAboutProcessTimeoutService implements JavaDelegate {
         else if(execution.getProcessDefinitionId().split(":")[0].equals("book-publishing")){
             Long id = (Long) execution.getVariable("publishing-request-id");
             PublishingRequest publishingRequest = publishingRequestService.getPublishingRequest(id);
-            publishingRequest.setStatus("Timeout");
+            publishingRequest.setStatus("Process timeout");
             publishingRequestService.savePublishingRequest(publishingRequest);
         }
         else if(execution.getProcessDefinitionId().split(":")[0].equals("author-reg")){
