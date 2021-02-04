@@ -8,6 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import upp.team5.literaryassociation.common.dto.MembershipRequestDTO;
 import upp.team5.literaryassociation.authorRegistration.service.MembershipRequestService;
+import upp.team5.literaryassociation.model.MembershipRequest;
 
 import java.util.List;
 
@@ -41,5 +42,12 @@ public class MembershipRequestController {
     @GetMapping(path = "/documents/{id}")
     public ResponseEntity<byte[]> getDocument(@PathVariable Long id) {
         return this.membershipRequestService.getDocument(id);
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_PENDING_AUTHOR')")
+    @GetMapping(path = "/author-request/{id}")
+    public ResponseEntity<MembershipRequestDTO> getAuthorMembershipRequest(@PathVariable String id) {
+        MembershipRequestDTO membershipRequest = this.membershipRequestService.getAuthorRequest(Long.parseLong(id));
+        return  new ResponseEntity<MembershipRequestDTO>(membershipRequest, HttpStatus.OK);
     }
 }

@@ -33,9 +33,6 @@ public class ChooseEditorService implements JavaDelegate {
     @Autowired
     private IdentityService identityService;
 
-    @Autowired
-    private AuthUserService authUserService;
-
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
 
@@ -49,12 +46,12 @@ public class ChooseEditorService implements JavaDelegate {
             }
         }
 
-        Role role = roleService.getByName("ROLE_EDITOR");
-        //Role newRole = roleService.getByName("ROLE_CHIEF_EDITOR");
+//        Role role = roleService.getByName("ROLE_EDITOR");
+        Role role = roleService.getByName("ROLE_CHIEF_EDITOR");
 
-        List<User> editors = userService.getUsersByRole(role.getId());
-        int rand = getRandomNumber(0, editors.size()-1);
-        User chief = editors.get(rand);
+        List<User> chiefs = userService.getUsersByRole(role.getId());
+//        int rand = getRandomNumber(0, editors.size()-1);
+        User chief = chiefs.get(0);
 
         //Set<Role> currentRoles = chief.getRoles();
         //currentRoles.add(newRole);
@@ -69,6 +66,9 @@ public class ChooseEditorService implements JavaDelegate {
         book.setTitle(bookInfoSubmission.get("title").toString());
         book.setSynopsis(bookInfoSubmission.get("synopsis").toString());
         book.setChiefEditor(chief);
+        Set<User> authors = new HashSet<>();
+        authors.add(currentUser);
+        book.setAuthors(authors);
 
         Genre genre = genreService.getGenreByName(bookInfoSubmission.get("genre").toString());
         Set<Genre> genres = new HashSet<>();
@@ -78,13 +78,11 @@ public class ChooseEditorService implements JavaDelegate {
         bookService.saveBook(book);
 
         PublishingRequest req = new PublishingRequest();
-        req.setStatus("Created");
+        req.setStatus("New request");
         req.setBook(book);
         publishingRequestService.savePublishingRequest(req);
 
-        Set<PublishingRequest> requests = new HashSet<>();
-        requests.add(req);
-        book.setPublishingRequests(requests);
+        book.setPublishingRequest(req);
         bookService.saveBook(book);
 
         var books = currentUser.getAuthorBooks();

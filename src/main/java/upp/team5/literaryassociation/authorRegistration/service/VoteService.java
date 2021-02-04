@@ -32,76 +32,10 @@ public class VoteService implements JavaDelegate {
     private final UserRepository userRepository;
 
     @Autowired
-    private IdentityService identityService;
-
-    @Autowired
-    private TaskService taskService;
-
-    @Autowired
-    private RuntimeService runtimeService;
-
-    @Autowired
     public VoteService(VoteRepository voteRepository, MembershipRequestService membershipRequestService, UserRepository userRepository) {
         this.voteRepository = voteRepository;
         this.membershipRequestService = membershipRequestService;
         this.userRepository = userRepository;
-    }
-
-    public void newVote(VoteDTO voteDTO) {
-        User committee = getLoggedInUser();
-
-        MembershipRequest membershipRequest = this.membershipRequestService.getMembershipRequest(voteDTO.getRequestId());
-
-        log.info("Creating new vote");
-        Vote vote = new Vote();
-
-        switch (voteDTO.getOption()) {
-            case "approve" -> {
-                vote.setVoteOption(VoteOption.APPROVE);
-                membershipRequest.getAuthor().setStatus("paymentRequired");
-            }
-            case "refuse" -> {
-                vote.setVoteOption(VoteOption.REFUSE);
-            }
-            case "request_more" -> {
-                vote.setVoteOption(VoteOption.REQUEST_MORE_MATERIAL);
-                membershipRequest.getAuthor().setStatus("moreDocuments");
-            }
-        }
-
-        vote.setMembershipRequest(membershipRequest);
-        vote.setVoteTime(new Date());
-        vote.setRound(membershipRequest.getVoteRound());
-        vote.setCommitteeMember(committee);
-
-        this.voteRepository.save(vote);
-
-        log.info("Getting process instance");
-        ProcessInstance pi = this.runtimeService.createProcessInstanceQuery()
-                .processDefinitionKey("author-reg")
-                .variableValueEquals("membershipRequestId", membershipRequest.getId())
-                .singleResult();
-
-        org.camunda.bpm.engine.identity.User camundaUser = identityService.createUserQuery().userId(String.valueOf(committee.getId())).singleResult();
-        Task task = this.taskService.createTaskQuery().processInstanceId(pi.getId()).taskAssignee(camundaUser.getId()).singleResult();
-        taskService.claim(task.getId(), camundaUser.getId());
-
-        log.info("Completing task");
-        taskService.complete(task.getId());
-
-    }
-
-    private User getLoggedInUser() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String email;
-        if(principal instanceof UserDetails){
-             email = ((UserDetails)principal).getUsername();
-        }
-        else{
-             email = principal.toString();
-        }
-
-        return this.userRepository.findByEmail(email);
     }
 
     @Override
@@ -137,5 +71,12 @@ public class VoteService implements JavaDelegate {
             delegateExecution.setVariable("decision", "approved");
         }
 
+        User author = userRepository.findByMembershipRequest(membershipRequest);
+        author.setStatus("moreDocuments");
+        userRepository.save(author);
+    }
+
+    public void saveVote(Vote vote) {
+        voteRepository.save(vote);
     }
 }

@@ -38,20 +38,20 @@ public class Book implements Serializable {
     @JoinColumn(name = "chief_editor_id", referencedColumnName = "id")
     private User chiefEditor;
 
-    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
-    private Set<PublishingRequest> publishingRequests;
+    @OneToOne()
+    private PublishingRequest publishingRequest;
 
     @OneToMany(
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<PlagiarismComplaint> accusedOfPlagiarism = new ArrayList<>();
+    private Set<PlagiarismComplaint> accusedOfPlagiarism;
 
     @OneToMany(
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<PlagiarismComplaint> beingPlagiated = new ArrayList<>();
+    private Set<PlagiarismComplaint> beingPlagiated;
 
     @ManyToMany
     @JoinTable(name = "books_genres",
@@ -62,4 +62,6 @@ public class Book implements Serializable {
     @OneToOne
     private FileDB bookFile;
 
+    @Column
+    private boolean isPlagiarism;
 }

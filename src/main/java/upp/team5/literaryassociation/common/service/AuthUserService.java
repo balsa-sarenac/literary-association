@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import upp.team5.literaryassociation.model.User;
 import upp.team5.literaryassociation.security.repository.UserRepository;
 
+import javax.ws.rs.NotFoundException;
+
 @Service @Slf4j
 public class AuthUserService {
 
@@ -30,5 +32,9 @@ public class AuthUserService {
         }
 
         return this.userRepository.findByEmail(email);
+    }
+
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User with given id doesn't exist"));
     }
 }

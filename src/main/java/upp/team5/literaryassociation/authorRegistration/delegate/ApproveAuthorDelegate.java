@@ -25,8 +25,10 @@ public class ApproveAuthorDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
         long membershipId = (long) delegateExecution.getVariable("membershipRequestId");
-        MembershipRequest membershipRequest = this.membershipRequestService.getMembershipRequest(membershipId);
-        User user = this.userRepository.findByMembershipRequest(membershipRequest);
+        MembershipRequest membershipRequest = membershipRequestService.getMembershipRequest(membershipId);
+        User user = userRepository.findByMembershipRequest(membershipRequest);
+        user.setStatus("paymentRequired");
+        userRepository.save(user);
 
         String to = user.getEmail();
         String subject = "You are approved!!!";
@@ -34,6 +36,6 @@ public class ApproveAuthorDelegate implements JavaDelegate {
         body += "You have been approved to join our literary association!";
         body += "Next step is paying membership fee. Please log in to your profile and pay to start using our site!";
 
-        this.emailService.Send(to, body, subject);
+        emailService.Send(to, body, subject);
     }
 }

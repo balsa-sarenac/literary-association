@@ -27,8 +27,8 @@ public class RequestMoreDelegate implements JavaDelegate {
     public void execute(DelegateExecution delegateExecution) throws Exception {
         log.info("Getting request and user");
         long membershipId = (long) delegateExecution.getVariable("membershipRequestId");
-        MembershipRequest membershipRequest = this.membershipRequestService.getMembershipRequest(membershipId);
-        User user = this.userRepository.findByMembershipRequest(membershipRequest);
+        MembershipRequest membershipRequest = membershipRequestService.getMembershipRequest(membershipId);
+        User user = userRepository.findByMembershipRequest(membershipRequest);
 
         String to = user.getEmail();
         String subject = "We need more manuscripts";
@@ -37,6 +37,9 @@ public class RequestMoreDelegate implements JavaDelegate {
         body += "Please log int to your profile and submit more documents. You have 2 weeks to do so, after that your request will be terminated.";
 
         log.info("Sending mail to author to send more material");
-        this.emailService.Send(to, body, subject);
+        emailService.Send(to, body, subject);
+
+        user.setStatus("moreDocuments");
+        userRepository.save(user);
     }
 }

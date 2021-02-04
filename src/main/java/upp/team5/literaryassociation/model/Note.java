@@ -4,9 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.joda.time.DateTime;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Date;
 
 @Getter @Setter
 @NoArgsConstructor
@@ -19,6 +22,9 @@ public class Note implements Serializable {
 
       private String content;
 
+      @Column
+      private Boolean deleted;
+
       @Enumerated(value = EnumType.STRING)
       private NoteType type;
 
@@ -30,4 +36,13 @@ public class Note implements Serializable {
       @JoinColumn(name = "user_id", referencedColumnName = "id")
       private User user;
 
+      @ManyToOne
+      @JoinColumn(name = "membership_request_id")
+      private MembershipRequest membershipRequest;
+
+      @ManyToOne
+      private PlagiarismComplaint plagiarismComplaint;
+
+      @Column
+      private DateTime dateTime;
 }

@@ -2,6 +2,7 @@ package upp.team5.literaryassociation.authorRegistration.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.IdentityService;
+import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +15,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import upp.team5.literaryassociation.common.dto.MembershipRequestDTO;
 import upp.team5.literaryassociation.authorRegistration.repository.MembershipRequestRepository;
 import upp.team5.literaryassociation.common.dto.FileDTO;
+import upp.team5.literaryassociation.common.dto.NoteDTO;
 import upp.team5.literaryassociation.common.dto.UserDTO;
 import upp.team5.literaryassociation.common.file.service.FileService;
 import upp.team5.literaryassociation.exception.UserNotFoundException;
-import upp.team5.literaryassociation.model.FileDB;
-import upp.team5.literaryassociation.model.MembershipRequest;
-import upp.team5.literaryassociation.model.User;
-import upp.team5.literaryassociation.model.Vote;
+import upp.team5.literaryassociation.model.*;
 import upp.team5.literaryassociation.security.repository.UserRepository;
 
 import javax.ws.rs.NotFoundException;
@@ -58,13 +57,17 @@ public class MembershipRequestService {
         membershipRequest.setActive(true);
         membershipRequest.setVoteRound(0);
 
-        membershipRequest = membershipRequestRepository.save(membershipRequest);
+        try {
+            membershipRequest = membershipRequestRepository.save(membershipRequest);
 
-        dbUser.setMembershipRequest(membershipRequest);
+            dbUser.setMembershipRequest(membershipRequest);
+            this.userRepository.save(dbUser);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            throw new BpmnError("FailedSavingToDB");
+        }
 
         delegateExecution.setVariable("membershipRequestId", membershipRequest.getId());
-
-        this.userRepository.save(dbUser);
     }
 
     public List<MembershipRequestDTO> getAllRequests() {
@@ -135,6 +138,12 @@ public class MembershipRequestService {
         membershipRequestDTO.setUser(userDTO);
         membershipRequestDTO.setFiles(files);
 
+        List<NoteDTO> noteDTOS = new ArrayList<>();
+        for (Note note : membershipRequest.getNotes()) {
+            NoteDTO noteDTO = modelMapper.map(note, NoteDTO.class);
+            noteDTOS.add(noteDTO);
+        }
+        membershipRequestDTO.setNotes(noteDTOS);
         return membershipRequestDTO;
     }
 
@@ -161,11 +170,13 @@ public class MembershipRequestService {
         return membershipRequestRepository.findByAuthor(author).getId();
     }
 
-    public void deleteMembershipRequest(MembershipRequest membershipRequest) {
-        membershipRequestRepository.delete(membershipRequest);
-    }
-
     public void updateRequest(MembershipRequest membershipRequest) {
         membershipRequestRepository.save(membershipRequest);
+    }
+
+    public MembershipRequestDTO getAuthorRequest(Long id) {
+        User author = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        MembershipRequest request = membershipRequestRepository.findByAuthor(author);
+        return modelMapper.map(request, MembershipRequestDTO.class);
     }
 }

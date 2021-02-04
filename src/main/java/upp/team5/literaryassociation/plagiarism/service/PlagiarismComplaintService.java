@@ -3,67 +3,149 @@ package upp.team5.literaryassociation.plagiarism.service;
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.task.Task;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import upp.team5.literaryassociation.common.dto.FileDTO;
 import upp.team5.literaryassociation.common.dto.PlagiarismComplaintDTO;
-import upp.team5.literaryassociation.model.Book;
-import upp.team5.literaryassociation.model.PlagiarismComplaint;
-import upp.team5.literaryassociation.model.User;
+import upp.team5.literaryassociation.common.dto.UserDTO;
+import upp.team5.literaryassociation.common.service.AuthUserService;
+import upp.team5.literaryassociation.model.*;
 import upp.team5.literaryassociation.plagiarism.repository.PlagiarismComplaintRepository;
 import upp.team5.literaryassociation.publishing.service.BookService;
+import upp.team5.literaryassociation.security.repository.RoleRepository;
+import upp.team5.literaryassociation.security.repository.UserRepository;
 import upp.team5.literaryassociation.security.service.CustomUserDetailsService;
+import upp.team5.literaryassociation.security.service.RoleService;
 
 import javax.ws.rs.NotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class PlagiarismComplaintService {
     @Autowired
-    private CustomUserDetailsService userService;
-
-    @Autowired
-    private BookService bookService;
-
-    @Autowired
     private PlagiarismComplaintRepository plagiarismComplaintRepository;
 
     @Autowired
-    private RuntimeService runtimeService;
+    private RoleService roleService;
 
     @Autowired
-    private TaskService taskService;
+    private UserRepository userRepository;
 
-    public void processComplaint(PlagiarismComplaintDTO plagiarismComplaintDTO, Long authorId, String processId) {
-        User complainant = userService.getUserById(authorId);
-        Book complainantBook = bookService.getBook(plagiarismComplaintDTO.getPlagiated().getId());
-        Book plagiarismBook = bookService.getBook(plagiarismComplaintDTO.getPlagiarism().getId());
+    @Autowired
+    private ModelMapper modelMapper;
 
-        PlagiarismComplaint plagiarismComplaint = new PlagiarismComplaint();
-        plagiarismComplaint.setComplainant(complainant);
-        plagiarismComplaint.setComplainantBook(complainantBook);
-        plagiarismComplaint.setPlagiarism(plagiarismBook);
-        plagiarismComplaint = plagiarismComplaintRepository.save(plagiarismComplaint);
-
-        complainant.getComplaints().add(plagiarismComplaint);
-        userService.saveUser(complainant);
-
-        complainantBook.getBeingPlagiated().add(plagiarismComplaint);
-        bookService.saveBook(complainantBook);
-
-        plagiarismBook.getAccusedOfPlagiarism().add(plagiarismComplaint);
-        bookService.saveBook(plagiarismBook);
-
-        runtimeService.setVariable(processId, "plagiarism-complaint-id", plagiarismComplaint.getId());
-
-        Task task = taskService.createTaskQuery().processInstanceId(processId).singleResult();
-        taskService.complete(task.getId());
-
-    }
+    @Autowired
+    private AuthUserService authUserService;
 
     public PlagiarismComplaint getPlagiarismComplaint(Long id){
         return plagiarismComplaintRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Plagiarism complaint with given id doesn't exist"));
+    }
+
+    public PlagiarismComplaint save(PlagiarismComplaint plagiarismComplaint) {
+        return plagiarismComplaintRepository.save(plagiarismComplaint);
+    }
+
+    public List<UserDTO> getEditorsThatCanLeaveNotes(Long complaintId) {
+        var plagiarismComplaint = getPlagiarismComplaint(complaintId);
+        Role role = roleService.getByName("ROLE_EDITOR");
+        List<User> editors = userRepository.findAllByEnabledAndRolesIn(true, List.of(role));
+
+        List<User> editorsThatHaveLeftNotes = null;
+        if (plagiarismComplaint.getNotes() != null) {
+            editorsThatHaveLeftNotes = plagiarismComplaint.getNotes()
+                    .stream()
+                    .filter(note -> note.getDateTime().isAfter(plagiarismComplaint.getIterationStart()))
+                    .map(Note::getUser).collect(Collectors.toList());
+        }
+
+        if (editorsThatHaveLeftNotes != null) {
+            editors.removeIf(editorsThatHaveLeftNotes::contains);
+        }
+
+        List<UserDTO> editorDTOs = new ArrayList<>();
+        for (User user : editors) {
+            UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+            editorDTOs.add(userDTO);
+        }
+
+        return editorDTOs;
+    }
+
+    @Transactional
+    public List<PlagiarismComplaintDTO> getComplaints() {
+        User user = authUserService.getLoggedInUser();
+        PlagiarismComplaintStage stage = switch (user.getRoles().iterator().next().getName()) {
+            case "ROLE_CHIEF_EDITOR" -> PlagiarismComplaintStage.CHOOSE_EDITORS;
+            case "ROLE_EDITOR" -> PlagiarismComplaintStage.EDITORS_LEAVE_NOTES;
+            case "ROLE_COMMITTEE_MEMBER" -> PlagiarismComplaintStage.COMMITTEE_VOTING;
+            default -> null;
+        };
+
+        List<PlagiarismComplaint> complaints = plagiarismComplaintRepository.findAllByPlagiarismComplaintStage(stage);
+
+        if (user.getRoles().iterator().next().getName().equals("ROLE_EDITOR")) {
+            complaints.removeIf(plagiarismComplaint -> plagiarismComplaint.getNotes()
+                    .stream().filter(note -> note.getDateTime().isAfter(plagiarismComplaint.getIterationStart()))
+                    .map(Note::getUser).collect(Collectors.toList()).contains(user));
+            complaints.removeIf(plagiarismComplaint -> !plagiarismComplaint.getEditorsOnInvestigation().contains(user));
+        } else if (user.getRoles().stream().map(Role::getName).collect(Collectors.toList()).contains("ROLE_COMMITTEE_MEMBER")) {
+            complaints.removeIf(plagiarismComplaint -> plagiarismComplaint.getVotes()
+                    .stream().filter(vote -> vote.getRound() == plagiarismComplaint.getIteration())
+                    .map(Vote::getCommitteeMember).collect(Collectors.toList()).contains(user));
+        }
+
+        return complaints.stream()
+                .map(plagiarismComplaint -> modelMapper.map(plagiarismComplaint, PlagiarismComplaintDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public PlagiarismComplaintDTO getComplaint(Long complaintId) {
+        PlagiarismComplaint plagiarismComplaint = getPlagiarismComplaint(complaintId);
+        PlagiarismComplaintDTO plagiarismComplaintDTO = modelMapper.map(plagiarismComplaint, PlagiarismComplaintDTO.class);
+
+        FileDB complainantBook = plagiarismComplaint.getComplainantBook().getBookFile();
+        FileDB plagiarismBook = plagiarismComplaint.getPlagiarism().getBookFile();
+
+        if (complainantBook == null || plagiarismBook == null) {
+//            throw new BpmnError("BOOK_FILES_DONT_EXIST");
+            return plagiarismComplaintDTO;
+        }
+
+        String fileDownloadUri = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path("/membership-requests/documents/")
+                .path(String.valueOf(complainantBook.getId()))
+                .toUriString();
+        FileDTO fileDTO = new FileDTO(
+                complainantBook.getName(),
+                fileDownloadUri,
+                complainantBook.getType(),
+                complainantBook.getData().length);
+        plagiarismComplaintDTO.getComplainantBook().setBookFile(fileDTO);
+
+        fileDownloadUri = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path("/membership-requests/documents/")
+                .path(String.valueOf(plagiarismBook.getId()))
+                .toUriString();
+        fileDTO = new FileDTO(
+                plagiarismBook.getName(),
+                fileDownloadUri,
+                plagiarismBook.getType(),
+                plagiarismBook.getData().length);
+        plagiarismComplaintDTO.getPlagiarism().setBookFile(fileDTO);
+
+        return plagiarismComplaintDTO;
     }
 }
