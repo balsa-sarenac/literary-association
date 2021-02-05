@@ -57,15 +57,10 @@ public class MembershipRequestService {
         membershipRequest.setActive(true);
         membershipRequest.setVoteRound(0);
 
-        try {
-            membershipRequest = membershipRequestRepository.save(membershipRequest);
+        membershipRequest = membershipRequestRepository.save(membershipRequest);
 
-            dbUser.setMembershipRequest(membershipRequest);
-            this.userRepository.save(dbUser);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            throw new BpmnError("FailedSavingToDB");
-        }
+        dbUser.setMembershipRequest(membershipRequest);
+        this.userRepository.save(dbUser);
 
         delegateExecution.setVariable("membershipRequestId", membershipRequest.getId());
     }
