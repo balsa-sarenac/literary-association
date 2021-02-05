@@ -128,6 +128,7 @@ public class FileService {
             HashMap<String, Object> map = listToMap(toMap);
 
             formService.submitTaskForm(task.getId(), map );
+            runtimeService.setVariable(processId, "files", null);
             userRepository.save(dbUser);
         } catch(Exception e) {
             throw new BadInputException("Process instance no longer exists");
