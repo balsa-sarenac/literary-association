@@ -13,7 +13,7 @@ public class GenresValidator implements FormFieldValidator {
     @Override
     public boolean validate(Object o, FormFieldValidatorContext formFieldValidatorContext) {
         if (o instanceof List)
-            return ((List<String>) o).size() >= 2;
+            return ((List<String>) o).size() >= 1;
         else
             return false;
 
