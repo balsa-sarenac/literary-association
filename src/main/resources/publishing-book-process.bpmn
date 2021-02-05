@@ -349,7 +349,7 @@
     <bpmn:boundaryEvent id="Event_09d6sqy" attachedToRef="last-book-change">
       <bpmn:outgoing>Flow_1n9nsef</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_1tj8d99">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1S</bpmn:timeDuration>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P14D</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_1n9nsef" sourceRef="Event_09d6sqy" targetRef="Activity_1dzzkmh" />
@@ -867,6 +867,11 @@
       <bpmndi:BPMNShape id="Lane_0qc140n_di" bpmnElement="Lane_0qc140n" isHorizontal="true">
         <dc:Bounds x="189" y="1150" width="4589" height="250" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0tlv3xl_di" bpmnElement="Flow_0tlv3xl">
+        <di:waypoint x="2680" y="1470" />
+        <di:waypoint x="2680" y="530" />
+        <di:waypoint x="2755" y="530" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1lm1o32_di" bpmnElement="Flow_1lm1o32">
         <di:waypoint x="2680" y="1600" />
         <di:waypoint x="2680" y="1550" />
@@ -1123,14 +1128,6 @@
         <di:waypoint x="750" y="820" />
         <di:waypoint x="810" y="820" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0tlv3xl_di" bpmnElement="Flow_0tlv3xl">
-        <di:waypoint x="2680" y="1470" />
-        <di:waypoint x="2680" y="530" />
-        <di:waypoint x="2755" y="530" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Activity_084co16_di" bpmnElement="Activity_14j08vz">
-        <dc:Bounds x="2630" y="1470" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_16d22ym_di" bpmnElement="Activity_16d22ym" isExpanded="true">
         <dc:Bounds x="450" y="1610" width="350" height="200" />
       </bpmndi:BPMNShape>
@@ -1304,9 +1301,6 @@
       <bpmndi:BPMNShape id="Activity_0jjwrxr_di" bpmnElement="corrections">
         <dc:Bounds x="3080" y="1210" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_1clwsk3_di" bpmnElement="TextAnnotation_1clwsk3">
-        <dc:Bounds x="1390" y="430" width="100" height="53" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0ntmvxs_di" bpmnElement="Activity_0ntmvxs" isExpanded="true">
         <dc:Bounds x="2066" y="1600" width="970" height="360" />
       </bpmndi:BPMNShape>
@@ -1395,6 +1389,12 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0mw6s5r_di" bpmnElement="Event_1ey0xjr">
         <dc:Bounds x="2246" y="1722" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_084co16_di" bpmnElement="Activity_14j08vz">
+        <dc:Bounds x="2630" y="1470" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_1clwsk3_di" bpmnElement="TextAnnotation_1clwsk3">
+        <dc:Bounds x="1390" y="430" width="100" height="53" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_10ndhso_di" bpmnElement="Event_09d6sqy">
         <dc:Bounds x="4312" y="512" width="36" height="36" />
