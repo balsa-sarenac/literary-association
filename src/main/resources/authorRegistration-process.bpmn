@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0yusdow" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.4.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0yusdow" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.5.0">
   <bpmn:message id="Message_1afdhm9" name="LinkClicked" />
   <bpmn:message id="Message_1s8vrjk" name="SubmissionTimeoutMessage" />
   <bpmn:message id="Message_1qks3fi" name="PaymentTimeoutMessage" />
@@ -34,14 +34,11 @@
         <bpmn:flowNodeRef>Activity_1vj4fv2</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_1b3a6a9</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0jqjbbv</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Event_0uwepfp</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_1ogdcb2</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_1timofv</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_0vkasx3</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_1lypyd0</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Event_0rxzuij</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>basic-information</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Event_10ehrx3</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Lane_0bd0z93" name="Committee memebre">
         <bpmn:flowNodeRef>Gateway_00xsvqw</bpmn:flowNodeRef>
@@ -86,7 +83,6 @@
     <bpmn:sequenceFlow id="Flow_11owbb5" sourceRef="Activity_1c4fb44" targetRef="Event_0dn6roz" />
     <bpmn:sequenceFlow id="Flow_07tj1tm" sourceRef="basic-information" targetRef="data-basic-information" />
     <bpmn:sequenceFlow id="Flow_0st1pe0" sourceRef="data-basic-information" targetRef="Activity_1c4fb44" />
-    <bpmn:sequenceFlow id="Flow_1e6tk9b" sourceRef="Event_0uwepfp" targetRef="Event_0rxzuij" />
     <bpmn:boundaryEvent id="Event_0vkasx3" attachedToRef="Activity_1b3a6a9">
       <bpmn:outgoing>Flow_1ba5uae</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_1tuxxfj" errorRef="Error_0ptts4z" />
@@ -102,10 +98,6 @@
       <bpmn:timerEventDefinition id="TimerEventDefinition_0tt0mw7">
         <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P14D</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
-    </bpmn:boundaryEvent>
-    <bpmn:boundaryEvent id="Event_0uwepfp" attachedToRef="data-basic-information">
-      <bpmn:outgoing>Flow_1e6tk9b</bpmn:outgoing>
-      <bpmn:errorEventDefinition id="ErrorEventDefinition_07j9mgq" errorRef="Error_04s35tb" />
     </bpmn:boundaryEvent>
     <bpmn:subProcess id="Activity_0jqjbbv">
       <bpmn:incoming>Flow_19vrpvl</bpmn:incoming>
@@ -151,7 +143,7 @@
       <bpmn:startEvent id="Event_1397nlc">
         <bpmn:outgoing>Flow_0u8blnc</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_0e53koy">
-          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P2M</bpmn:timeDuration>
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P3M</bpmn:timeDuration>
         </bpmn:timerEventDefinition>
       </bpmn:startEvent>
       <bpmn:sequenceFlow id="Flow_0u8blnc" sourceRef="Event_1397nlc" targetRef="Activity_02zqolq" />
@@ -185,6 +177,7 @@
             <camunda:validation>
               <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.FileValidator" />
               <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.PdfOnlyValidator" />
+              <camunda:constraint name="required" />
             </camunda:validation>
           </camunda:formField>
         </camunda:formData>
@@ -216,6 +209,7 @@
           <camunda:formField id="files" label="Documents:" type="file" defaultValue="null">
             <camunda:validation>
               <camunda:constraint name="validator" config="upp.team5.literaryassociation.camunda.validator.PdfOnlyValidator" />
+              <camunda:constraint name="required" />
             </camunda:validation>
           </camunda:formField>
         </camunda:formData>
@@ -246,10 +240,6 @@
     </bpmn:intermediateCatchEvent>
     <bpmn:endEvent id="Event_1lypyd0">
       <bpmn:incoming>Flow_1ba5uae</bpmn:incoming>
-      <bpmn:incoming>Flow_0elml7x</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:endEvent id="Event_0rxzuij">
-      <bpmn:incoming>Flow_1e6tk9b</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:userTask id="basic-information" name="Fill registration fields">
       <bpmn:extensionElements>
@@ -293,11 +283,6 @@
       <bpmn:outgoing>Flow_1yu4v6o</bpmn:outgoing>
       <bpmn:outgoing>Flow_07tj1tm</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:boundaryEvent id="Event_10ehrx3" attachedToRef="Activity_1vj4fv2">
-      <bpmn:outgoing>Flow_0elml7x</bpmn:outgoing>
-      <bpmn:errorEventDefinition id="ErrorEventDefinition_0tjugih" errorRef="Error_0ptts4z" />
-    </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="Flow_0elml7x" sourceRef="Event_10ehrx3" targetRef="Event_1lypyd0" />
     <bpmn:exclusiveGateway id="Gateway_0q504la" default="Flow_17lmb52">
       <bpmn:incoming>Flow_04fo4x8</bpmn:incoming>
       <bpmn:incoming>Flow_0q66xj7</bpmn:incoming>
@@ -382,17 +367,6 @@
       <bpmndi:BPMNEdge id="Flow_17flcz1_di" bpmnElement="Flow_17flcz1">
         <di:waypoint x="1210" y="700" />
         <di:waypoint x="1250" y="700" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0elml7x_di" bpmnElement="Flow_0elml7x">
-        <di:waypoint x="988" y="310" />
-        <di:waypoint x="1050" y="310" />
-        <di:waypoint x="1050" y="250" />
-        <di:waypoint x="1160" y="250" />
-        <di:waypoint x="1160" y="208" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1e6tk9b_di" bpmnElement="Flow_1e6tk9b">
-        <di:waypoint x="550" y="208" />
-        <di:waypoint x="550" y="252" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0st1pe0_di" bpmnElement="Flow_0st1pe0">
         <di:waypoint x="600" y="150" />
@@ -629,9 +603,6 @@
       <bpmndi:BPMNShape id="Event_0okjbku_di" bpmnElement="Event_1lypyd0">
         <dc:Bounds x="1142" y="172" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0qtkcp3_di" bpmnElement="Event_0rxzuij">
-        <dc:Bounds x="532" y="252" width="36" height="36" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1rqq3h8_di" bpmnElement="basic-information">
         <dc:Bounds x="330" y="110" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -670,12 +641,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1sgamit_di" bpmnElement="Activity_0b8b7bl">
         <dc:Bounds x="1250" y="660" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1pt61gh_di" bpmnElement="Event_10ehrx3">
-        <dc:Bounds x="952" y="292" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0axckyp_di" bpmnElement="Event_0uwepfp">
-        <dc:Bounds x="532" y="172" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1ogdcb2_di" bpmnElement="Event_1ogdcb2">
         <dc:Bounds x="1042" y="402" width="36" height="36" />
